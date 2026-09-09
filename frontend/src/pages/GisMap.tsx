@@ -2,17 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
 import api from '../api/client';
-import { Cctv, MapPin } from 'lucide-react';
+import { PageHeader } from '../components/common/PageHeader';
+import { StatusBadge } from '../components/common/StatusBadge';
 
-// Custom marker pin
-const defaultIcon = L.icon({
-  iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-  iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
-  shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-  shadowSize: [41, 41]
+const defaultIcon = L.divIcon({
+  className: 'gis-pin',
+  html: `<div style="background-color: #2563EB; width: 14px; height: 14px; border-radius: 50%; border: 2px solid #FFFFFF; box-shadow: 0 0 8px rgba(37,99,235,0.7);"></div>`,
+  iconSize: [14, 14],
+  iconAnchor: [7, 7],
 });
 
 interface CameraNode {
@@ -22,15 +19,12 @@ interface CameraNode {
   longitude: number;
   address: string;
   status: string;
+  department: string;
 }
 
 export const GisMap: React.FC = () => {
   const [cameras, setCameras] = useState<CameraNode[]>([]);
   const [loading, setLoading] = useState(true);
-
-  // Gujarat / Ahmedabad default coordinates
-  const centerLat = 23.0225;
-  const centerLng = 72.5714;
 
   useEffect(() => {
     const fetchCams = async () => {
@@ -47,42 +41,39 @@ export const GisMap: React.FC = () => {
   }, []);
 
   return (
-    <div className="h-[calc(100vh-8rem)] flex flex-col space-y-4">
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-xl font-bold tracking-tight text-white">GIS Geo-Spatial Intelligence</h2>
-          <p className="text-xs text-slate-400 mt-0.5">
-            Geographic positioning of CCTV surveillance nodes and planned vehicle route tracking.
-          </p>
-        </div>
-        <div className="text-xs font-mono text-cyan-400">
-          Mapped Nodes: {cameras.length}
-        </div>
-      </div>
+    <div className="h-[calc(100vh-7rem)] flex flex-col space-y-3">
+      <PageHeader
+        title="GIS Geo-Spatial Intelligence & Surveillance Grid"
+        category="OPERATIONS / GEO-SPATIAL TOPOLOGY"
+        description="State-wide spatial mapping of deployed optical sensors, traffic monitoring points, and district jurisdiction boundaries."
+        actions={
+          <div className="flex items-center gap-2 text-xs font-mono text-slate-300">
+            <span>TOTAL NODES: <strong className="text-blue-400">{cameras.length}</strong></span>
+          </div>
+        }
+      />
 
-      <div className="flex-1 rounded-lg overflow-hidden border border-slate-800 bg-[#080D1A] relative z-0">
+      <div className="flex-1 rounded-lg border border-[#1F293D] overflow-hidden relative z-0">
         <MapContainer
-          center={[centerLat, centerLng]}
-          zoom={12}
-          style={{ height: '100%', width: '100%', background: '#090E1A' }}
+          center={[23.1, 72.6]}
+          zoom={11}
+          style={{ height: '100%', width: '100%' }}
+          zoomControl={false}
         >
           <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            attribution="&copy; OpenStreetMap contributors"
           />
           {cameras.map((c) => (
-            <Marker
-              key={c.camera_id}
-              position={[c.latitude, c.longitude]}
-              icon={defaultIcon}
-            >
+            <Marker key={c.camera_id} position={[c.latitude, c.longitude]} icon={defaultIcon}>
               <Popup>
-                <div className="text-xs text-slate-900 font-sans p-1">
-                  <div className="font-bold text-cyan-800">{c.camera_id}</div>
-                  <div className="font-medium">{c.name}</div>
-                  <div className="text-slate-600 text-[11px]">{c.address}</div>
-                  <div className="mt-1 text-[10px] font-mono font-semibold uppercase">
-                    Status: {c.status}
+                <div className="text-xs space-y-1 font-sans">
+                  <div className="font-bold text-slate-100">{c.name}</div>
+                  <div className="font-mono text-slate-400 text-[10px]">{c.camera_id}</div>
+                  <div className="text-slate-300 text-[10px]">{c.address}</div>
+                  <div className="text-slate-400 text-[9px]">{c.department}</div>
+                  <div className="pt-1">
+                    <StatusBadge status={c.status} size="sm" />
                   </div>
                 </div>
               </Popup>

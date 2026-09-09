@@ -5,6 +5,7 @@ export interface UserSession {
   role: 'ADMIN' | 'SUPERVISOR' | 'ANALYST' | 'OFFICER' | 'INVESTIGATOR';
   full_name: string;
   badge_number?: string;
+  department?: string;
   access_token: string;
 }
 

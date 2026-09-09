@@ -26,11 +26,11 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   }
 
   return (
-    <div className="flex h-screen bg-[#050811] text-slate-100 overflow-hidden font-sans">
+    <div className="flex h-screen bg-[#0B0F17] text-slate-100 overflow-hidden font-sans">
       <Sidebar />
       <div className="flex-1 flex flex-col min-w-0">
         <Header />
-        <main className="flex-1 overflow-y-auto p-6 bg-[#060913]">
+        <main className="flex-1 overflow-y-auto p-4 md:p-5 bg-[#0B0F17]">
           {children}
         </main>
       </div>

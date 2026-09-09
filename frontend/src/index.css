@@ -9,31 +9,46 @@
 body {
   margin: 0;
   padding: 0;
-  background-color: #060913;
+  background-color: #0B0F17;
   color: #E2E8F0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Custom scrollbar for law enforcement operations console */
+/* Subtle, dense enterprise scrollbars */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 ::-webkit-scrollbar-track {
-  background: #0B0F19;
+  background: #0B0F17;
 }
 ::-webkit-scrollbar-thumb {
-  background: #1E293B;
-  border-radius: 3px;
+  background: #1F293D;
+  border-radius: 2px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #334155;
+  background: #2D3748;
 }
 
-.radar-glow {
-  box-shadow: 0 0 15px rgba(6, 182, 212, 0.15);
+/* Leaflet dark theme override for intelligence map */
+.leaflet-container {
+  background: #0B0F17 !important;
+  font-family: inherit !important;
 }
 
-.alert-glow {
-  box-shadow: 0 0 15px rgba(239, 68, 68, 0.25);
+.leaflet-tile {
+  filter: brightness(0.65) invert(1) contrast(3) hue-rotate(200deg) saturate(0.3) brightness(0.7);
+}
+
+.leaflet-popup-content-wrapper {
+  background-color: #111827 !important;
+  color: #E2E8F0 !important;
+  border: 1px solid #1F293D !important;
+  border-radius: 6px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5) !important;
+}
+
+.leaflet-popup-tip {
+  background-color: #111827 !important;
 }

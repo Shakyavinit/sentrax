@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { Settings, UserPlus, ShieldCheck } from 'lucide-react';
+import { Settings, UserPlus, ShieldCheck, Key } from 'lucide-react';
 import api from '../api/client';
 import { useAuth } from '../context/AuthContext';
+import { PageHeader } from '../components/common/PageHeader';
+import { StatusBadge } from '../components/common/StatusBadge';
 
 export const Administration: React.FC = () => {
   const { user } = useAuth();
@@ -14,11 +16,13 @@ export const Administration: React.FC = () => {
     role: 'OFFICER',
   });
   const [msg, setMsg] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
 
   const handleCreateUser = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       setMsg('');
+      setErrorMsg('');
       await api.post('/auth/users', form);
       setMsg(`Officer account ${form.email} created successfully.`);
       setForm({
@@ -30,24 +34,24 @@ export const Administration: React.FC = () => {
         role: 'OFFICER',
       });
     } catch (err: any) {
-      alert(err.response?.data?.detail || 'Failed to create officer account');
+      setErrorMsg(err.response?.data?.detail || 'Failed to provision officer account');
     }
   };
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h2 className="text-xl font-bold tracking-tight text-white">System Administration &amp; Access Control</h2>
-        <p className="text-xs text-slate-400 mt-1">
-          Role-Based Access Control (RBAC), operator credential management, and platform policies.
-        </p>
-      </div>
+    <div className="space-y-4">
+      <PageHeader
+        title="System Administration & Role-Based Access Control"
+        category="SYSTEM / ACCESS CONTROL & POLICIES"
+        description="Provision police analyst and officer credentials, enforce RBAC roles, and manage digital forensic custody permissions."
+      />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="p-5 rounded-lg bg-[#080D1A] border border-slate-800 space-y-4">
-          <div className="flex items-center gap-2 text-sm font-semibold text-slate-200">
-            <UserPlus className="w-4 h-4 text-cyan-400" />
-            <span>Provision Police Officer / Analyst Account</span>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Provision User Account */}
+        <div className="p-4 rounded-lg bg-[#111827] border border-[#1F293D] space-y-4">
+          <div className="flex items-center gap-2 text-xs font-mono font-bold uppercase text-slate-200 border-b border-[#1F293D] pb-3">
+            <UserPlus className="w-4 h-4 text-blue-400" />
+            <span>Provision Police Officer Account</span>
           </div>
 
           {msg && (
@@ -56,109 +60,116 @@ export const Administration: React.FC = () => {
             </div>
           )}
 
+          {errorMsg && (
+            <div className="p-3 rounded bg-red-950/20 border border-red-800 text-red-300 text-xs font-mono">
+              {errorMsg}
+            </div>
+          )}
+
           <form onSubmit={handleCreateUser} className="space-y-3 text-xs">
             <div>
-              <label className="block text-slate-400 mb-1">Official Police Email</label>
+              <label className="block text-[10px] font-mono uppercase text-slate-400 mb-1">
+                Official Email
+              </label>
               <input
                 type="email"
                 required
+                placeholder="officer@sentrax.gujarat.gov.in"
                 value={form.email}
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
-                placeholder="officer@sentrax.gujarat.gov.in"
-                className="w-full px-3 py-2 rounded bg-slate-900 border border-slate-800 text-slate-200"
-              />
-            </div>
-
-            <div>
-              <label className="block text-slate-400 mb-1">Password</label>
-              <input
-                type="password"
-                required
-                value={form.password}
-                onChange={(e) => setForm({ ...form, password: e.target.value })}
-                className="w-full px-3 py-2 rounded bg-slate-900 border border-slate-800 text-slate-200"
+                className="w-full px-2.5 py-1.5 rounded-sm-panel bg-[#0B0F17] border border-[#1F293D] text-slate-100 font-mono"
               />
             </div>
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-slate-400 mb-1">Full Name &amp; Rank</label>
+                <label className="block text-[10px] font-mono uppercase text-slate-400 mb-1">
+                  Full Name
+                </label>
                 <input
+                  type="text"
                   required
+                  placeholder="Inspector V. K. Jadeja"
                   value={form.full_name}
                   onChange={(e) => setForm({ ...form, full_name: e.target.value })}
-                  placeholder="Insp. R. V. Patel"
-                  className="w-full px-3 py-2 rounded bg-slate-900 border border-slate-800 text-slate-200"
+                  className="w-full px-2.5 py-1.5 rounded-sm-panel bg-[#0B0F17] border border-[#1F293D] text-slate-100"
                 />
               </div>
               <div>
-                <label className="block text-slate-400 mb-1">Badge Number</label>
+                <label className="block text-[10px] font-mono uppercase text-slate-400 mb-1">
+                  Badge Number
+                </label>
                 <input
+                  type="text"
                   required
+                  placeholder="GJ-AHM-408"
                   value={form.badge_number}
                   onChange={(e) => setForm({ ...form, badge_number: e.target.value })}
-                  placeholder="GJ-AHM-9021"
-                  className="w-full px-3 py-2 rounded bg-slate-900 border border-slate-800 text-slate-200"
+                  className="w-full px-2.5 py-1.5 rounded-sm-panel bg-[#0B0F17] border border-[#1F293D] text-slate-100 font-mono"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-slate-400 mb-1">Role / Authority</label>
+                <label className="block text-[10px] font-mono uppercase text-slate-400 mb-1">
+                  Password
+                </label>
+                <input
+                  type="password"
+                  required
+                  placeholder="••••••••"
+                  value={form.password}
+                  onChange={(e) => setForm({ ...form, password: e.target.value })}
+                  className="w-full px-2.5 py-1.5 rounded-sm-panel bg-[#0B0F17] border border-[#1F293D] text-slate-100 font-mono"
+                />
+              </div>
+              <div>
+                <label className="block text-[10px] font-mono uppercase text-slate-400 mb-1">
+                  Role Tier
+                </label>
                 <select
                   value={form.role}
                   onChange={(e) => setForm({ ...form, role: e.target.value })}
-                  className="w-full px-3 py-2 rounded bg-slate-900 border border-slate-800 text-slate-200"
+                  className="w-full px-2.5 py-1.5 rounded-sm-panel bg-[#0B0F17] border border-[#1F293D] text-slate-200"
                 >
-                  <option value="OFFICER">OFFICER (Field View &amp; Alerts)</option>
-                  <option value="ANALYST">ANALYST (Video &amp; Forensics)</option>
-                  <option value="INVESTIGATOR">INVESTIGATOR (Watchlist &amp; Cases)</option>
-                  <option value="SUPERVISOR">SUPERVISOR (Camera Mgmt)</option>
-                  <option value="ADMIN">ADMIN (Full Authority)</option>
+                  <option value="OFFICER">Field Officer / Analyst</option>
+                  <option value="OPERATOR">Console Operator</option>
+                  <option value="ADMIN">Command Center Admin</option>
                 </select>
-              </div>
-              <div>
-                <label className="block text-slate-400 mb-1">Department</label>
-                <input
-                  value={form.department}
-                  onChange={(e) => setForm({ ...form, department: e.target.value })}
-                  className="w-full px-3 py-2 rounded bg-slate-900 border border-slate-800 text-slate-200"
-                />
               </div>
             </div>
 
-            <button
-              type="submit"
-              className="w-full mt-2 py-2 rounded bg-cyan-600 hover:bg-cyan-500 text-white font-semibold shadow"
-            >
-              Provision Account
-            </button>
+            <div className="pt-2">
+              <button
+                type="submit"
+                className="w-full py-2 rounded bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold transition"
+              >
+                Provision Officer Account
+              </button>
+            </div>
           </form>
         </div>
 
-        <div className="p-5 rounded-lg bg-[#080D1A] border border-slate-800 space-y-4">
-          <div className="flex items-center gap-2 text-sm font-semibold text-slate-200">
+        {/* Current Active Session & RBAC Policy */}
+        <div className="p-4 rounded-lg bg-[#111827] border border-[#1F293D] space-y-3">
+          <div className="flex items-center gap-2 text-xs font-mono font-bold uppercase text-slate-200 border-b border-[#1F293D] pb-3">
             <ShieldCheck className="w-4 h-4 text-emerald-400" />
-            <span>Active Session &amp; Authority State</span>
+            <span>Active Command Session Policy</span>
           </div>
 
-          <div className="space-y-3 text-xs text-slate-300 font-mono">
-            <div className="p-3 rounded bg-slate-900 border border-slate-800">
-              <span className="text-slate-500">Operator Identity: </span>
-              <span className="text-slate-200">{user?.full_name || 'Guest / Unauthenticated'}</span>
+          <div className="space-y-2 text-xs font-mono">
+            <div className="p-2.5 rounded bg-[#161F30] border border-[#1F293D]">
+              <span className="text-slate-400 block text-[10px]">AUTHENTICATED OPERATOR</span>
+              <span className="text-slate-200 font-bold">{user?.full_name} ({user?.email})</span>
             </div>
-            <div className="p-3 rounded bg-slate-900 border border-slate-800">
-              <span className="text-slate-500">Role &amp; Clearance: </span>
-              <span className="text-cyan-400 font-bold">{user?.role || 'None'}</span>
+            <div className="p-2.5 rounded bg-[#161F30] border border-[#1F293D]">
+              <span className="text-slate-400 block text-[10px]">ASSIGNED JURISDICTION</span>
+              <span className="text-slate-200 font-bold">{user?.department || 'Gujarat Police HQ'}</span>
             </div>
-            <div className="p-3 rounded bg-slate-900 border border-slate-800">
-              <span className="text-slate-500">Badge Identifier: </span>
-              <span className="text-slate-200">{user?.badge_number || 'N/A'}</span>
-            </div>
-            <div className="p-3 rounded bg-slate-900 border border-slate-800">
-              <span className="text-slate-500">Security Standard: </span>
-              <span className="text-emerald-400">JWT HS256 + Argon2/Bcrypt + SHA-256</span>
+            <div className="p-2.5 rounded bg-[#161F30] border border-[#1F293D]">
+              <span className="text-slate-400 block text-[10px]">CRYPTOGRAPHIC ALGORITHM</span>
+              <span className="text-slate-200 font-bold">SHA-256 (FIPS 180-4 Standard)</span>
             </div>
           </div>
         </div>

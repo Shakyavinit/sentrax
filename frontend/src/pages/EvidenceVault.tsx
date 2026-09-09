@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Archive, ShieldCheck, FileCheck, AlertTriangle } from 'lucide-react';
+import { Archive, ShieldCheck, FileCheck, AlertTriangle, Key, Download, CheckCircle, ExternalLink } from 'lucide-react';
 import api from '../api/client';
-import { EmptyState } from '../components/EmptyState';
+import { PageHeader } from '../components/common/PageHeader';
+import { StatusBadge } from '../components/common/StatusBadge';
+import { DataTable, Column } from '../components/common/DataTable';
 
 interface EvidenceItem {
   id: number;
@@ -13,6 +15,7 @@ interface EvidenceItem {
   camera_id?: string;
   case_reference?: string;
   captured_at: string;
+  file_path: string;
 }
 
 export const EvidenceVault: React.FC = () => {
@@ -20,6 +23,7 @@ export const EvidenceVault: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [verifyingId, setVerifyingId] = useState<string | null>(null);
   const [verificationResult, setVerificationResult] = useState<any | null>(null);
+  const [previewItem, setPreviewItem] = useState<EvidenceItem | null>(null);
 
   const loadEvidence = async () => {
     try {
@@ -43,100 +47,190 @@ export const EvidenceVault: React.FC = () => {
       const res = await api.get(`/evidence/${uuid}/verify`);
       setVerificationResult(res.data);
     } catch (err: any) {
-      alert(err.response?.data?.detail || 'Integrity check failed');
+      alert(err.response?.data?.detail || 'Cryptographic integrity verification failed');
     } finally {
       setVerifyingId(null);
     }
   };
 
-  return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-xl font-bold tracking-tight text-white">Forensic Evidence Vault</h2>
-          <p className="text-xs text-slate-400 mt-1">
-            Immutable digital evidence with SHA-256 cryptographic verification &amp; chain of custody.
-          </p>
+  const columns: Column<EvidenceItem>[] = [
+    {
+      header: 'Evidence UUID',
+      accessor: (row) => (
+        <span className="font-mono text-xs text-blue-400 font-semibold">
+          {row.evidence_uuid.slice(0, 8)}...
+        </span>
+      ),
+    },
+    {
+      header: 'Type',
+      accessor: (row) => (
+        <span className="font-mono text-[11px] uppercase text-slate-300">
+          {row.evidence_type}
+        </span>
+      ),
+    },
+    {
+      header: 'Camera Node',
+      accessor: (row) => (
+        <span className="font-mono text-slate-300 text-xs">
+          {row.camera_id || 'N/A'}
+        </span>
+      ),
+    },
+    {
+      header: 'SHA-256 Hash (Forensic Digest)',
+      accessor: (row) => (
+        <span className="font-mono text-[11px] text-slate-400 bg-[#0B0F17] px-2 py-0.5 rounded border border-[#1F293D]">
+          {row.sha256_hash.slice(0, 16)}...{row.sha256_hash.slice(-8)}
+        </span>
+      ),
+    },
+    {
+      header: 'File Size',
+      accessor: (row) => (
+        <span className="font-mono text-slate-400 text-xs">
+          {(row.file_size_bytes / 1024).toFixed(1)} KB
+        </span>
+      ),
+    },
+    {
+      header: 'Timestamp',
+      accessor: (row) => (
+        <span className="font-mono text-slate-400 text-[11px]">
+          {new Date(row.captured_at).toLocaleString()}
+        </span>
+      ),
+    },
+    {
+      header: 'Actions',
+      accessor: (row) => (
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => handleVerify(row.evidence_uuid)}
+            disabled={verifyingId === row.evidence_uuid}
+            className="px-2.5 py-1 rounded bg-[#161F30] hover:bg-[#1F293D] border border-[#1F293D] text-slate-200 font-mono text-[10px] transition flex items-center gap-1"
+          >
+            <ShieldCheck className="w-3 h-3 text-emerald-400" />
+            <span>{verifyingId === row.evidence_uuid ? 'VERIFYING...' : 'VERIFY SHA-256'}</span>
+          </button>
+          <button
+            onClick={() => setPreviewItem(row)}
+            className="px-2 py-1 rounded bg-blue-600/10 hover:bg-blue-600/20 border border-blue-500/30 text-blue-400 font-mono text-[10px] transition"
+          >
+            INSPECT
+          </button>
         </div>
-      </div>
+      ),
+    },
+  ];
 
+  return (
+    <div className="space-y-4">
+      <PageHeader
+        title="Forensic Evidence Vault & Integrity Seal"
+        category="DIGITAL FORENSICS / CHAIN OF CUSTODY"
+        description="Immutable digital evidence vault. Individual sighting frames and alert video clips sealed with SHA-256 cryptographic hashes for judicial admissibility."
+      />
+
+      {/* Verification Result Notification */}
       {verificationResult && (
         <div
-          className={`p-4 rounded-lg border text-xs flex items-center justify-between ${
+          className={`p-3.5 rounded-lg border text-xs flex items-center justify-between font-mono ${
             !verificationResult.tamper_detected
               ? 'bg-emerald-950/20 border-emerald-800 text-emerald-300'
               : 'bg-red-950/20 border-red-800 text-red-300'
           }`}
         >
-          <div className="flex items-center gap-3">
-            <ShieldCheck className="w-5 h-5 text-emerald-400" />
+          <div className="flex items-center gap-2">
+            {!verificationResult.tamper_detected ? (
+              <ShieldCheck className="w-4 h-4 text-emerald-400" />
+            ) : (
+              <AlertTriangle className="w-4 h-4 text-red-400" />
+            )}
             <div>
-              <div className="font-bold">
-                FORENSIC VERIFICATION: {verificationResult.status}
-              </div>
-              <div className="font-mono text-[11px] text-slate-400">
-                SHA-256: {verificationResult.database_sha256}
+              <span className="font-bold">
+                {!verificationResult.tamper_detected
+                  ? 'CRYPTOGRAPHIC INTEGRITY CONFIRMED'
+                  : 'INTEGRITY TAMPER DETECTED'}
+              </span>
+              <div className="text-[11px] text-slate-400 mt-0.5">
+                Computed Hash: {verificationResult.computed_sha256}
               </div>
             </div>
           </div>
           <button
             onClick={() => setVerificationResult(null)}
-            className="text-slate-400 hover:text-white"
+            className="text-slate-400 hover:text-slate-200 text-xs"
           >
-            Dismiss
+            DISMISS
           </button>
         </div>
       )}
 
-      {loading ? (
-        <div className="text-center py-20 text-xs text-slate-400">Loading evidence vault records...</div>
-      ) : evidenceList.length === 0 ? (
-        <EmptyState
-          icon={Archive}
-          title="Evidence Vault Empty"
-          description="Forensically sealed frames, plate crops, and video clips will be automatically registered with SHA-256 signatures when captured."
-        />
-      ) : (
-        <div className="overflow-x-auto rounded-lg border border-slate-800 bg-[#080D1A]">
-          <table className="w-full text-left text-xs text-slate-300">
-            <thead className="bg-[#0B1222] text-slate-400 uppercase tracking-wider text-[10px] border-b border-slate-800">
-              <tr>
-                <th className="px-4 py-3">UUID</th>
-                <th className="px-4 py-3">File / Asset</th>
-                <th className="px-4 py-3">SHA-256 Hash</th>
-                <th className="px-4 py-3">Camera Node</th>
-                <th className="px-4 py-3">Timestamp</th>
-                <th className="px-4 py-3">Integrity Action</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-800/60 font-mono">
-              {evidenceList.map((item) => (
-                <tr key={item.id} className="hover:bg-slate-800/30 transition">
-                  <td className="px-4 py-3 text-cyan-400 text-[11px]">{item.evidence_uuid.slice(0, 8)}...</td>
-                  <td className="px-4 py-3 font-sans font-semibold text-slate-200">
-                    {item.file_name} ({(item.file_size_bytes / 1024).toFixed(1)} KB)
-                  </td>
-                  <td className="px-4 py-3 text-[10px] text-slate-400 max-w-[200px] truncate" title={item.sha256_hash}>
-                    {item.sha256_hash}
-                  </td>
-                  <td className="px-4 py-3 text-slate-300">{item.camera_id || 'SYSTEM'}</td>
-                  <td className="px-4 py-3 text-[11px] text-slate-500">
-                    {new Date(item.captured_at).toLocaleString()}
-                  </td>
-                  <td className="px-4 py-3">
-                    <button
-                      onClick={() => handleVerify(item.evidence_uuid)}
-                      disabled={verifyingId === item.evidence_uuid}
-                      className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-emerald-600/20 border border-emerald-600/40 text-emerald-300 hover:bg-emerald-600/30 text-[11px]"
-                    >
-                      <FileCheck className="w-3.5 h-3.5" />
-                      {verifyingId === item.evidence_uuid ? 'Verifying...' : 'Verify Hash'}
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+      {/* Evidence Table */}
+      <DataTable
+        columns={columns}
+        data={evidenceList}
+        keyField="id"
+        loading={loading}
+        emptyMessage="No evidence items logged. Forensic snapshots and alert clips are saved automatically when watchlist triggers occur."
+      />
+
+      {/* Forensic Inspection Modal */}
+      {previewItem && (
+        <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4">
+          <div className="bg-[#111827] border border-[#1F293D] rounded-lg max-w-xl w-full p-5 space-y-4">
+            <div className="flex items-center justify-between border-b border-[#1F293D] pb-3">
+              <div className="flex items-center gap-2">
+                <Archive className="w-4 h-4 text-blue-400" />
+                <span className="text-xs font-mono font-bold text-slate-100">
+                  EVIDENCE: {previewItem.evidence_uuid}
+                </span>
+              </div>
+              <button
+                onClick={() => setPreviewItem(null)}
+                className="text-slate-400 hover:text-slate-200 text-xs font-mono"
+              >
+                CLOSE [ESC]
+              </button>
+            </div>
+
+            <div className="space-y-2 text-xs font-mono">
+              <div className="bg-[#0B0F17] p-3 rounded border border-[#1F293D] space-y-1.5">
+                <div className="text-slate-400 text-[10px] uppercase">SHA-256 CRYPTOGRAPHIC DIGEST</div>
+                <div className="text-emerald-400 break-all text-[11px] font-bold">
+                  {previewItem.sha256_hash}
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2 text-[11px]">
+                <div className="p-2.5 rounded bg-[#161F30] border border-[#1F293D]">
+                  <span className="text-slate-400 block text-[10px]">CAMERA NODE</span>
+                  <span className="text-slate-200 font-bold">{previewItem.camera_id || 'N/A'}</span>
+                </div>
+                <div className="p-2.5 rounded bg-[#161F30] border border-[#1F293D]">
+                  <span className="text-slate-400 block text-[10px]">FILE SIZE</span>
+                  <span className="text-slate-200 font-bold">{(previewItem.file_size_bytes / 1024).toFixed(1)} KB</span>
+                </div>
+              </div>
+
+              <div className="p-2.5 rounded bg-[#161F30] border border-[#1F293D]">
+                <span className="text-slate-400 block text-[10px]">CHAIN OF CUSTODY STORE</span>
+                <span className="text-slate-300 break-all">{previewItem.file_path}</span>
+              </div>
+            </div>
+
+            <div className="pt-2 flex justify-end gap-2">
+              <button
+                onClick={() => handleVerify(previewItem.evidence_uuid)}
+                className="px-3 py-1.5 rounded bg-blue-600 hover:bg-blue-500 text-white text-xs font-medium transition flex items-center gap-1.5"
+              >
+                <ShieldCheck className="w-3.5 h-3.5" />
+                <span>Run Integrity Hash Check</span>
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

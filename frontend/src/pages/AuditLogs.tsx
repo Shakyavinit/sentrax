@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { FileText, Shield, User } from 'lucide-react';
+import { FileText, Shield, User, Filter } from 'lucide-react';
 import api from '../api/client';
-import { EmptyState } from '../components/EmptyState';
+import { PageHeader } from '../components/common/PageHeader';
+import { StatusBadge } from '../components/common/StatusBadge';
+import { DataTable, Column } from '../components/common/DataTable';
 
 interface AuditItem {
   id: number;
@@ -33,66 +35,67 @@ export const AuditLogs: React.FC = () => {
     loadLogs();
   }, []);
 
-  return (
-    <div className="space-y-6">
-      <div>
-        <h2 className="text-xl font-bold tracking-tight text-white">Immutable Security Audit Trail</h2>
-        <p className="text-xs text-slate-400 mt-1">
-          Full forensic record of operator logins, watchlist adjustments, camera changes, and evidence access.
-        </p>
-      </div>
-
-      {loading ? (
-        <div className="text-center py-20 text-xs text-slate-400">Loading audit trail...</div>
-      ) : logs.length === 0 ? (
-        <EmptyState
-          icon={FileText}
-          title="No Audit Entries Found"
-          description="Every security event, login, target addition, and evidence verification is automatically recorded here."
-        />
-      ) : (
-        <div className="overflow-x-auto rounded-lg border border-slate-800 bg-[#080D1A]">
-          <table className="w-full text-left text-xs text-slate-300">
-            <thead className="bg-[#0B1222] text-slate-400 uppercase tracking-wider text-[10px] border-b border-slate-800">
-              <tr>
-                <th className="px-4 py-3">Timestamp</th>
-                <th className="px-4 py-3">Officer / User</th>
-                <th className="px-4 py-3">Action</th>
-                <th className="px-4 py-3">Target Resource</th>
-                <th className="px-4 py-3">Details</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-800/60 font-mono text-[11px]">
-              {logs.map((log) => (
-                <tr key={log.id} className="hover:bg-slate-800/30 transition">
-                  <td className="px-4 py-3 text-slate-500">
-                    {new Date(log.timestamp).toLocaleString()}
-                  </td>
-                  <td className="px-4 py-3 font-sans text-slate-200">
-                    <div>{log.user_email || 'System'}</div>
-                    {log.badge_number && (
-                      <div className="text-[10px] text-cyan-400 font-mono">
-                        Badge: {log.badge_number}
-                      </div>
-                    )}
-                  </td>
-                  <td className="px-4 py-3">
-                    <span className="px-2 py-0.5 rounded bg-slate-900 border border-slate-700 text-cyan-300 font-bold">
-                      {log.action}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3 text-slate-300">
-                    {log.target_resource ? `${log.target_resource} (${log.target_id || ''})` : 'N/A'}
-                  </td>
-                  <td className="px-4 py-3 text-slate-400 text-[10px] max-w-[300px] truncate">
-                    {log.details ? JSON.stringify(log.details) : '-'}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+  const columns: Column<AuditItem>[] = [
+    {
+      header: 'Timestamp',
+      accessor: (row) => (
+        <span className="font-mono text-slate-400 text-[11px]">
+          {new Date(row.timestamp).toLocaleString()}
+        </span>
+      ),
+    },
+    {
+      header: 'Officer / Operator',
+      accessor: (row) => (
+        <div>
+          <span className="font-medium text-slate-200 block text-xs">
+            {row.user_email || 'System Daemon'}
+          </span>
+          {row.badge_number && (
+            <span className="text-[10px] font-mono text-slate-400">
+              BADGE: {row.badge_number}
+            </span>
+          )}
         </div>
-      )}
+      ),
+    },
+    {
+      header: 'Security Action',
+      accessor: (row) => (
+        <span className="font-mono text-xs text-blue-400 font-semibold">
+          {row.action}
+        </span>
+      ),
+    },
+    {
+      header: 'Target Resource',
+      accessor: (row) => (
+        <span className="text-slate-300 text-xs">
+          {row.target_resource} {row.target_id ? `(#${row.target_id})` : ''}
+        </span>
+      ),
+    },
+    {
+      header: 'Result',
+      accessor: () => <StatusBadge status="operational" label="AUTHORIZED" size="sm" />,
+    },
+  ];
+
+  return (
+    <div className="space-y-4">
+      <PageHeader
+        title="Immutable Security Audit Trail & Access Logs"
+        category="SYSTEM / FORENSIC ACCOUNTABILITY"
+        description="Non-repudiable audit ledger recording operator logins, watchlist adjustments, camera node creation, and evidence verifications."
+      />
+
+      <DataTable
+        columns={columns}
+        data={logs}
+        keyField="id"
+        loading={loading}
+        emptyMessage="No audit logs recorded yet. Security actions and user operations will appear here automatically."
+      />
     </div>
   );
 };

@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Cctv, Plus, Radio, RefreshCw } from 'lucide-react';
+import { Cctv, Plus, Radio, RefreshCw, MapPin, Search } from 'lucide-react';
 import api from '../api/client';
-import { EmptyState } from '../components/EmptyState';
+import { PageHeader } from '../components/common/PageHeader';
+import { StatusBadge } from '../components/common/StatusBadge';
+import { DataTable, Column } from '../components/common/DataTable';
 
 interface Camera {
   camera_id: string;
@@ -22,6 +24,7 @@ export const CameraNetwork: React.FC = () => {
   const [cameras, setCameras] = useState<Camera[]>([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
   const [form, setForm] = useState({
     camera_id: '',
     name: '',
@@ -72,214 +75,211 @@ export const CameraNetwork: React.FC = () => {
       });
       loadCameras();
     } catch (err: any) {
-      alert(err.response?.data?.detail || 'Failed to register camera');
+      alert(err.response?.data?.detail || 'Failed to register camera node');
     }
   };
 
-  return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
+  const filtered = cameras.filter(
+    (c) =>
+      c.camera_id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      c.department.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      c.address.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const columns: Column<Camera>[] = [
+    {
+      header: 'Camera ID',
+      accessor: (row) => (
+        <span className="font-mono font-bold text-slate-100 bg-[#161F30] px-2 py-0.5 rounded border border-[#1F293D]">
+          {row.camera_id}
+        </span>
+      ),
+    },
+    {
+      header: 'Jurisdiction & Department',
+      accessor: (row) => (
         <div>
-          <h2 className="text-xl font-bold tracking-tight text-white">Camera Registry &amp; Network</h2>
-          <p className="text-xs text-slate-400 mt-1">
-            Registered Gujarat State CCTV nodes, RTSP/MP4 streams &amp; telemetry status.
-          </p>
+          <span className="text-slate-200 font-medium block">{row.name}</span>
+          <span className="text-slate-400 text-[11px]">{row.department}</span>
         </div>
-        <div className="flex items-center gap-2">
-          <button
-            onClick={loadCameras}
-            className="p-2 rounded bg-slate-900 border border-slate-800 text-slate-300 hover:bg-slate-800 transition"
-          >
-            <RefreshCw className="w-4 h-4" />
-          </button>
-          <button
-            onClick={() => setShowModal(true)}
-            className="flex items-center gap-2 px-3 py-2 rounded bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-semibold shadow transition"
-          >
-            <Plus className="w-4 h-4" /> Register Camera Node
-          </button>
-        </div>
-      </div>
+      ),
+    },
+    {
+      header: 'Location Address',
+      accessor: (row) => <span className="text-slate-300 text-xs truncate max-w-xs block">{row.address}</span>,
+    },
+    {
+      header: 'Vendor & VMS',
+      accessor: (row) => (
+        <span className="font-mono text-slate-400 text-xs">
+          {row.vendor} / {row.vms_type}
+        </span>
+      ),
+    },
+    {
+      header: 'Source Type',
+      accessor: (row) => <span className="font-mono text-[11px] text-blue-400">{row.source_type}</span>,
+    },
+    {
+      header: 'Node Status',
+      accessor: (row) => <StatusBadge status={row.status} size="sm" />,
+    },
+    {
+      header: 'AI Pipeline Status',
+      accessor: () => <StatusBadge status="operational" label="ACTIVE ANPR" size="sm" />,
+    },
+  ];
 
-      {loading ? (
-        <div className="text-center py-20 text-xs text-slate-400">Querying database...</div>
-      ) : cameras.length === 0 ? (
-        <EmptyState
-          icon={Cctv}
-          title="No Cameras Registered"
-          description="Register physical RTSP cameras, local MP4 feeds, or uploaded videos to initiate video ingestion."
-          actionText="Register First Camera"
-          onAction={() => setShowModal(true)}
-        />
-      ) : (
-        <div className="overflow-x-auto rounded-lg border border-slate-800 bg-[#080D1A]">
-          <table className="w-full text-left text-xs text-slate-300">
-            <thead className="bg-[#0B1222] text-slate-400 uppercase tracking-wider text-[10px] border-b border-slate-800">
-              <tr>
-                <th className="px-4 py-3">Camera ID</th>
-                <th className="px-4 py-3">Name &amp; Location</th>
-                <th className="px-4 py-3">Department</th>
-                <th className="px-4 py-3">Coordinates</th>
-                <th className="px-4 py-3">Source / Protocol</th>
-                <th className="px-4 py-3">Status</th>
-                <th className="px-4 py-3">Last Seen</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-800/60 font-mono">
-              {cameras.map((cam) => (
-                <tr key={cam.camera_id} className="hover:bg-slate-800/30 transition">
-                  <td className="px-4 py-3 text-cyan-400 font-bold">{cam.camera_id}</td>
-                  <td className="px-4 py-3 font-sans">
-                    <div className="font-semibold text-slate-200">{cam.name}</div>
-                    <div className="text-[11px] text-slate-400">{cam.address}</div>
-                  </td>
-                  <td className="px-4 py-3 font-sans text-slate-300">{cam.department}</td>
-                  <td className="px-4 py-3 text-[11px] text-slate-400">
-                    {cam.latitude.toFixed(4)}, {cam.longitude.toFixed(4)}
-                  </td>
-                  <td className="px-4 py-3">
-                    <span className="px-2 py-0.5 rounded bg-slate-800 border border-slate-700 text-[10px] text-slate-300">
-                      {cam.source_type}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3">
-                    <span
-                      className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                        cam.status === 'ONLINE'
-                          ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30'
-                          : 'bg-red-500/10 text-red-400 border border-red-500/30'
-                      }`}
-                    >
-                      {cam.status}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3 text-[11px] text-slate-500">
-                    {cam.last_seen ? new Date(cam.last_seen).toLocaleString() : 'N/A'}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+  return (
+    <div className="space-y-4">
+      <PageHeader
+        title="Surveillance Camera Registry & Hardware Nodes"
+        category="OPERATIONS / HARDWARE INFRASTRUCTURE"
+        description="Catalog of state-deployed CCTV cameras, optical specifications, junction coordinates, and VMS stream bindings."
+        actions={
+          <div className="flex items-center gap-2">
+            <div className="relative">
+              <Search className="w-3.5 h-3.5 text-slate-500 absolute left-2.5 top-2" />
+              <input
+                type="text"
+                placeholder="Search nodes..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-8 pr-3 py-1 rounded-sm-panel bg-[#0B0F17] border border-[#1F293D] text-slate-200 text-xs font-mono focus:outline-none focus:border-blue-500 w-44"
+              />
+            </div>
+            <button
+              onClick={() => setShowModal(true)}
+              className="px-3 py-1.5 rounded-sm-panel bg-blue-600 hover:bg-blue-500 text-white text-xs font-medium transition flex items-center gap-1.5"
+            >
+              <Plus className="w-3.5 h-3.5" />
+              <span>Register Node</span>
+            </button>
+          </div>
+        }
+      />
 
-      {/* Register Camera Modal */}
+      <DataTable
+        columns={columns}
+        data={filtered}
+        keyField="camera_id"
+        loading={loading}
+        emptyMessage="No cameras matching search criteria."
+      />
+
+      {/* Register Node Modal */}
       {showModal && (
         <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4">
-          <div className="w-full max-w-lg rounded-lg bg-[#0A0F1E] border border-slate-700 p-6 shadow-2xl">
-            <h3 className="text-base font-bold text-white mb-4">Register New Surveillance Camera</h3>
-            <form onSubmit={handleCreate} className="space-y-4 text-xs">
+          <div className="bg-[#111827] border border-[#1F293D] rounded-lg max-w-lg w-full p-5 space-y-4">
+            <div className="flex items-center justify-between border-b border-[#1F293D] pb-3">
+              <span className="text-xs font-mono font-bold text-slate-100 uppercase">
+                REGISTER SURVEILLANCE NODE
+              </span>
+              <button
+                onClick={() => setShowModal(false)}
+                className="text-slate-400 hover:text-slate-200 text-xs font-mono"
+              >
+                DISMISS [ESC]
+              </button>
+            </div>
+
+            <form onSubmit={handleCreate} className="space-y-3 text-xs">
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-slate-400 mb-1">Camera ID *</label>
+                  <label className="block text-[10px] font-mono uppercase text-slate-400 mb-1">
+                    Camera ID (Node Ref)
+                  </label>
                   <input
+                    type="text"
                     required
+                    placeholder="GJ-AHM-SG-04"
                     value={form.camera_id}
                     onChange={(e) => setForm({ ...form, camera_id: e.target.value })}
-                    placeholder="e.g. GJ-AHM-SG-01"
-                    className="w-full px-3 py-2 rounded bg-slate-900 border border-slate-800 text-slate-200"
+                    className="w-full px-2.5 py-1.5 rounded-sm-panel bg-[#0B0F17] border border-[#1F293D] text-slate-100 font-mono"
                   />
                 </div>
                 <div>
-                  <label className="block text-slate-400 mb-1">Camera Name *</label>
+                  <label className="block text-[10px] font-mono uppercase text-slate-400 mb-1">
+                    Junction / Node Name
+                  </label>
                   <input
+                    type="text"
                     required
+                    placeholder="SG Highway Circle"
                     value={form.name}
                     onChange={(e) => setForm({ ...form, name: e.target.value })}
-                    placeholder="e.g. SG Highway Junction 04"
-                    className="w-full px-3 py-2 rounded bg-slate-900 border border-slate-800 text-slate-200"
+                    className="w-full px-2.5 py-1.5 rounded-sm-panel bg-[#0B0F17] border border-[#1F293D] text-slate-100"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-slate-400 mb-1">Physical Address *</label>
+                <label className="block text-[10px] font-mono uppercase text-slate-400 mb-1">
+                  Location Address
+                </label>
                 <input
+                  type="text"
                   required
+                  placeholder="Pakwan Cross Road, SG Highway, Ahmedabad"
                   value={form.address}
                   onChange={(e) => setForm({ ...form, address: e.target.value })}
-                  placeholder="e.g. Pakwan Cross Road, Bodakdev, Ahmedabad"
-                  className="w-full px-3 py-2 rounded bg-slate-900 border border-slate-800 text-slate-200"
+                  className="w-full px-2.5 py-1.5 rounded-sm-panel bg-[#0B0F17] border border-[#1F293D] text-slate-100"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-slate-400 mb-1">Latitude</label>
+                  <label className="block text-[10px] font-mono uppercase text-slate-400 mb-1">Latitude</label>
                   <input
                     type="number"
                     step="0.000001"
                     required
                     value={form.latitude}
                     onChange={(e) => setForm({ ...form, latitude: parseFloat(e.target.value) })}
-                    className="w-full px-3 py-2 rounded bg-slate-900 border border-slate-800 text-slate-200"
+                    className="w-full px-2.5 py-1.5 rounded-sm-panel bg-[#0B0F17] border border-[#1F293D] text-slate-100 font-mono"
                   />
                 </div>
                 <div>
-                  <label className="block text-slate-400 mb-1">Longitude</label>
+                  <label className="block text-[10px] font-mono uppercase text-slate-400 mb-1">Longitude</label>
                   <input
                     type="number"
                     step="0.000001"
                     required
                     value={form.longitude}
                     onChange={(e) => setForm({ ...form, longitude: parseFloat(e.target.value) })}
-                    className="w-full px-3 py-2 rounded bg-slate-900 border border-slate-800 text-slate-200"
+                    className="w-full px-2.5 py-1.5 rounded-sm-panel bg-[#0B0F17] border border-[#1F293D] text-slate-100 font-mono"
                   />
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-slate-400 mb-1">Source Type</label>
-                  <select
-                    value={form.source_type}
-                    onChange={(e) => setForm({ ...form, source_type: e.target.value })}
-                    className="w-full px-3 py-2 rounded bg-slate-900 border border-slate-800 text-slate-200"
-                  >
-                    <option value="RTSP">RTSP Live Stream</option>
-                    <option value="MP4_LOCAL">Local MP4 File</option>
-                    <option value="MP4_UPLOAD">Uploaded MP4 Clip</option>
-                    <option value="HTTP_STREAM">HTTP / HLS Stream</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-slate-400 mb-1">Status</label>
-                  <select
-                    value={form.status}
-                    onChange={(e) => setForm({ ...form, status: e.target.value as any })}
-                    className="w-full px-3 py-2 rounded bg-slate-900 border border-slate-800 text-slate-200"
-                  >
-                    <option value="ONLINE">ONLINE</option>
-                    <option value="OFFLINE">OFFLINE</option>
-                    <option value="MAINTENANCE">MAINTENANCE</option>
-                  </select>
-                </div>
-              </div>
-
               <div>
-                <label className="block text-slate-400 mb-1">Stream URL / File Path *</label>
+                <label className="block text-[10px] font-mono uppercase text-slate-400 mb-1">
+                  Stream URL / RTSP Binding
+                </label>
                 <input
+                  type="text"
                   required
+                  placeholder="rtsp://10.0.0.1:554/live"
                   value={form.stream_url}
                   onChange={(e) => setForm({ ...form, stream_url: e.target.value })}
-                  placeholder="rtsp://10.20.1.50:554/ch0 or /app/data/videos/junction1.mp4"
-                  className="w-full px-3 py-2 rounded bg-slate-900 border border-slate-800 text-slate-200 font-mono text-[11px]"
+                  className="w-full px-2.5 py-1.5 rounded-sm-panel bg-[#0B0F17] border border-[#1F293D] text-slate-100 font-mono"
                 />
               </div>
 
-              <div className="flex justify-end gap-3 pt-4 border-t border-slate-800">
+              <div className="pt-2 flex justify-end gap-2">
                 <button
                   type="button"
                   onClick={() => setShowModal(false)}
-                  className="px-4 py-2 rounded bg-slate-800 text-slate-300 hover:bg-slate-700"
+                  className="px-3 py-1.5 rounded bg-[#161F30] text-slate-300 text-xs"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 rounded bg-cyan-600 hover:bg-cyan-500 text-white font-semibold"
+                  className="px-3 py-1.5 rounded bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold"
                 >
-                  Register Node
+                  Commit Node to PostGIS
                 </button>
               </div>
             </form>
