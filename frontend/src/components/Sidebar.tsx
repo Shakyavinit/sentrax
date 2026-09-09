@@ -92,24 +92,34 @@ export const Sidebar: React.FC = () => {
         </nav>
       </div>
 
-      {/* System Gateway Link Status */}
-      <div className="p-4 border-t border-slate-800/80 bg-[#060A14]">
+      {/* System Gateway Link Status & Build Badge */}
+      <div className="p-3.5 border-t border-slate-800/80 bg-[#060A14] space-y-2">
         <div className="flex items-center justify-between text-[11px]">
-          <span className="text-slate-400">Stream Relay</span>
+          <span className="text-slate-400">Gateway Relay</span>
           <div className="flex items-center gap-1.5">
             <span
               className={`w-2 h-2 rounded-full ${
                 isConnected ? 'bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.6)]' : 'bg-red-500 animate-pulse'
               }`}
             />
-            <span className={isConnected ? 'text-emerald-400 font-mono' : 'text-red-400 font-mono'}>
-              {isConnected ? 'LIVE' : 'DISCONNECTED'}
+            <span className={isConnected ? 'text-emerald-400 font-mono font-semibold' : 'text-red-400 font-mono font-semibold'}>
+              {isConnected ? 'LIVE WS' : 'DISCONNECTED'}
             </span>
           </div>
         </div>
-        <div className="mt-2 text-[10px] text-slate-500 font-mono flex justify-between">
-          <span>CAP: 500M/1000M</span>
-          <span>v1.0.0-M1</span>
+
+        {/* Build Badge */}
+        <div className="pt-2 border-t border-slate-800/40 flex flex-col gap-1 text-[10px] font-mono">
+          <div className="flex items-center justify-between">
+            <span className="px-1.5 py-0.5 rounded bg-blue-500/10 border border-blue-500/30 text-blue-400 font-semibold">
+              BUILD: v1.0.0-m1
+            </span>
+            <span className="text-slate-400">2026.09.09</span>
+          </div>
+          <div className="text-slate-500 text-[9px] flex justify-between">
+            <span>STORAGE CAP</span>
+            <span className="text-slate-400">500M / 1000M</span>
+          </div>
         </div>
       </div>
     </aside>

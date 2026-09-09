@@ -77,14 +77,31 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Health endpoint
+BUILD_TIMESTAMP = "2026-09-09T21:55:00Z"
+
+# Health endpoints: /health, /api/health, /api/v1/health
 @app.get("/health", tags=["Health"])
+@app.get("/api/health", tags=["Health"])
 @app.get(f"{settings.API_V1_STR}/health", tags=["Health"])
 def health_check():
+    db_status = "healthy"
+    db = SessionLocal()
+    try:
+        from sqlalchemy import text
+        db.execute(text("SELECT 1"))
+    except Exception as e:
+        logger.error(f"Database health check failed: {e}")
+        db_status = f"unhealthy: {str(e)}"
+    finally:
+        db.close()
+
     return {
-        "status": "healthy",
-        "service": "SENTRAX Intelligence Core",
+        "app_name": "SENTRAX Intelligence Core",
         "version": "1.0.0-m1",
+        "build_timestamp": BUILD_TIMESTAMP,
+        "backend_status": "healthy",
+        "database_status": db_status,
+        "status": "healthy" if db_status == "healthy" else "degraded",
         "environment": settings.ENVIRONMENT,
         "storage": {
             "max_temp_mb": settings.MAX_TEMP_STORAGE_MB,
