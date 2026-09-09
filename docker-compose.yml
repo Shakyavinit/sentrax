@@ -1,0 +1,54 @@
+services:
+  db:
+    image: postgis/postgis:16-3.4
+    container_name: sentrax_db
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-sentrax_admin}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-sentrax_secure_postgis_password_2026}
+      POSTGRES_DB: ${POSTGRES_DB:-sentrax_db}
+    ports:
+      - "5433:5432"
+    volumes:
+      - sentrax_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-sentrax_admin} -d ${POSTGRES_DB:-sentrax_db}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: sentrax_backend
+    restart: always
+    env_file:
+      - .env
+    environment:
+      POSTGRES_SERVER: db
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8001:8000"
+    volumes:
+      - ./backend:/app/backend
+      - ./ai:/app/ai
+      - ./data/videos:/app/data/videos
+      - ./data/evidence:/app/data/evidence
+      - ./data/temp:/app/data/temp
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    container_name: sentrax_frontend
+    restart: always
+    depends_on:
+      - backend
+    ports:
+      - "8080:80"
+
+volumes:
+  sentrax_postgres_data:
