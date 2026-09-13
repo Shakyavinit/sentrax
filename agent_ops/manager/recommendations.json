@@ -1,0 +1,41 @@
+[
+  {
+    "id": "REC-001",
+    "title": "Activate YOLO Plate Detector in ANPR Pipeline",
+    "priority": "P1",
+    "impact": 5,
+    "effort": 2,
+    "risk": 2,
+    "demo_value": 5,
+    "confidence": 4,
+    "score": 15,
+    "classification": "Class-B",
+    "status": "APPROVED_FOR_EXPERIMENT"
+  },
+  {
+    "id": "REC-002",
+    "title": "Evidence Event Metadata JSON Archiving with Provenance",
+    "priority": "P1",
+    "impact": 4,
+    "effort": 1,
+    "risk": 1,
+    "demo_value": 4,
+    "confidence": 5,
+    "score": 16,
+    "classification": "Class-A",
+    "status": "APPROVED_FOR_INTEGRATION"
+  },
+  {
+    "id": "REC-003",
+    "title": "Sentinel Live Catalog Dynamic Ingestion Adapter",
+    "priority": "P1",
+    "impact": 4,
+    "effort": 2,
+    "risk": 2,
+    "demo_value": 4,
+    "confidence": 4,
+    "score": 12,
+    "classification": "Class-B",
+    "status": "APPROVED_FOR_EXPERIMENT"
+  }
+]

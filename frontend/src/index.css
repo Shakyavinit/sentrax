@@ -1,0 +1,223 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* === BASE === */
+  --bg-void:        #080C12;   /* deepest background — main canvas */
+  --bg-surface:     #0D1520;   /* panels, cards, sidebar */
+  --bg-elevated:    #121E2E;   /* input fields, dropdowns, hover states */
+  --bg-overlay:     #1A2A3D;   /* modals, popovers */
+  --bg-subtle:      #1F3050;   /* selected states, row highlights */
+
+  /* === BORDERS === */
+  --border-dim:     #1C2E42;   /* subtle separators */
+  --border-default: #233A52;   /* card borders, input borders */
+  --border-bright:  #2E4E70;   /* active/focused borders */
+  --border-accent:  #0E6FBF;   /* accent-colored borders */
+
+  /* === TEXT === */
+  --text-primary:   #E8EFF7;   /* main content */
+  --text-secondary: #8FA8C0;   /* labels, captions */
+  --text-muted:     #4D6B85;   /* placeholders, disabled */
+  --text-inverse:   #080C12;   /* text on bright backgrounds */
+
+  /* === ACCENT — Sentinel Blue === */
+  --accent-primary:   #0E7FE0;  /* primary actions, active states */
+  --accent-bright:    #1A9FFF;  /* hover on primary */
+  --accent-dim:       #0A4F8C;  /* pressed, muted accent */
+  --accent-glow:      rgba(14, 127, 224, 0.15); /* glow behind accent elements */
+
+  /* === STATUS COLORS === */
+  --status-alert:     #FF3B3B;  /* active watchlist match, critical alert */
+  --status-alert-dim: rgba(255, 59, 59, 0.12);
+  --status-warn:      #FF8C00;  /* stream warning, degraded */
+  --status-warn-dim:  rgba(255, 140, 0, 0.12);
+  --status-ok:        #00C875;  /* online, confirmed, verified */
+  --status-ok-dim:    rgba(0, 200, 117, 0.10);
+  --status-info:      #40A9FF;  /* general info, timestamps */
+  --status-neutral:   #4D6B85;  /* offline, unknown */
+
+  /* === CONFIDENCE GRADIENT (AI score) === */
+  --conf-high:    #00C875;   /* 85%+ */
+  --conf-med:     #FF8C00;   /* 60–84% */
+  --conf-low:     #FF3B3B;   /* <60% */
+
+  /* === TYPOGRAPHY === */
+  --font-sans:   'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono:   'JetBrains Mono', 'Fira Code', monospace;
+  --font-data:   'JetBrains Mono', monospace;
+
+  /* === SPACING SCALE === */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* === RADIUS === */
+  --radius-sm:  3px;
+  --radius-md:  6px;
+  --radius-lg:  10px;
+  --radius-xl:  16px;
+
+  /* === SHADOWS === */
+  --shadow-card:   0 1px 3px rgba(0,0,0,0.5), 0 0 0 1px var(--border-dim);
+  --shadow-modal:  0 24px 48px rgba(0,0,0,0.7);
+  --shadow-accent: 0 0 12px var(--accent-glow);
+  --shadow-alert:  0 0 16px rgba(255,59,59,0.2);
+
+  /* === TRANSITIONS === */
+  --ease-default: 150ms cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-bounce:  350ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Base styling */
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-void);
+  color: var(--text-primary);
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+/* Animations */
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 currentColor; }
+  50% { opacity: 0.8; box-shadow: 0 0 0 4px transparent; }
+}
+
+@keyframes slide-in-right {
+  from { transform: translateX(100%); opacity: 0; }
+  to   { transform: translateX(0);    opacity: 1; }
+}
+
+@keyframes scan-line {
+  0%   { top: 0%; }
+  100% { top: 100%; }
+}
+
+@keyframes badge-bounce {
+  0%, 100% { transform: scale(1); }
+  50%       { transform: scale(1.15); }
+}
+
+.animate-pulse-dot {
+  animation: pulse-dot 2s infinite ease-in-out;
+}
+
+.animate-slide-in {
+  animation: slide-in-right 300ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-scan {
+  animation: scan-line 3s linear infinite;
+}
+
+.animate-badge-bounce {
+  animation: badge-bounce 1.5s infinite ease-in-out;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: scale(0.98); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.animate-fade-in {
+  animation: fade-in 200ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Custom Tactical Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-void);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-bright);
+  border-radius: var(--radius-sm);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-primary);
+}
+
+/* Map Dark Theme override & Strict Containment */
+.leaflet-container {
+  background-color: #080C12 !important;
+  font-family: var(--font-sans) !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  outline: none;
+  z-index: 10 !important;
+}
+
+/* Ensure Leaflet controls stay within bounds and match dark theme */
+.leaflet-control-container .leaflet-top,
+.leaflet-control-container .leaflet-bottom {
+  z-index: 20 !important;
+}
+
+.leaflet-bar {
+  border: 1px solid #1C2E42 !important;
+  border-radius: 4px !important;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5) !important;
+}
+
+.leaflet-bar a {
+  background-color: #0D1520 !important;
+  color: #E8EFF7 !important;
+  border-bottom: 1px solid #1C2E42 !important;
+  transition: all 0.15s ease;
+}
+
+.leaflet-bar a:hover {
+  background-color: #121E2E !important;
+  color: #0E7FE0 !important;
+}
+
+.leaflet-bar a.leaflet-disabled {
+  background-color: #080C12 !important;
+  color: #4D6B85 !important;
+}
+
+.leaflet-control-attribution {
+  background: rgba(8, 12, 18, 0.85) !important;
+  color: #4D6B85 !important;
+  font-size: 9px !important;
+  border-top-left-radius: 4px;
+}
+
+.leaflet-control-attribution a {
+  color: #8FA8C0 !important;
+}
+
+.leaflet-popup-content-wrapper {
+  background: #0D1520 !important;
+  color: #E8EFF7 !important;
+  border: 1px solid #233A52 !important;
+  border-radius: 6px !important;
+  box-shadow: 0 12px 32px rgba(0,0,0,0.8), 0 0 16px rgba(14,127,224,0.15) !important;
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+.leaflet-popup-content {
+  margin: 0 !important;
+  line-height: 1.4 !important;
+}
+
+.leaflet-popup-tip {
+  background: #0D1520 !important;
+  border: 1px solid #233A52 !important;
+}

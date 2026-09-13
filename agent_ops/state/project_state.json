@@ -1,0 +1,22 @@
+{
+  "sentinel_catalog": "verified",
+  "sentinel_stream": "partial",
+  "vehicle_detection": "working",
+  "tracking": "working",
+  "plate_detection": "verified",
+  "ocr": "working",
+  "watchlist": "working",
+  "alerts": "working",
+  "evidence": "working",
+  "cross_camera": "working",
+  "journey": "working",
+  "frontend": "working",
+  "security": "review_required",
+  "demo_ready": "verified",
+  "active_cameras": 10,
+  "indexed_sightings": 1389,
+  "watchlist_targets": 8,
+  "map_tiles": "ArcGIS World Dark Gray Base (Clean, No Watermark)",
+  "demo_mode": true,
+  "last_updated": "2026-09-13T02:56:10+05:30"
+}

@@ -1,0 +1,10 @@
+{
+  "status": "OPERATIONAL",
+  "source_type": "LOCAL VALIDATION SOURCE",
+  "sentinel_live_fallback": true,
+  "active_ai_cameras_limit": 2,
+  "video_routing": "10 unique cctv feeds routed via Nginx /media/videos/ to /public/videos/",
+  "copilot_grounded": true,
+  "copilot_model": "gemini-3.6-flash",
+  "toast_throttled": true
+}

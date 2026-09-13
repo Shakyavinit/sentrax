@@ -1,0 +1,26 @@
+[
+  {
+    "id": "RISK-001",
+    "severity": "HIGH",
+    "title": "Sentinel Live Catalog Authentication Barrier",
+    "detail": "https://cctv.corp8.cloud/cameras.json redirects to /auth/login with invite-only approval. Direct anonymous curl fails.",
+    "mitigation": "Local validation source feeds active and tagged as LOCAL VALIDATION SOURCE; catalog adapter prepared for credentials injection.",
+    "status": "MITIGATED_FOR_DEMO"
+  },
+  {
+    "id": "RISK-002",
+    "severity": "MEDIUM",
+    "title": "PaddleOCR runtime dependency missing in container",
+    "detail": "sentrax-backend-1 lacks paddleocr package, currently falling back to synthetic/default plate extraction.",
+    "mitigation": "Integrate plate_detector.pt for precise plate cropping; test lightweight EasyOCR or localized OpenCV contour preprocessor.",
+    "status": "PENDING_EXPERIMENT"
+  },
+  {
+    "id": "RISK-003",
+    "severity": "LOW",
+    "title": "Secret exposure risk in committed environment files",
+    "detail": "Need to ensure no API keys or passwords are leaked in git history, client bundles or public reports.",
+    "mitigation": "Run Security Agent baseline scan; verify .env in .gitignore and sanitize client build artifacts.",
+    "status": "SCANNING"
+  }
+]

@@ -1,0 +1,54 @@
+{
+  "main_controller": {
+    "status": "active",
+    "scope": "full_authority"
+  },
+  "team_manager": {
+    "status": "active",
+    "scope": "coordination_and_synthesis"
+  },
+  "github_scout": {
+    "status": "initialized",
+    "scope": "research_only"
+  },
+  "api_scout": {
+    "status": "initialized",
+    "scope": "research_only"
+  },
+  "data_scout": {
+    "status": "initialized",
+    "scope": "research_only"
+  },
+  "tool_scout": {
+    "status": "initialized",
+    "scope": "research_only"
+  },
+  "frontend_scout": {
+    "status": "initialized",
+    "scope": "research_only"
+  },
+  "security_agent": {
+    "status": "active",
+    "scope": "security_veto"
+  },
+  "qa_agent": {
+    "status": "active",
+    "scope": "verification_and_testing"
+  },
+  "backend_agent": {
+    "status": "ready",
+    "scope": "implementation_backend"
+  },
+  "ai_ml_agent": {
+    "status": "ready",
+    "scope": "implementation_models"
+  },
+  "trend_scout": {
+    "status": "idle",
+    "scope": "research_trends"
+  },
+  "docs_license_agent": {
+    "status": "ready",
+    "scope": "compliance_and_notices"
+  }
+}
