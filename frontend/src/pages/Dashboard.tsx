@@ -19,6 +19,7 @@ import {
   AlertCircle,
   Scan,
   Radio,
+  Target,
   Video,
   ArrowRight,
   ExternalLink,
@@ -78,6 +79,20 @@ const CCTVCameraGraphic: React.FC<{ className?: string }> = ({ className = 'w-14
     <ellipse cx="26" cy="40" rx="12" ry="3" fill="rgba(0, 200, 117, 0.15)" />
   </svg>
 );
+
+// Tactical Red Sniper Crosshair Icon matching reference design
+const TacticalTargetIcon: React.FC<{ className?: string }> = ({ className = 'w-4 h-4 text-[#FF3B3B]' }) => (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+    <circle cx="12" cy="12" r="7.5" stroke="currentColor" strokeWidth="1.8" />
+    <line x1="12" y1="1.5" x2="12" y2="5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+    <line x1="12" y1="19" x2="12" y2="22.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+    <line x1="1.5" y1="12" x2="5" y2="12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+    <line x1="19" y1="12" x2="22.5" y2="12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+    <circle cx="12" cy="12" r="2.8" stroke="currentColor" strokeWidth="1.5" />
+    <circle cx="12" cy="12" r="1.2" fill="currentColor" />
+  </svg>
+);
+
 
 export const Dashboard: React.FC = () => {
   const navigate = useNavigate();
@@ -233,37 +248,37 @@ export const Dashboard: React.FC = () => {
         </form>
 
         {/* High-Priority Targets Strip */}
-        <div className="flex items-center gap-3 px-1 text-xs overflow-x-auto scrollbar-none py-1 whitespace-nowrap">
-          <div className="flex items-center gap-1.5 text-[#FF3B3B] font-mono font-bold text-xs shrink-0">
-            <Radio className="w-3.5 h-3.5 animate-pulse text-[#FF3B3B]" />
+        <div className="flex items-center justify-between gap-1.5 px-0.5 text-xs overflow-x-auto scrollbar-none py-1 whitespace-nowrap w-full">
+          <div className="flex items-center gap-1.5 text-[#0E7FE0] font-mono font-bold text-xs shrink-0 tracking-wider mr-1">
+            <TacticalTargetIcon className="w-4 h-4 text-[#FF3B3B] shrink-0" />
             <span>HIGH-PRIORITY TARGETS:</span>
           </div>
 
-          <div className="flex items-center gap-2 shrink-0">
+          <div className="flex items-center gap-1.5 shrink-0 flex-1 justify-between max-w-[840px]">
             {[
-              { plate: 'GJ01AB1234', label: 'Kidnapping Lead', color: 'border-[#FF3B3B]/60 text-[#FF3B3B] bg-[#FF3B3B]/10 hover:bg-[#FF3B3B]/20' },
-              { plate: 'RJ14GH3456', label: 'Stolen Fortuner', color: 'border-[#FF3B3B]/60 text-[#FF3B3B] bg-[#FF3B3B]/10 hover:bg-[#FF3B3B]/20' },
-              { plate: 'UP32PQ6677', label: 'Narcotics Track', color: 'border-[#FF8C00]/60 text-[#FF8C00] bg-[#FF8C00]/10 hover:bg-[#FF8C00]/20' },
-              { plate: 'GJ05CD5678', label: 'Hit & Run Fatal', color: 'border-[#FF8C00]/60 text-[#FF8C00] bg-[#FF8C00]/10 hover:bg-[#FF8C00]/20' },
-              { plate: 'DL10XY9090', label: 'Syndicate Convoy', color: 'border-[#0E7FE0]/60 text-[#0E7FE0] bg-[#0E7FE0]/10 hover:bg-[#0E7FE0]/20' },
+              { plate: 'GJ01AB1234', label: 'Kidnapping Lead', border: 'border-[#FF3B3B]', bg: 'bg-[#15090F]', plateColor: 'text-[#FF3B3B]' },
+              { plate: 'RJ14GH3456', label: 'Stolen Fortuner', border: 'border-[#FF3B3B]', bg: 'bg-[#15090F]', plateColor: 'text-[#FF3B3B]' },
+              { plate: 'UP32PQ6677', label: 'Narcotics Track', border: 'border-[#F59E0B]', bg: 'bg-[#171207]', plateColor: 'text-[#F59E0B]' },
+              { plate: 'GJ05CD5678', label: 'Hit & Run Fatal', border: 'border-[#F59E0B]', bg: 'bg-[#171207]', plateColor: 'text-[#F59E0B]' },
+              { plate: 'DL10XY9090', label: 'Syndicate Convoy', border: 'border-[#0E7FE0]', bg: 'bg-[#081320]', plateColor: 'text-[#0E7FE0]' },
             ].map((t) => (
               <button
                 key={t.plate}
                 onClick={() => navigate(`/vehicles/details/${t.plate}`)}
-                className={`flex items-center gap-2 px-3 py-1 rounded-[4px] border text-xs font-mono transition-all cursor-pointer shadow-sm shrink-0 whitespace-nowrap ${t.color}`}
+                className={`flex items-center gap-1.5 px-2 py-0.5 rounded-[4px] border ${t.border} ${t.bg} hover:brightness-125 text-xs font-mono transition-all cursor-pointer shadow-sm shrink-0 whitespace-nowrap`}
               >
-                <span className="font-bold tracking-wide">{t.plate}</span>
-                <span className="text-[11px] opacity-85 font-sans">{t.label}</span>
+                <span className={`font-bold tracking-tight text-[11px] ${t.plateColor}`}>{t.plate}</span>
+                <span className="text-[10.5px] text-[#A8C2D8] font-sans">{t.label}</span>
               </button>
             ))}
           </div>
 
           <Link
             to="/watchlist"
-            className="text-xs text-[#0E7FE0] hover:text-[#118bf2] flex items-center gap-1 font-semibold shrink-0 whitespace-nowrap ml-auto pl-2"
+            className="text-[11px] text-[#0E7FE0] hover:text-[#118bf2] flex items-center gap-1 font-mono font-semibold shrink-0 whitespace-nowrap pl-2 ml-auto"
           >
             <span>View All Targets</span>
-            <ArrowRight className="w-3.5 h-3.5" />
+            <ArrowRight className="w-3 h-3" />
           </Link>
         </div>
       </div>
@@ -271,138 +286,111 @@ export const Dashboard: React.FC = () => {
       {/* ─── 3. FOUR KEY METRIC KPI STAT CARDS ─── */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
         {/* Card 1: CAMERAS ONLINE */}
-        <div className="relative bg-[#0A1017] border border-[#00C875]/30 rounded-xl p-3.5 flex items-center justify-between shadow-[0_4px_16px_rgba(0,0,0,0.5)] overflow-hidden min-h-[92px] group">
-          <div className="flex items-center gap-3 min-w-0">
-            <div className="w-10 h-10 rounded-xl bg-[#00C875]/15 text-[#00C875] border border-[#00C875]/30 flex items-center justify-center shadow-[0_0_12px_rgba(0,200,117,0.2)] shrink-0">
-              <Camera className="w-5 h-5" />
+        <div className="relative bg-[#0A121D] border border-[#00C875]/35 rounded-xl p-4 flex items-center justify-between shadow-[0_4px_16px_rgba(0,0,0,0.5)] overflow-hidden min-h-[96px] group">
+          <div className="min-w-0 flex-1">
+            <div className="text-[11px] font-sans font-medium tracking-wide text-[#8FA8C0] uppercase whitespace-nowrap">
+              CAMERAS ONLINE
             </div>
-            <div className="min-w-0">
-              <div className="text-[11px] font-sans font-semibold tracking-wide text-[#8FA8C0] uppercase whitespace-nowrap">
-                CAMERAS ONLINE
-              </div>
-              <div className="flex items-baseline gap-2 mt-0.5">
-                <span className="text-2xl font-mono font-black text-white tracking-tight whitespace-nowrap">
-                  8 / 10
-                </span>
-                <span className="text-[10px] font-mono font-bold text-[#00C875] bg-[#00C875]/15 px-1.5 py-0.2 rounded border border-[#00C875]/30 whitespace-nowrap shrink-0">
-                  ▲ +20%
-                </span>
-              </div>
-              <div className="text-[11px] font-sans text-[#8FA8C0] whitespace-nowrap mt-0.5">
-                Active stream nodes
-              </div>
+            <div className="flex items-baseline gap-2 mt-1">
+              <span className="text-2xl font-mono font-black text-white tracking-tight whitespace-nowrap">
+                8 / 10
+              </span>
+              <span className="text-[11px] font-mono font-bold text-[#00C875] flex items-center gap-0.5 whitespace-nowrap shrink-0">
+                +20%
+              </span>
+            </div>
+            <div className="text-[11px] font-sans text-[#8FA8C0] whitespace-nowrap mt-0.5">
+              Active stream nodes
             </div>
           </div>
 
-          <div className="w-14 h-11 shrink-0 flex items-center justify-end overflow-hidden pl-1">
+          <div className="w-16 h-12 shrink-0 flex items-center justify-end overflow-hidden pr-0.5">
             <img
               src="/images/cctv_camera_3d.png"
               alt="Surveillance Camera"
-              className="h-10 w-auto max-h-10 object-contain drop-shadow-[0_4px_8px_rgba(0,0,0,0.6)] group-hover:scale-105 transition-transform"
+              className="h-11 w-auto max-h-11 object-contain drop-shadow-[0_2px_6px_rgba(0,0,0,0.35)] group-hover:scale-105 transition-transform"
             />
           </div>
         </div>
 
         {/* Card 2: VEHICLES DETECTED TODAY */}
-        <div className="relative bg-[#0A1017] border border-[#0E7FE0]/30 rounded-xl p-3.5 flex items-center justify-between shadow-[0_4px_16px_rgba(0,0,0,0.5)] overflow-hidden min-h-[92px]">
-          <div className="flex items-center gap-3 min-w-0">
-            <div className="w-10 h-10 rounded-xl bg-[#0E7FE0]/15 text-[#0E7FE0] border border-[#0E7FE0]/30 flex items-center justify-center shadow-[0_0_12px_rgba(14,127,224,0.2)] shrink-0">
-              <Car className="w-5 h-5" />
+        <div className="relative bg-[#0A121D] border border-[#0E7FE0]/35 rounded-xl p-4 flex items-center justify-between shadow-[0_4px_16px_rgba(0,0,0,0.5)] overflow-hidden min-h-[96px] group">
+          <div className="min-w-0 flex-1">
+            <div className="text-[11px] font-sans font-medium tracking-wide text-[#8FA8C0] uppercase whitespace-nowrap">
+              VEHICLES DETECTED TODAY
             </div>
-            <div className="min-w-0">
-              <div className="text-[11px] font-sans font-semibold tracking-wide text-[#8FA8C0] uppercase whitespace-nowrap">
-                VEHICLES DETECTED TODAY
-              </div>
-              <div className="flex items-baseline gap-2 mt-0.5">
-                <span className="text-2xl font-mono font-black text-white tracking-tight whitespace-nowrap">
-                  2,068
-                </span>
-                <span className="text-[10px] font-mono font-bold text-[#00C875] bg-[#00C875]/15 px-1.5 py-0.2 rounded border border-[#00C875]/30 whitespace-nowrap shrink-0">
-                  ▲ +14.2%
-                </span>
-              </div>
-              <div className="text-[11px] font-sans text-[#8FA8C0] whitespace-nowrap mt-0.5">
-                Cross-camera detections
-              </div>
+            <div className="flex items-baseline gap-2 mt-1">
+              <span className="text-2xl font-mono font-black text-white tracking-tight whitespace-nowrap">
+                2,068
+              </span>
+              <span className="text-[11px] font-mono font-bold text-[#00C875] flex items-center gap-0.5 whitespace-nowrap shrink-0">
+                +14.2%
+              </span>
+            </div>
+            <div className="text-[11px] font-sans text-[#8FA8C0] whitespace-nowrap mt-0.5">
+              Cross-camera detections
             </div>
           </div>
 
-          <div className="flex items-end gap-1.5 h-9 shrink-0 pl-2">
-            <div className="w-1.5 bg-[#0E7FE0]/40 h-3 rounded-full" />
-            <div className="w-1.5 bg-[#0E7FE0]/60 h-5.5 rounded-full" />
-            <div className="w-1.5 bg-[#0E7FE0] h-8 rounded-full shadow-[0_0_8px_#0E7FE0]" />
-            <div className="w-1.5 bg-[#0E7FE0]/80 h-6.5 rounded-full" />
-            <div className="w-1.5 bg-[#0E7FE0]/50 h-4 rounded-full" />
+          <div className="w-16 h-12 shrink-0 flex items-center justify-end overflow-hidden pr-0.5">
+            <img
+              src="/images/police_car_3d.png"
+              alt="Police Patrol Vehicle"
+              className="h-11 w-auto max-h-11 object-contain drop-shadow-[0_2px_6px_rgba(0,0,0,0.35)] group-hover:scale-105 transition-transform"
+            />
           </div>
         </div>
 
         {/* Card 3: ACTIVE WATCHLIST ALERTS */}
-        <div className="relative bg-[#0A1017] border border-[#FF3B3B]/40 rounded-xl p-3.5 flex items-center justify-between shadow-[0_4px_20px_rgba(255,59,59,0.15)] overflow-hidden min-h-[92px]">
-          <div className="absolute top-0 left-0 right-0 h-[2px] bg-[#FF3B3B] shadow-[0_0_8px_#FF3B3B]" />
-          <div className="flex items-center gap-3 min-w-0">
-            <div className="w-10 h-10 rounded-xl bg-[#FF3B3B]/15 text-[#FF3B3B] border border-[#FF3B3B]/40 flex items-center justify-center shadow-[0_0_12px_rgba(255,59,59,0.3)] shrink-0">
-              <AlertTriangle className="w-5 h-5" />
+        <div className="relative bg-[#0A121D] border border-[#FF3B3B]/35 rounded-xl p-4 flex items-center justify-between shadow-[0_4px_16px_rgba(255,59,59,0.15)] overflow-hidden min-h-[96px] group">
+          <div className="min-w-0 flex-1">
+            <div className="text-[11px] font-sans font-medium tracking-wide text-[#8FA8C0] uppercase whitespace-nowrap">
+              ACTIVE WATCHLIST ALERTS
             </div>
-            <div className="min-w-0">
-              <div className="text-[11px] font-sans font-semibold tracking-wide text-[#FF3B3B] uppercase whitespace-nowrap">
-                ACTIVE WATCHLIST ALERTS
-              </div>
-              <div className="flex items-baseline gap-2 mt-0.5">
-                <span className="text-2xl font-mono font-black text-[#FF3B3B] tracking-tight whitespace-nowrap">
-                  320
-                </span>
-                <AlertCircle className="w-4 h-4 text-[#FF3B3B] animate-pulse shrink-0 self-center" />
-              </div>
-              <div className="text-[11px] font-sans text-[#8FA8C0] flex items-center gap-1.5 whitespace-nowrap mt-0.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#FF3B3B] animate-pulse shrink-0" />
-                <span>Requires officer attention</span>
-              </div>
+            <div className="flex items-baseline gap-2 mt-1">
+              <span className="text-2xl font-mono font-black text-[#FF3B3B] tracking-tight whitespace-nowrap">
+                320
+              </span>
+            </div>
+            <div className="text-[11px] font-sans text-[#8FA8C0] whitespace-nowrap mt-0.5">
+              Requires officer attention
             </div>
           </div>
 
-          <div className="shrink-0 flex items-center pl-2">
-            <svg className="w-12 h-7 text-[#FF3B3B] filter drop-shadow-[0_0_6px_rgba(255,59,59,0.5)]" viewBox="0 0 60 30" fill="none">
-              <path
-                d="M0 15 H16 L22 4 L28 26 L34 10 L38 19 L42 15 H60"
-                stroke="currentColor"
-                strokeWidth="2.2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+          <div className="w-16 h-12 shrink-0 flex items-center justify-end overflow-hidden pr-0.5">
+            <img
+              src="/images/alert_beacon_3d.png"
+              alt="Emergency Alert Siren"
+              className="h-11 w-auto max-h-11 object-contain drop-shadow-[0_2px_6px_rgba(0,0,0,0.35)] group-hover:scale-105 transition-transform"
+            />
           </div>
         </div>
 
         {/* Card 4: PLATES SCANNED */}
-        <div className="relative bg-[#0A1017] border border-[#8A63D2]/30 rounded-xl p-3.5 flex items-center justify-between shadow-[0_4px_16px_rgba(0,0,0,0.5)] overflow-hidden min-h-[92px]">
-          <div className="flex items-center gap-3 min-w-0">
-            <div className="w-10 h-10 rounded-xl bg-[#8A63D2]/15 text-[#8A63D2] border border-[#8A63D2]/30 flex items-center justify-center shadow-[0_0_12px_rgba(138,99,210,0.2)] shrink-0">
-              <Scan className="w-5 h-5" />
+        <div className="relative bg-[#0A121D] border border-[#8A63D2]/35 rounded-xl p-4 flex items-center justify-between shadow-[0_4px_16px_rgba(0,0,0,0.5)] overflow-hidden min-h-[96px] group">
+          <div className="min-w-0 flex-1">
+            <div className="text-[11px] font-sans font-medium tracking-wide text-[#8FA8C0] uppercase whitespace-nowrap">
+              PLATES SCANNED
             </div>
-            <div className="min-w-0">
-              <div className="text-[11px] font-sans font-semibold tracking-wide text-[#8FA8C0] uppercase whitespace-nowrap">
-                PLATES SCANNED
-              </div>
-              <div className="flex items-baseline gap-2 mt-0.5">
-                <span className="text-2xl font-mono font-black text-white tracking-tight whitespace-nowrap">
-                  3,528
-                </span>
-                <span className="text-[10px] font-mono font-bold text-[#00C875] bg-[#00C875]/15 px-1.5 py-0.2 rounded border border-[#00C875]/30 whitespace-nowrap shrink-0">
-                  ▲ +8.3%
-                </span>
-              </div>
-              <div className="text-[11px] font-sans text-[#8FA8C0] whitespace-nowrap mt-0.5">
-                OCR validated records
-              </div>
+            <div className="flex items-baseline gap-2 mt-1">
+              <span className="text-2xl font-mono font-black text-white tracking-tight whitespace-nowrap">
+                3,528
+              </span>
+              <span className="text-[11px] font-mono font-bold text-[#00C875] flex items-center gap-0.5 whitespace-nowrap shrink-0">
+                +8.3%
+              </span>
+            </div>
+            <div className="text-[11px] font-sans text-[#8FA8C0] whitespace-nowrap mt-0.5">
+              OCR validated records
             </div>
           </div>
 
-          <div className="flex items-end gap-1.5 h-9 shrink-0 pl-2">
-            <div className="w-1.5 bg-[#8A63D2]/40 h-3 rounded-full" />
-            <div className="w-1.5 bg-[#8A63D2]/60 h-5.5 rounded-full" />
-            <div className="w-1.5 bg-[#8A63D2] h-7.5 rounded-full shadow-[0_0_8px_#8A63D2]" />
-            <div className="w-1.5 bg-[#8A63D2]/80 h-8 rounded-full shadow-[0_0_8px_#8A63D2]" />
-            <div className="w-1.5 bg-[#8A63D2]/50 h-4 rounded-full" />
+          <div className="w-16 h-12 shrink-0 flex items-center justify-end overflow-hidden pr-0.5">
+            <img
+              src="/images/plate_scanner_3d.png"
+              alt="ANPR Plate Scanner"
+              className="h-11 w-auto max-h-11 object-contain drop-shadow-[0_2px_6px_rgba(0,0,0,0.35)] group-hover:scale-105 transition-transform"
+            />
           </div>
         </div>
       </div>
@@ -487,7 +475,7 @@ export const Dashboard: React.FC = () => {
                           </div>
                           {payload[0].payload.time === '19:46' && (
                             <div className="text-[#00C875] text-[10px] font-bold mt-0.5">
-                              ▲ Peak Rush (+62%)
+                              Peak Rush (+62%)
                             </div>
                           )}
                         </div>
@@ -520,7 +508,7 @@ export const Dashboard: React.FC = () => {
             <div className="absolute top-2 right-24 sm:right-32 bg-[#0D1520]/90 border border-[#0E7FE0]/60 backdrop-blur-xs px-2.5 py-1 rounded-lg text-xs font-mono shadow-lg pointer-events-none hidden sm:block">
               <div className="font-bold text-white flex items-center gap-1.5">
                 <span>682 vehicles</span>
-                <span className="text-[10px] text-[#00C875]">▲ +62%</span>
+                <span className="text-[10px] text-[#00C875]">+62%</span>
               </div>
               <div className="text-[10px] text-[#8FA8C0]">19:46 Peak</div>
             </div>

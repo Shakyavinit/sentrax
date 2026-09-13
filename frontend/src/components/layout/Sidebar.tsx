@@ -52,7 +52,7 @@ export const Sidebar: React.FC = () => {
           path: '/alerts',
           label: 'Alerts',
           icon: ShieldAlert,
-          badge: 320,
+          badge: 260,
         },
         { path: '/watchlist', label: 'Watchlist', icon: Eye },
         { path: '/evidence', label: 'Evidence Vault', icon: Archive },
@@ -63,26 +63,26 @@ export const Sidebar: React.FC = () => {
       title: 'REPORTS',
       items: [
         { path: '/analytics', label: 'Analytics', icon: BarChart3 },
-        { path: '/analytics', label: 'Reports', icon: FileText },
+        { path: '/analytics', label: 'Audit Trail', icon: FileText },
       ],
     },
     {
       title: 'TOOLS',
       items: [
         { path: '/research-agent', label: 'Research Agent', icon: Bot },
-        { path: '/cameras', label: 'System Settings', icon: Settings },
+        { path: '/cameras', label: 'Settings', icon: Settings },
       ],
     },
   ];
 
   return (
     <aside
-      className={`fixed top-0 left-0 bottom-0 z-30 bg-[#0D1520] border-r border-[#1C2E42] flex flex-col transition-all duration-200 ${
+      className={`fixed top-0 left-0 bottom-0 z-30 bg-[#070B11] border-r border-[#142030] flex flex-col transition-all duration-200 ${
         sidebarCollapsed ? 'w-14' : 'w-56'
       }`}
     >
       {/* Top Header & Logo */}
-      <div className="h-[52px] border-b border-[#1C2E42] flex items-center justify-between px-3">
+      <div className="h-[52px] border-b border-[#142030] flex items-center justify-between px-3">
         <NavLink to="/" className="flex items-center gap-2 overflow-hidden">
           <Logo collapsed={sidebarCollapsed} className={sidebarCollapsed ? 'h-6 w-6' : 'h-7'} />
         </NavLink>
@@ -100,7 +100,7 @@ export const Sidebar: React.FC = () => {
         {navSections.map((sec) => (
           <div key={sec.title}>
             {!sidebarCollapsed && (
-              <div className="px-2.5 pb-1 text-[9px] font-mono tracking-widest text-[#4D6B85] uppercase font-bold">
+              <div className="px-2.5 pb-1 text-[9px] font-mono tracking-wider text-[#4D6B85] uppercase font-bold">
                 {sec.title}
               </div>
             )}
@@ -113,10 +113,10 @@ export const Sidebar: React.FC = () => {
                     to={item.path}
                     end={item.path === '/'}
                     className={({ isActive }) =>
-                      `flex items-center h-8 px-2.5 rounded-[4px] text-xs font-medium transition-colors ${
+                      `flex items-center h-8 px-2.5 rounded-[6px] text-xs font-medium transition-colors ${
                         isActive
-                          ? 'bg-[#1F3050] text-[#E8EFF7] border-l-2 border-[#0E7FE0] font-semibold'
-                          : 'text-[#8FA8C0] hover:text-[#E8EFF7] hover:bg-[#121E2E]'
+                          ? 'bg-[#0E7FE0] text-white font-semibold shadow-[0_0_12px_rgba(14,127,224,0.35)]'
+                          : 'text-[#8FA8C0] hover:text-[#E8EFF7] hover:bg-[#0D1520]'
                       } ${sidebarCollapsed ? 'justify-center px-0' : 'gap-2.5'}`
                     }
                     title={sidebarCollapsed ? item.label : undefined}
@@ -138,54 +138,38 @@ export const Sidebar: React.FC = () => {
 
       {/* System Status Widget */}
       {!sidebarCollapsed && (
-        <div className="mx-2 mb-2 p-2.5 rounded-lg bg-[#070B10] border border-[#1C2E42] text-[10px] font-mono shadow-inner shrink-0">
-          <div className="flex items-center justify-between pb-1.5 border-b border-[#1C2E42]/60 mb-2">
-            <span className="text-white font-bold tracking-wider">System Status</span>
-            <span className="w-2 h-2 rounded-full bg-[#00C875] shadow-[0_0_6px_#00C875] animate-pulse" />
+        <div className="mx-2 mb-2 p-2.5 rounded-lg bg-[#0A1017] border border-[#162536] text-[10px] font-mono shadow-inner shrink-0">
+          <div className="flex items-center justify-between text-xs pb-1">
+            <span className="text-[#8FA8C0] flex items-center gap-1.5">
+              <span>⚙️</span> AI Engine
+            </span>
+            <span className="text-[#00C875] font-bold flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#00C875] shadow-[0_0_6px_#00C875] animate-pulse" />
+              Running
+            </span>
           </div>
-          <div className="space-y-1.5">
-            <div className="flex items-center justify-between">
-              <span className="text-[#8FA8C0] flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#00C875]" /> AI Engine
-              </span>
-              <span className="text-[#00C875] font-bold">Running</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-[#8FA8C0] flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#00C875]" /> ANPR Service
-              </span>
-              <span className="text-[#00C875] font-bold">Online</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-[#8FA8C0] flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#00C875]" /> Video Pipeline
-              </span>
-              <span className="text-[#00C875] font-bold">Healthy</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-[#8FA8C0] flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#00C875]" /> Database
-              </span>
-              <span className="text-[#00C875] font-bold">Healthy</span>
-            </div>
-          </div>
-          <div className="mt-2 pt-1.5 border-t border-[#1C2E42]/60 text-[9px] text-[#4D6B85] flex items-center justify-between">
-            <span>Uptime 324d 6h 12m</span>
-            <span>v3.1.0</span>
+          <div className="flex items-center justify-between text-[10px] text-[#4D6B85] pt-0.5">
+            <span>YOLOv8 + LPR</span>
+            <span className="text-[#8FA8C0]">25 FPS Active</span>
           </div>
         </div>
       )}
 
       {/* User Info & Logout Footer */}
-      <div className="p-2 border-t border-[#1C2E42] bg-[#0A101A] shrink-0">
-        <div className={`flex items-center ${sidebarCollapsed ? 'justify-center' : 'justify-between px-2'}`}>
+      <div className="p-2 border-t border-[#142030] bg-[#070B11] shrink-0">
+        <div className={`flex items-center ${sidebarCollapsed ? 'justify-center' : 'justify-between px-1'}`}>
           {!sidebarCollapsed && (
-            <div className="overflow-hidden">
-              <div className="text-xs font-semibold text-[#E8EFF7] truncate">
-                {user?.username || 'Officer'}
+            <div className="flex items-center gap-2 overflow-hidden">
+              <div className="w-7 h-7 rounded-full bg-[#0E7FE0] text-white font-mono font-bold text-xs flex items-center justify-center shrink-0">
+                AD
               </div>
-              <div className="text-[10px] font-mono text-[#8FA8C0] uppercase tracking-wider">
-                {user?.role || 'INVESTIGATOR'}
+              <div className="overflow-hidden">
+                <div className="text-xs font-semibold text-[#E8EFF7] truncate">
+                  {user?.username || 'admin'}
+                </div>
+                <div className="text-[10px] font-sans text-[#8FA8C0] truncate">
+                  Administrator
+                </div>
               </div>
             </div>
           )}
