@@ -58,8 +58,8 @@ const CANONICAL_CAMERAS: SentinelCamera[] = [
     protocol: 'HLS',
     resolution: '1920×1080',
     fps: 30,
-    feedImg: '/images/feed_cam01.jpg',
-    videoUrl: '/videos/cam_mg_road.mp4',
+    feedImg: './images/feed_cam01.jpg',
+    videoUrl: './videos/cam_mg_road.mp4',
     category: 'highway',
     status: 'online',
     lat: 23.0258,
@@ -76,8 +76,8 @@ const CANONICAL_CAMERAS: SentinelCamera[] = [
     protocol: 'RTSP',
     resolution: '1920×1080',
     fps: 30,
-    feedImg: '/images/feed_cam02.jpg',
-    videoUrl: '/videos/cam_sardar_bridge.mp4',
+    feedImg: './images/feed_cam02.jpg',
+    videoUrl: './videos/cam_sardar_bridge.mp4',
     category: 'city',
     status: 'online',
     lat: 23.0152,
@@ -94,8 +94,8 @@ const CANONICAL_CAMERAS: SentinelCamera[] = [
     protocol: 'HLS',
     resolution: '1920×1080',
     fps: 30,
-    feedImg: '/images/feed_cam03.jpg',
-    videoUrl: '/videos/cam_vastrapur.mp4',
+    feedImg: './images/feed_cam03.jpg',
+    videoUrl: './videos/cam_vastrapur.mp4',
     category: 'city',
     status: 'online',
     lat: 23.0436,
@@ -112,8 +112,8 @@ const CANONICAL_CAMERAS: SentinelCamera[] = [
     protocol: 'RTSP',
     resolution: '1920×1080',
     fps: 30,
-    feedImg: '/images/feed_cam04.jpg',
-    videoUrl: '/videos/cam_sg_highway_toll.mp4',
+    feedImg: './images/feed_cam04.jpg',
+    videoUrl: './videos/cam_sg_highway_toll.mp4',
     category: 'highway',
     status: 'online',
     lat: 23.0732,
@@ -130,8 +130,8 @@ const CANONICAL_CAMERAS: SentinelCamera[] = [
     protocol: 'HLS',
     resolution: '1920×1080',
     fps: 30,
-    feedImg: '/images/feed_cam05.jpg',
-    videoUrl: '/videos/cam_sector15.mp4',
+    feedImg: './images/feed_cam05.jpg',
+    videoUrl: './videos/cam_sector15.mp4',
     category: 'sensitive',
     status: 'online',
     lat: 23.2156,
@@ -148,8 +148,8 @@ const CANONICAL_CAMERAS: SentinelCamera[] = [
     protocol: 'RTSP',
     resolution: '1920×1080',
     fps: 30,
-    feedImg: '/images/feed_cam06.jpg',
-    videoUrl: '/videos/cam_gift_city.mp4',
+    feedImg: './images/feed_cam06.jpg',
+    videoUrl: './videos/cam_gift_city.mp4',
     category: 'sensitive',
     status: 'online',
     lat: 23.1573,
@@ -166,8 +166,8 @@ const CANONICAL_CAMERAS: SentinelCamera[] = [
     protocol: 'HLS',
     resolution: '1920×1080',
     fps: 30,
-    feedImg: '/images/feed_cam07.jpg',
-    videoUrl: '/videos/cam_sabarmati.mp4',
+    feedImg: './images/feed_cam07.jpg',
+    videoUrl: './videos/cam_sabarmati.mp4',
     category: 'city',
     status: 'online',
     lat: 23.0395,
@@ -184,8 +184,8 @@ const CANONICAL_CAMERAS: SentinelCamera[] = [
     protocol: 'RTSP',
     resolution: '1920×1080',
     fps: 30,
-    feedImg: '/images/feed_cam08.jpg',
-    videoUrl: '/videos/cam_gnlu_gate.mp4',
+    feedImg: './images/feed_cam08.jpg',
+    videoUrl: './videos/cam_gnlu_gate.mp4',
     category: 'entry_exit',
     status: 'online',
     lat: 23.1891,
@@ -202,8 +202,8 @@ const CANONICAL_CAMERAS: SentinelCamera[] = [
     protocol: 'HLS',
     resolution: '1920×1080',
     fps: 30,
-    feedImg: '/images/feed_cam09.jpg',
-    videoUrl: '/videos/cam_chiloda_circle.mp4',
+    feedImg: './images/feed_cam09.jpg',
+    videoUrl: './videos/cam_chiloda_circle.mp4',
     category: 'entry_exit',
     status: 'online',
     lat: 23.2743,
@@ -220,8 +220,8 @@ const CANONICAL_CAMERAS: SentinelCamera[] = [
     protocol: 'RTSP',
     resolution: '1920×1080',
     fps: 30,
-    feedImg: '/images/feed_cam06.jpg',
-    videoUrl: '/videos/cam_kudasan.mp4',
+    feedImg: './images/feed_cam06.jpg',
+    videoUrl: './videos/cam_kudasan.mp4',
     category: 'city',
     status: 'online',
     lat: 23.178,
@@ -768,7 +768,7 @@ export const LiveMonitor: React.FC = () => {
               <div className="bg-[#0B131F] border border-[#FF3B3B]/50 rounded-lg p-2.5 shadow relative overflow-hidden">
                 <div className="flex items-start gap-2.5">
                   <img
-                    src="/images/hit_scorpio_clean.jpg"
+                    src="./images/hit_scorpio_clean.jpg"
                     alt="Scorpio"
                     className="w-16 h-12 rounded object-cover border border-[#1C2E42] shrink-0"
                   />
@@ -821,7 +821,7 @@ export const LiveMonitor: React.FC = () => {
               <div className="bg-[#0B131F] border border-[#FFB800]/50 rounded-lg p-2.5 shadow relative overflow-hidden">
                 <div className="flex items-start gap-2.5">
                   <img
-                    src="/images/hit_fortuner_clean.jpg"
+                    src="./images/hit_fortuner_clean.jpg"
                     alt="Fortuner"
                     className="w-16 h-12 rounded object-cover border border-[#1C2E42] shrink-0"
                   />
@@ -874,7 +874,7 @@ export const LiveMonitor: React.FC = () => {
               <div className="bg-[#0B131F] border border-[#E5A800]/50 rounded-lg p-2.5 shadow relative overflow-hidden">
                 <div className="flex items-start gap-2.5">
                   <img
-                    src="/images/hit_swift_clean.jpg"
+                    src="./images/hit_swift_clean.jpg"
                     alt="Swift"
                     className="w-16 h-12 rounded object-cover border border-[#1C2E42] shrink-0"
                   />

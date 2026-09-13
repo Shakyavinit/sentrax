@@ -39,16 +39,16 @@ export interface CameraDetailModalProps {
 }
 
 const CAM_VIDEO_MAP: Record<string, string> = {
-  CAM01: '/videos/cam_mg_road.mp4',
-  CAM02: '/videos/cam_sardar_bridge.mp4',
-  CAM03: '/videos/cam_vastrapur.mp4',
-  CAM04: '/videos/cam_sg_highway_toll.mp4',
-  CAM05: '/videos/cam_gift_city.mp4',
-  CAM06: '/videos/cam_gnlu_gate.mp4',
-  CAM07: '/videos/cam_sabarmati.mp4',
-  CAM08: '/videos/cam_sardar_bridge.mp4',
-  CAM09: '/videos/cam_vastrapur.mp4',
-  CAM10: '/videos/cam_mg_road.mp4',
+  CAM01: './videos/cam_mg_road.mp4',
+  CAM02: './videos/cam_sardar_bridge.mp4',
+  CAM03: './videos/cam_vastrapur.mp4',
+  CAM04: './videos/cam_sg_highway_toll.mp4',
+  CAM05: './videos/cam_gift_city.mp4',
+  CAM06: './videos/cam_gnlu_gate.mp4',
+  CAM07: './videos/cam_sabarmati.mp4',
+  CAM08: './videos/cam_sardar_bridge.mp4',
+  CAM09: './videos/cam_vastrapur.mp4',
+  CAM10: './videos/cam_mg_road.mp4',
 };
 
 export const CameraDetailModal: React.FC<CameraDetailModalProps> = ({
@@ -95,7 +95,7 @@ export const CameraDetailModal: React.FC<CameraDetailModalProps> = ({
 
   // Video source resolution
   const camKey = camera?.camera_id?.toUpperCase() || 'CAM07';
-  const videoSrc = CAM_VIDEO_MAP[camKey] || '/videos/cam_sabarmati.mp4';
+  const videoSrc = CAM_VIDEO_MAP[camKey] || './videos/cam_sabarmati.mp4';
 
   // Play video on mount / camera change
   useEffect(() => {
@@ -267,7 +267,7 @@ export const CameraDetailModal: React.FC<CameraDetailModalProps> = ({
     } catch {
       // Cross-origin fallback download
       const link = document.createElement('a');
-      link.href = '/images/cam07_sabarmati_feed.jpg';
+      link.href = './images/cam07_sabarmati_feed.jpg';
       link.download = `SENTRAX_${camera.camera_id}_FRAME_${Date.now()}.jpg`;
       document.body.appendChild(link);
       link.click();
@@ -745,7 +745,7 @@ export const CameraDetailModal: React.FC<CameraDetailModalProps> = ({
                   className="p-2 rounded-lg bg-[#070D16] border border-[#162536] flex items-center gap-2.5 hover:border-[#0E7FE0]/60 transition-colors cursor-pointer group"
                 >
                   <img
-                    src="/images/car_mh12ef9012.jpg"
+                    src="./images/car_mh12ef9012.jpg"
                     alt="SUV MH12EF9012"
                     className="w-12 h-10 object-cover rounded border border-[#1C2E42] shrink-0"
                   />
@@ -775,7 +775,7 @@ export const CameraDetailModal: React.FC<CameraDetailModalProps> = ({
                   className="p-2 rounded-lg bg-[#070D16] border border-[#162536] flex items-center gap-2.5 hover:border-[#0E7FE0]/60 transition-colors cursor-pointer group"
                 >
                   <img
-                    src="/images/car_gj18ij7890.jpg"
+                    src="./images/car_gj18ij7890.jpg"
                     alt="Car GJ18IJ7890"
                     className="w-12 h-10 object-cover rounded border border-[#1C2E42] shrink-0"
                   />
@@ -805,7 +805,7 @@ export const CameraDetailModal: React.FC<CameraDetailModalProps> = ({
                   className="p-2 rounded-lg bg-[#140608] border border-[#FF3B3B] shadow-[0_0_15px_rgba(255,59,59,0.25)] flex items-center gap-2.5 cursor-pointer group hover:bg-[#1E090D] transition-colors"
                 >
                   <img
-                    src="/images/car_rj14gh3456.jpg"
+                    src="./images/car_rj14gh3456.jpg"
                     alt="Stolen Fortuner RJ14GH3456"
                     className="w-12 h-10 object-cover rounded border border-[#FF3B3B]/50 shrink-0"
                   />

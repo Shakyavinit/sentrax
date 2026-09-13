@@ -47,16 +47,16 @@ export const CameraFeed: React.FC<CameraFeedProps> = ({
 
   // Video fallback source map
   const CAM_VIDEO_FALLBACKS: Record<string, string> = {
-    CAM01: '/videos/cam_mg_road.mp4',
-    CAM02: '/videos/cam_sardar_bridge.mp4',
-    CAM03: '/videos/cam_vastrapur.mp4',
-    CAM04: '/videos/cam_sg_highway_toll.mp4',
-    CAM05: '/videos/cam_sector15.mp4',
-    CAM06: '/videos/cam_gift_city.mp4',
-    CAM07: '/videos/cam_sabarmati.mp4',
-    CAM08: '/videos/cam_gnlu_gate.mp4',
-    CAM09: '/videos/cam_chiloda_circle.mp4',
-    CAM10: '/videos/cam_kudasan.mp4',
+    CAM01: './videos/cam_mg_road.mp4',
+    CAM02: './videos/cam_sardar_bridge.mp4',
+    CAM03: './videos/cam_vastrapur.mp4',
+    CAM04: './videos/cam_sg_highway_toll.mp4',
+    CAM05: './videos/cam_sector15.mp4',
+    CAM06: './videos/cam_gift_city.mp4',
+    CAM07: './videos/cam_sabarmati.mp4',
+    CAM08: './videos/cam_gnlu_gate.mp4',
+    CAM09: './videos/cam_chiloda_circle.mp4',
+    CAM10: './videos/cam_kudasan.mp4',
   };
 
   // 1. Initialize and play video
@@ -64,7 +64,7 @@ export const CameraFeed: React.FC<CameraFeedProps> = ({
     const video = videoRef.current;
     if (!video || status === 'offline') return;
 
-    const chosenFallback = CAM_VIDEO_FALLBACKS[camKey] || '/videos/cam_mg_road.mp4';
+    const chosenFallback = CAM_VIDEO_FALLBACKS[camKey] || './videos/cam_mg_road.mp4';
     const targetSrc = hlsUrl && hlsUrl.endsWith('.mp4') ? hlsUrl : chosenFallback;
 
     video.muted = true;

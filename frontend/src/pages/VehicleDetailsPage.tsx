@@ -85,7 +85,7 @@ export const VehicleDetailsPage: React.FC = () => {
       speed: '42 km/h',
       conf: '98.6%',
       hash: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
-      image: '/images/evidence_gnlu_large.jpg',
+      image: './images/evidence_gnlu_large.jpg',
       plate: cleanPlate,
       location: 'GNLU Main Gate, Gandhinagar'
     },
@@ -96,7 +96,7 @@ export const VehicleDetailsPage: React.FC = () => {
       speed: '58 km/h',
       conf: '97.2%',
       hash: '8f434346648f6b96df89dda901c5176b10a6d83961dd3c1ac88b59b2dc327aa4',
-      image: '/images/cam_sabarmati_thumb.jpg',
+      image: './images/cam_sabarmati_thumb.jpg',
       plate: cleanPlate,
       location: 'Riverfront Promenade West'
     },
@@ -107,7 +107,7 @@ export const VehicleDetailsPage: React.FC = () => {
       speed: '64 km/h',
       conf: '99.1%',
       hash: '3a7bd3e2360a3d29eea436fcfb7e44c735d117c42d1c1835420b6b9942dd4f1b',
-      image: '/images/cam_gift_city_thumb.jpg',
+      image: './images/cam_gift_city_thumb.jpg',
       plate: cleanPlate,
       location: 'GIFT City Underpass Entry'
     },
@@ -118,7 +118,7 @@ export const VehicleDetailsPage: React.FC = () => {
       speed: '35 km/h',
       conf: '96.4%',
       hash: 'c249a50ae3576395e9ce0d7fbe8b5561a0f8bf36c99c855a02e6d9b0ef76451e',
-      image: '/images/cam_sg_highway_thumb.jpg',
+      image: './images/cam_sg_highway_thumb.jpg',
       plate: cleanPlate,
       location: 'SG Highway Southbound Plaza'
     },
@@ -279,7 +279,7 @@ export const VehicleDetailsPage: React.FC = () => {
           <div className="lg:col-span-3 flex justify-center lg:justify-start">
             <div className="relative group w-full max-w-[260px] h-[155px] rounded-lg overflow-hidden border border-[#233A52] bg-[#070B10] shadow-inner">
               <img
-                src="/images/vehicle_scorpio_crop.jpg"
+                src="./images/vehicle_scorpio_crop.jpg"
                 alt="White Mahindra Scorpio-N"
                 className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300"
                 onError={(e) => {
@@ -697,7 +697,7 @@ export const VehicleDetailsPage: React.FC = () => {
                       cam: 'GNLU Main Gate (CAM08)',
                       speed: '42 km/h',
                       heading: 'Southbound',
-                      thumb: '/images/cam_gnlu_gate_thumb.jpg',
+                      thumb: './images/cam_gnlu_gate_thumb.jpg',
                       status: 'Live',
                     },
                     {
@@ -705,7 +705,7 @@ export const VehicleDetailsPage: React.FC = () => {
                       cam: 'Sabarmati Riverfront (CAM07)',
                       speed: '58 km/h',
                       heading: 'South-West',
-                      thumb: '/images/cam_sabarmati_thumb.jpg',
+                      thumb: './images/cam_sabarmati_thumb.jpg',
                       status: 'Passed',
                     },
                     {
@@ -713,7 +713,7 @@ export const VehicleDetailsPage: React.FC = () => {
                       cam: 'GIFT City Road (CAM06)',
                       speed: '64 km/h',
                       heading: 'Westbound',
-                      thumb: '/images/cam_gift_city_thumb.jpg',
+                      thumb: './images/cam_gift_city_thumb.jpg',
                       status: 'Passed',
                     },
                     {
@@ -721,7 +721,7 @@ export const VehicleDetailsPage: React.FC = () => {
                       cam: 'SG Highway Toll (CAM04)',
                       speed: '35 km/h',
                       heading: 'Northbound',
-                      thumb: '/images/cam_sg_highway_thumb.jpg',
+                      thumb: './images/cam_sg_highway_thumb.jpg',
                       status: 'Passed',
                     },
                   ].map((s, idx) => (
@@ -1019,7 +1019,7 @@ export const VehicleDetailsPage: React.FC = () => {
                     speed: '42 km/h',
                     conf: '98.6%',
                     hash: 'e3b0c442...b855',
-                    thumb: '/images/cam_gnlu_gate_thumb.jpg',
+                    thumb: './images/cam_gnlu_gate_thumb.jpg',
                   },
                   {
                     cam: 'Sabarmati Riverfront CAM07',
@@ -1028,7 +1028,7 @@ export const VehicleDetailsPage: React.FC = () => {
                     speed: '58 km/h',
                     conf: '97.2%',
                     hash: '8f434346...aa4',
-                    thumb: '/images/cam_sabarmati_thumb.jpg',
+                    thumb: './images/cam_sabarmati_thumb.jpg',
                   },
                   {
                     cam: 'GIFT City Road CAM06',
@@ -1037,7 +1037,7 @@ export const VehicleDetailsPage: React.FC = () => {
                     speed: '64 km/h',
                     conf: '99.1%',
                     hash: '3a7bd3e2...4f1b',
-                    thumb: '/images/cam_gift_city_thumb.jpg',
+                    thumb: './images/cam_gift_city_thumb.jpg',
                   },
                   {
                     cam: 'SG Highway Toll CAM04',
@@ -1046,7 +1046,7 @@ export const VehicleDetailsPage: React.FC = () => {
                     speed: '35 km/h',
                     conf: '96.4%',
                     hash: 'c249a50a...6451',
-                    thumb: '/images/cam_sg_highway_thumb.jpg',
+                    thumb: './images/cam_sg_highway_thumb.jpg',
                   },
                   {
                     cam: 'Vastrapur Lake Junction CAM02',
@@ -1055,7 +1055,7 @@ export const VehicleDetailsPage: React.FC = () => {
                     speed: '28 km/h',
                     conf: '97.8%',
                     hash: '77a94f1c...8189',
-                    thumb: '/images/cam_vastrapur.jpg',
+                    thumb: './images/cam_vastrapur.jpg',
                   },
                 ].map((row, i) => (
                   <tr key={i} className="hover:bg-[#121E2E] transition-colors">
@@ -1494,7 +1494,7 @@ export const VehicleDetailsPage: React.FC = () => {
         >
           <div className="relative max-w-4xl max-h-[90vh] bg-[#0A1017] border border-[#1F334D] rounded-xl overflow-hidden p-2">
             <img
-              src="/images/vehicle_scorpio_crop.jpg"
+              src="./images/vehicle_scorpio_crop.jpg"
               alt="Enlarged Vehicle"
               className="max-h-[80vh] w-auto mx-auto object-contain rounded"
             />

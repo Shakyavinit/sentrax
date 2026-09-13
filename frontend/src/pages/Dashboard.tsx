@@ -184,7 +184,7 @@ export const Dashboard: React.FC = () => {
               title="Gujarat Surveillance Grid"
             >
               <img
-                src="/images/gujarat_hud_map.jpg"
+                src="./images/gujarat_hud_map.jpg"
                 alt="Gujarat Surveillance Grid"
                 className="w-full h-full object-contain rounded filter contrast-125"
               />
@@ -306,7 +306,7 @@ export const Dashboard: React.FC = () => {
 
           <div className="w-16 h-12 shrink-0 flex items-center justify-end overflow-hidden pr-0.5">
             <img
-              src="/images/cctv_camera_3d.png"
+              src="./images/cctv_camera_3d.png"
               alt="Surveillance Camera"
               className="h-11 w-auto max-h-11 object-contain drop-shadow-[0_2px_6px_rgba(0,0,0,0.35)] group-hover:scale-105 transition-transform"
             />
@@ -334,7 +334,7 @@ export const Dashboard: React.FC = () => {
 
           <div className="w-16 h-12 shrink-0 flex items-center justify-end overflow-hidden pr-0.5">
             <img
-              src="/images/police_car_3d.png"
+              src="./images/police_car_3d.png"
               alt="Police Patrol Vehicle"
               className="h-11 w-auto max-h-11 object-contain drop-shadow-[0_2px_6px_rgba(0,0,0,0.35)] group-hover:scale-105 transition-transform"
             />
@@ -359,7 +359,7 @@ export const Dashboard: React.FC = () => {
 
           <div className="w-16 h-12 shrink-0 flex items-center justify-end overflow-hidden pr-0.5">
             <img
-              src="/images/alert_beacon_3d.png"
+              src="./images/alert_beacon_3d.png"
               alt="Emergency Alert Siren"
               className="h-11 w-auto max-h-11 object-contain drop-shadow-[0_2px_6px_rgba(0,0,0,0.35)] group-hover:scale-105 transition-transform"
             />
@@ -387,7 +387,7 @@ export const Dashboard: React.FC = () => {
 
           <div className="w-16 h-12 shrink-0 flex items-center justify-end overflow-hidden pr-0.5">
             <img
-              src="/images/plate_scanner_3d.png"
+              src="./images/plate_scanner_3d.png"
               alt="ANPR Plate Scanner"
               className="h-11 w-auto max-h-11 object-contain drop-shadow-[0_2px_6px_rgba(0,0,0,0.35)] group-hover:scale-105 transition-transform"
             />
@@ -576,7 +576,7 @@ export const Dashboard: React.FC = () => {
                   {/* Thumbnail */}
                   <div className="w-14 h-9 rounded overflow-hidden bg-black border border-[#233A52] ml-auto shrink-0">
                     <img
-                      src="/images/cam_sardar_bridge_thumb.jpg"
+                      src="./images/cam_sardar_bridge_thumb.jpg"
                       alt="UP32PQ6677"
                       className="w-full h-full object-cover"
                     />
@@ -630,7 +630,7 @@ export const Dashboard: React.FC = () => {
                   {/* Thumbnail */}
                   <div className="w-14 h-9 rounded overflow-hidden bg-black border border-[#233A52] ml-auto shrink-0">
                     <img
-                      src="/images/vehicle_scorpio_crop.jpg"
+                      src="./images/vehicle_scorpio_crop.jpg"
                       alt="GJ01AB1234"
                       className="w-full h-full object-cover"
                     />
@@ -684,7 +684,7 @@ export const Dashboard: React.FC = () => {
                   {/* Thumbnail */}
                   <div className="w-14 h-9 rounded overflow-hidden bg-black border border-[#233A52] ml-auto shrink-0">
                     <img
-                      src="/images/cam_vastrapur_thumb.jpg"
+                      src="./images/cam_vastrapur_thumb.jpg"
                       alt="DL10XY9090"
                       className="w-full h-full object-cover"
                     />
@@ -743,7 +743,7 @@ export const Dashboard: React.FC = () => {
             className="group relative rounded-lg overflow-hidden border border-[#1F334D] hover:border-[#0E7FE0] transition-colors cursor-pointer bg-black flex flex-col justify-between h-[180px]"
           >
             <img
-              src="/images/cam_mg_road_thumb.jpg"
+              src="./images/cam_mg_road_thumb.jpg"
               alt="CAM01 MG Road Junction"
               className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
             />
@@ -787,7 +787,7 @@ export const Dashboard: React.FC = () => {
             className="group relative rounded-lg overflow-hidden border border-[#1F334D] hover:border-[#0E7FE0] transition-colors cursor-pointer bg-black flex flex-col justify-between h-[180px]"
           >
             <img
-              src="/images/cam_sardar_bridge_thumb.jpg"
+              src="./images/cam_sardar_bridge_thumb.jpg"
               alt="CAM02 Sardar Bridge Entry"
               className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
             />
@@ -831,7 +831,7 @@ export const Dashboard: React.FC = () => {
             className="group relative rounded-lg overflow-hidden border border-[#1F334D] hover:border-[#0E7FE0] transition-colors cursor-pointer bg-black flex flex-col justify-between h-[180px]"
           >
             <img
-              src="/images/cam_vastrapur_thumb.jpg"
+              src="./images/cam_vastrapur_thumb.jpg"
               alt="CAM03 Vastrapur Lake Gate"
               className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
             />
