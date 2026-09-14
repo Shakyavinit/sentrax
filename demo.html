@@ -340,25 +340,18 @@
       border-color: var(--border-bright);
       transform: translateY(-2px);
     }
-    .stat-icon {
-      width: 44px;
-      height: 44px;
-      border-radius: 8px;
-      display: grid;
-      place-items: center;
-      font-size: 20px;
-      filter: grayscale(1) brightness(0.7);
-      background: var(--bg-elevated);
-      transition: all 250ms ease;
+    .color-reveal {
+      width: 54px;
+      height: 54px;
+      object-fit: contain;
+      filter: grayscale(100%) contrast(1.1) brightness(0.88);
+      transition: filter 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .stat-card:hover .stat-icon {
-      filter: grayscale(0) brightness(1);
-      transform: scale(1.1) rotate(-3deg);
+    .stat-card:hover .color-reveal,
+    .color-reveal:hover {
+      filter: grayscale(0%) saturate(1.25) brightness(1.05);
+      transform: translateY(-3px) scale(1.08);
     }
-    .stat-card:nth-child(1):hover .stat-icon { background: rgba(14,127,224,0.2); color: var(--accent); box-shadow: 0 0 16px rgba(14,127,224,0.3); }
-    .stat-card:nth-child(2):hover .stat-icon { background: rgba(0,200,117,0.2); color: var(--green); box-shadow: 0 0 16px rgba(0,200,117,0.3); }
-    .stat-card:nth-child(3):hover .stat-icon { background: rgba(255,140,0,0.2); color: var(--orange); box-shadow: 0 0 16px rgba(255,140,0,0.3); }
-    .stat-card:nth-child(4):hover .stat-icon { background: rgba(255,59,59,0.2); color: var(--red); box-shadow: 0 0 16px rgba(255,59,59,0.3); }
 
     .stat-title { font-size: 11px; color: var(--text-muted); font-weight: 500; }
     .stat-value { font-size: 24px; font-weight: 700; font-family: var(--font-mono); color: #fff; margin: 4px 0 2px; }
@@ -671,23 +664,30 @@
   <div class="app-main">
     <!-- TOPBAR -->
     <header class="app-topbar">
-      <div style="display:flex;align-items:center;gap:12px">
+      <div style="display:flex;align-items:center;gap:12px;min-width:110px">
         <button class="btn btn-ghost btn-sm" style="display:none" id="mobile-toggle" onclick="toggleSidebar()">☰</button>
-        <div class="topbar-search">
-          <span class="search-icon">🔍</span>
-          <input id="global-search" placeholder="Search plate, e.g. GJ01AB1234" onkeydown="if(event.key==="Enter"){doGlobalSearch(this.value);}"/>
-          <kbd>⌘ K</kbd>
-        </div>
+        <span style="font-family:var(--font-mono);font-size:10px;color:var(--text-muted);display:flex;align-items:center;gap:6px">
+          <span style="width:6px;height:6px;border-radius:50%;background:var(--green);display:inline-block"></span>
+          AHMEDABAD SOC
+        </span>
       </div>
 
-      <div class="topbar-right">
-        <button class="btn btn-demo btn-sm" onclick="startDemoMode()">
-          ▶ Demo Mode (Judges)
-        </button>
-        <div style="display:flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:11px">
-          <span style="width:8px;height:8px;border-radius:50%;background:var(--green);display:inline-block"></span>
-          <span>DUTY OFFICER</span>
+      <!-- Centered Page Heading -->
+      <div class="topbar-center" style="display:flex;align-items:center;justify-content:center;flex:1;font-family:var(--font-mono);font-size:12px;text-transform:uppercase;letter-spacing:1px">
+        <span style="color:var(--text-muted)">WORKSPACE / </span>
+        <strong id="topbar-current-page" style="color:#fff;font-weight:700;margin-left:6px;font-size:13px">OVERVIEW</strong>
+      </div>
+
+      <!-- Right Hand Search & Controls -->
+      <div class="topbar-right" style="display:flex;align-items:center;gap:10px;min-width:110px">
+        <div class="topbar-search">
+          <span class="search-icon">🔍</span>
+          <input id="global-search" placeholder="Search plate, e.g. GJ01AB1234" onkeydown="if(event.key==='Enter'){doGlobalSearch(this.value);}"/>
+          <kbd>⌘ K</kbd>
         </div>
+        <button class="btn btn-demo btn-sm" onclick="startDemoMode()">
+          ▶ Demo Mode
+        </button>
       </div>
     </header>
 
@@ -698,37 +698,37 @@
       <section id="page-dashboard" class="page-section active">
         <!-- 4 Metric Cards with hover reveal -->
         <div class="stat-grid">
-          <div class="stat-card" onclick="navigate("cameras")">
+          <div class="stat-card" onclick="navigate('cameras')">
             <div>
               <div class="stat-title">REGISTERED CAMERAS</div>
               <div class="stat-value" id="stat-cameras">14 / 15</div>
               <div class="stat-note">Ahmedabad & Gandhinagar grid</div>
             </div>
-            <div class="stat-icon">📹</div>
+            <img class="color-reveal" src="./images/cctv_camera_3d.png" alt="Cameras" width="56" height="56" />
           </div>
-          <div class="stat-card" onclick="navigate("investigation")">
+          <div class="stat-card" onclick="navigate('investigation')">
             <div>
               <div class="stat-title">UNIQUE VEHICLES TODAY</div>
               <div class="stat-value" id="stat-vehicles">2,847</div>
               <div class="stat-note">+14% vs yesterday</div>
             </div>
-            <div class="stat-icon">🚗</div>
+            <img class="color-reveal" src="./images/police_car_3d.png" alt="Vehicles" width="56" height="56" />
           </div>
-          <div class="stat-card" onclick="navigate("investigation")">
+          <div class="stat-card" onclick="navigate('investigation')">
             <div>
               <div class="stat-title">PLATE SCANS (24H)</div>
               <div class="stat-value" id="stat-plates">1,924</div>
               <div class="stat-note">Avg 96.2% confidence</div>
             </div>
-            <div class="stat-icon">⚡</div>
+            <img class="color-reveal" src="./images/plate_scanner_3d.png" alt="Plates" width="56" height="56" />
           </div>
-          <div class="stat-card" onclick="navigate("alerts")">
+          <div class="stat-card" onclick="navigate('alerts')">
             <div>
               <div class="stat-title">AWAITING REVIEW</div>
               <div class="stat-value" id="stat-alerts" style="color:var(--red)">3</div>
               <div class="stat-note">2 warrants · 1 speed anomaly</div>
             </div>
-            <div class="stat-icon">🚨</div>
+            <img class="color-reveal" src="./images/alert_beacon_3d.png" alt="Alerts" width="56" height="56" />
           </div>
         </div>
 
@@ -1144,7 +1144,7 @@
         attributionControl: false
       });
 
-      L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
+      L.tileLayer("https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png", {
         subdomains: "abcd",
         maxZoom: 19
       }).addTo(map);
