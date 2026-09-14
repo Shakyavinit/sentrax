@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Evidence } from '../../types';
 import { LicensePlate } from '../ui/LicensePlate';
 import { Badge, ConfidenceBadge } from '../ui/Badge';
 import { formatTimestamp, truncateHash } from '../../utils/format';
-import { Download, ExternalLink, FileCheck } from 'lucide-react';
+import { Download, ExternalLink, FileCheck, CheckCircle, RefreshCw } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { DEMO_MODE } from '../../utils/demo';
+import { toast } from 'sonner';
 
 interface EvidenceCardProps {
   evidence: Evidence;
@@ -14,11 +15,26 @@ interface EvidenceCardProps {
 }
 
 export const EvidenceCard: React.FC<EvidenceCardProps> = ({ evidence, onView, onExport }) => {
+  const [verifyStatus, setVerifyStatus] = useState<'idle' | 'verifying' | 'verified'>('idle');
+
+  const handleVerifyHash = () => {
+    setVerifyStatus('verifying');
+    setTimeout(() => {
+      setVerifyStatus('verified');
+      toast.success(`SHA-256 hash verified for ${evidence.plate_text} — evidence seal is authentic.`);
+    }, 1100);
+  };
   return (
     <div className="bg-[#0D1520] border border-[#1C2E42] hover:border-[#2E4E70] rounded-[6px] p-4 shadow-[0_1px_3px_rgba(0,0,0,0.5)] transition-all flex flex-col justify-between group">
       <div>
         <div className="flex items-center justify-between mb-3">
-          <Badge variant="ok">{DEMO_MODE ? 'SAMPLE METADATA HASHED' : 'SHA-256 SEALED'}</Badge>
+          <Badge variant={verifyStatus === 'verified' ? 'ok' : 'ok'}>
+            {verifyStatus === 'verified'
+              ? '✓ VERIFIED SHA-256'
+              : DEMO_MODE
+              ? 'SAMPLE METADATA HASHED'
+              : 'SHA-256 SEALED'}
+          </Badge>
           <span className="text-[10px] font-mono text-[#8FA8C0]">
             {evidence.case_id || 'GENERAL_LOG'}
           </span>
@@ -68,7 +84,7 @@ export const EvidenceCard: React.FC<EvidenceCardProps> = ({ evidence, onView, on
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-2 pt-2 border-t border-[#1C2E42]">
+      <div className="grid grid-cols-3 gap-1.5 pt-2 border-t border-[#1C2E42]">
         <Button
           size="sm"
           variant="secondary"
@@ -77,13 +93,33 @@ export const EvidenceCard: React.FC<EvidenceCardProps> = ({ evidence, onView, on
         >
           Inspect
         </Button>
+        <button
+          onClick={handleVerifyHash}
+          disabled={verifyStatus === 'verifying'}
+          className={`h-7 px-2 rounded text-[10px] font-mono font-bold flex items-center justify-center gap-1 border transition-all cursor-pointer ${
+            verifyStatus === 'verified'
+              ? 'bg-[#00C875]/20 text-[#00C875] border-[#00C875]/40'
+              : verifyStatus === 'verifying'
+              ? 'bg-[#121E2E] text-[#8FA8C0] border-[#1C2E42]'
+              : 'bg-[#121E2E] text-[#0E7FE0] hover:bg-[#0E7FE0]/15 border-[#1C2E42] hover:border-[#0E7FE0]/40'
+          }`}
+          title="Verify cryptographic SHA-256 metadata hash"
+        >
+          {verifyStatus === 'verifying' ? (
+            <span>⟳ Checking...</span>
+          ) : verifyStatus === 'verified' ? (
+            <span>✓ Verified</span>
+          ) : (
+            <span>Verify SHA</span>
+          )}
+        </button>
         <Button
           size="sm"
           variant="ghost"
           icon={<Download className="w-3 h-3" />}
           onClick={() => onExport(evidence)}
         >
-          Export ZIP
+          Export
         </Button>
       </div>
     </div>

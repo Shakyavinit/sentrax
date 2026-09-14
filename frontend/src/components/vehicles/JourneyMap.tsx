@@ -155,7 +155,7 @@ const createStopMarker = (
   });
 };
 
-// Active moving marker during route playback
+// Active moving marker during route playback (vehicle tracker)
 const createActiveTrackerMarker = (plate: string) => {
   return L.divIcon({
     className: 'active-tracker-marker',
@@ -163,38 +163,28 @@ const createActiveTrackerMarker = (plate: string) => {
       position: relative;
       display: flex;
       align-items: center;
-      justify-content: center;
+      gap: 6px;
+      background: #080C12;
+      border: 2px solid #0E7FE0;
+      box-shadow: 0 0 18px #0E7FE0, 0 0 32px rgba(14, 127, 224, 0.45);
+      border-radius: 20px;
+      padding: 4px 10px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      color: #E8EFF7;
+      white-space: nowrap;
+      cursor: pointer;
+      z-index: 1000;
     ">
-      <div style="
-        position: absolute;
-        width: 38px;
-        height: 38px;
-        border-radius: 50%;
-        background: rgba(14,127,224,0.3);
-        animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
-      "></div>
-      <div style="
-        background: #080C12;
-        border: 2px solid #0E7FE0;
-        box-shadow: 0 0 16px #0E7FE0;
-        border-radius: 4px;
-        padding: 2px 6px;
-        font-family: 'JetBrains Mono', monospace;
-        font-size: 10px;
-        font-weight: bold;
-        color: #E8EFF7;
-        white-space: nowrap;
-        z-index: 10;
-        display: flex;
-        align-items: center;
-        gap: 4px;
-      ">
+      <span style="font-size: 16px; filter: drop-shadow(0 0 6px #0E7FE0);">🚗</span>
+      <span style="display: flex; align-items: center; gap: 5px;">
         <span style="width: 6px; height: 6px; border-radius: 50%; background: #00C875; display: inline-block;"></span>
         ${plate}
-      </div>
+      </span>
     </div>`,
-    iconSize: [80, 40],
-    iconAnchor: [40, 20],
+    iconSize: [124, 36],
+    iconAnchor: [62, 18],
   });
 };
 
@@ -223,7 +213,7 @@ export const JourneyMap: React.FC<JourneyMapProps> = ({
       : stops[0];
 
   const layerUrls = {
-    dark: 'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}',
+    dark: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
     satellite: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
     street: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
   };
@@ -242,9 +232,10 @@ export const JourneyMap: React.FC<JourneyMapProps> = ({
         scrollWheelZoom={true}
       >
         <TileLayer
-          attribution='&copy; SENTRAX Surveillance Grid &mdash; Esri / OSM'
+          attribution='&copy; <a href="https://carto.com/">CARTO</a> &copy; OpenStreetMap'
           url={layerUrls[mapLayer]}
-          maxZoom={18}
+          subdomains={mapLayer === 'dark' ? 'abcd' : 'abc'}
+          maxZoom={19}
         />
 
         <MapHandler

@@ -9,7 +9,7 @@ try {
   const { demoRequest: request } = await server.ssrLoadModule('/src/api/demoClient.ts');
   const mutation = (method, body) => ({ method, body: JSON.stringify(body) });
   const cameras = await request('/cameras');
-  check(cameras.length === 10, 'ten cameras');
+  check(cameras.length === 15, 'fifteen cameras');
   const result = await request('/vehicles/search?plate=GJ01AB1234');
   check(result.total === 5, 'known plate returns five sightings');
   check((await request('/vehicles/search?plate=ZZ99ZZ9999')).total === 0, 'unknown plate does not fabricate sightings');

@@ -3,15 +3,25 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Bell, Search, Menu, Bot } from 'lucide-react';
 import { CopilotModal } from '../ui/CopilotModal';
 import { useUiStore } from '../../store/uiStore';
-const titles: Record<string, string> = { '/': 'Overview', '/live': 'Camera monitor', '/investigation': 'Vehicle search', '/journey': 'Journey reconstruction', '/alerts': 'Alert review', '/watchlist': 'Watchlist', '/evidence': 'Evidence vault', '/cameras': 'Camera registry', '/analytics': 'Analytics', '/research-agent': 'Research assistant' };
+const titles: Record<string, string> = { '/': 'Overview', '/live': 'Camera monitor', '/investigation': 'Vehicle search', '/journey': 'Journey reconstruction', '/alerts': 'Alert review', '/watchlist': 'Watchlist', '/evidence': 'Evidence vault', '/audit': 'Forensic audit trail', '/cameras': 'Camera registry', '/analytics': 'Analytics', '/research-agent': 'Research assistant' };
 export const TopBar: React.FC = () => {
   const { pathname } = useLocation(), navigate = useNavigate();
   const { mobileMenuOpen, setMobileMenuOpen } = useUiStore();
   const [query, setQuery] = useState(''), [copilot, setCopilot] = useState(false);
   const input = useRef<HTMLInputElement>(null);
   useEffect(() => {
-    const shortcut = (e: KeyboardEvent) => { if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); input.current?.focus(); } };
-    window.addEventListener('keydown', shortcut); return () => window.removeEventListener('keydown', shortcut);
+    const shortcut = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        input.current?.focus();
+        input.current?.select();
+      }
+      if (e.key === 'Escape' && document.activeElement === input.current) {
+        input.current?.blur();
+      }
+    };
+    window.addEventListener('keydown', shortcut);
+    return () => window.removeEventListener('keydown', shortcut);
   }, []);
   return <header className="app-topbar">
     <div className="topbar-context"><button className="mobile-menu icon-button" aria-label="Open navigation" aria-expanded={mobileMenuOpen} aria-controls="primary-navigation" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}><Menu size={20}/></button>

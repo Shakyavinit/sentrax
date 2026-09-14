@@ -31,6 +31,7 @@ export interface Camera {
   updated_at?: string;
   recent_sightings_count?: number;
   metadata?: Record<string, any>;
+  congestion?: 'LOW' | 'MEDIUM' | 'HIGH';
 }
 
 export interface Sighting {
@@ -205,6 +206,9 @@ export interface Alert {
   frame_path?: string;
   crop_path?: string;
   plate_crop_path?: string;
+  alert_type?: 'watchlist' | 'speed' | 'anomaly';
+  speed_kmh?: number;
+  speed_limit?: number;
 }
 
 export interface Evidence {

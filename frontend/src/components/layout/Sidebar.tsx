@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, Video, Search, Route, ShieldAlert, Archive, Eye, Camera, BarChart3, Bot, LogOut, PanelLeftClose, PanelLeftOpen, X } from 'lucide-react';
+import { LayoutDashboard, Video, Search, Route, ShieldAlert, Archive, Eye, Camera, BarChart3, Bot, LogOut, PanelLeftClose, PanelLeftOpen, X, ShieldCheck } from 'lucide-react';
 import { Logo } from '../ui/Logo';
 import { useAuthStore } from '../../store/authStore';
 import { useUiStore } from '../../store/uiStore';
@@ -16,6 +16,7 @@ const sections = [
     { path: '/alerts', label: 'Alert review', icon: ShieldAlert },
     { path: '/watchlist', label: 'Watchlist', icon: Eye },
     { path: '/evidence', label: 'Evidence vault', icon: Archive },
+    { path: '/audit', label: 'Audit trail', icon: ShieldCheck },
     { path: '/cameras', label: 'Camera registry', icon: Camera },
   ] },
   { title: 'INSIGHTS', items: [

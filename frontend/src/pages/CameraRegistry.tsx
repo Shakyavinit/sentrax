@@ -121,7 +121,7 @@ export const CameraRegistry: React.FC = () => {
                 <tr>
                   <th className="py-2.5 px-3 font-medium">Node ID</th>
                   <th className="py-2.5 px-3 font-medium">Camera Name</th>
-                  <th className="py-2.5 px-3 font-medium">Protocol</th>
+                  <th className="py-2.5 px-3 font-medium">Congestion</th>
                   <th className="py-2.5 px-3 font-medium">Status</th>
                   <th className="py-2.5 px-3 font-medium">Activity</th>
                   <th className="py-2.5 px-3 text-right font-medium">Action</th>
@@ -150,8 +150,14 @@ export const CameraRegistry: React.FC = () => {
                         <div className="font-semibold text-white truncate max-w-[160px]">{c.name}</div>
                         <div className="text-[10px] text-[#8FA8C0] truncate max-w-[160px]">{c.location_name}</div>
                       </td>
-                      <td className="py-3 px-3 font-mono text-[10px] uppercase text-[#8FA8C0]">
-                        {c.protocol}
+                      <td className="py-3 px-3">
+                        <span className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold ${
+                          c.congestion === 'HIGH' ? 'bg-red-500/20 text-red-400 border border-red-500/30' :
+                          c.congestion === 'MEDIUM' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' :
+                          'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+                        }`}>
+                          {c.congestion || 'LOW'}
+                        </span>
                       </td>
                       <td className="py-3 px-3">
                         <StatusDot status={c.status} showLabel />

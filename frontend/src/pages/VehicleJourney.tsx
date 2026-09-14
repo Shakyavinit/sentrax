@@ -503,8 +503,11 @@ export const VehicleJourney: React.FC = () => {
               <Compass className="w-4 h-4 text-[#00C875]" />
               <span>GUJARAT SURVEILLANCE RADAR GRID</span>
             </div>
-            <div className="flex items-center gap-2 font-mono text-[10px]">
-              <span className="text-[#8FA8C0]">ACTIVE VEHICLE:</span>
+            <div className="flex items-center gap-3 font-mono text-[10px]">
+              <span className="text-[#8FA8C0] hidden sm:inline">
+                {journey?.stops.length || 0} stops · {journey?.total_duration_mins || 48}m · ~{journey?.estimated_distance_km || 23.4}km · Avg {avgSpeed} km/h
+              </span>
+              <span className="text-[#8FA8C0]">TARGET:</span>
               <span className="text-[#00C875] font-bold">{plateParam}</span>
             </div>
           </div>

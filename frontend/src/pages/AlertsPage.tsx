@@ -150,17 +150,23 @@ export const AlertsPage: React.FC = () => {
                     className="hover:bg-[#121E2E] cursor-pointer transition-colors"
                   >
                     <td className="py-3 px-4">
-                      <Badge
-                        variant={
-                          a.priority === 'critical'
-                            ? 'alert'
-                            : a.priority === 'high'
-                            ? 'warn'
-                            : 'info'
-                        }
-                      >
-                        {a.priority}
-                      </Badge>
+                      {a.alert_type === 'speed' ? (
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-500/20 text-amber-400 border border-amber-500/40 shadow-[0_0_8px_rgba(245,158,11,0.2)]">
+                          ⚡ SPEED
+                        </span>
+                      ) : (
+                        <Badge
+                          variant={
+                            a.priority === 'critical'
+                              ? 'alert'
+                              : a.priority === 'high'
+                              ? 'warn'
+                              : 'info'
+                          }
+                        >
+                          {a.priority}
+                        </Badge>
+                      )}
                     </td>
                     <td className="py-3 px-3">
                       <LicensePlate plate={a.plate_text} size="sm" />

@@ -35,27 +35,24 @@ const CameraMapController: React.FC<{ cameras: Camera[] }> = ({ cameras }) => {
 };
 
 const createCameraIcon = (status: string, isSelected: boolean) => {
-  const color = status === 'online' ? '#00C875' : status === 'warning' ? '#FF8C00' : '#FF3B3B';
-  const strokeColor = isSelected ? '#0E7FE0' : '#FFFFFF';
-  const scale = isSelected ? 'scale-125' : '';
+  const color = status === 'online' ? '#0E7FE0' : status === 'warning' ? '#FF8C00' : '#FF3B3B';
+  const strokeColor = isSelected ? '#FFFFFF' : '#0D1520';
+  const pulse = status === 'offline' ? 'animation: pulse-dot 1.2s infinite;' : '';
 
   return L.divIcon({
     className: 'custom-camera-marker',
     html: `<div style="
-      background: #0D1520;
-      border: 2px solid ${strokeColor};
-      box-shadow: 0 0 10px ${color};
+      width: ${isSelected ? '18px' : '14px'};
+      height: ${isSelected ? '18px' : '14px'};
       border-radius: 50%;
-      width: 24px;
-      height: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    " class="${scale}">
-      <div style="width: 8px; height: 8px; border-radius: 50%; background: ${color};"></div>
-    </div>`,
-    iconSize: [24, 24],
-    iconAnchor: [12, 12],
+      background: ${color};
+      border: 2px solid ${strokeColor};
+      box-shadow: 0 0 0 3px ${status === 'offline' ? 'rgba(255,59,59,0.35)' : 'rgba(14,127,224,0.35)'}, 0 0 14px ${color};
+      cursor: pointer;
+      ${pulse}
+    "></div>`,
+    iconSize: [18, 18],
+    iconAnchor: [9, 9],
   });
 };
 
@@ -73,11 +70,12 @@ export const CameraMap: React.FC<CameraMapProps> = ({
         className="w-full h-full min-h-[300px]"
         scrollWheelZoom={true}
       >
-        {/* Native Dark Surveillance Tiles (No API Key Required) */}
+        {/* CartoDB Dark Matter Tiles — Same as SIH-2026 */}
         <TileLayer
-          attribution='&copy; Esri &mdash; Esri, DeLorme, NAVTEQ'
-          url="https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}"
-          maxZoom={16}
+          attribution='&copy; <a href="https://carto.com/">CARTO</a> &copy; OpenStreetMap'
+          url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+          subdomains="abcd"
+          maxZoom={19}
         />
 
         <CameraMapController cameras={cameras} />
@@ -102,9 +100,16 @@ export const CameraMap: React.FC<CameraMapProps> = ({
                     <StatusDot status={cam.status} showLabel />
                   </div>
                   <div className="text-sm font-semibold text-white mb-1">{cam.name}</div>
-                  <div className="text-[11px] text-[#8FA8C0] mb-2">{cam.location_name}</div>
-                  <div className="text-[10px] font-mono text-[#0E7FE0]">
-                    {cam.recent_sightings_count || 0} scans in past 24h
+                  <div className="text-[11px] text-[#8FA8C0] mb-1.5">{cam.location_name}</div>
+                  <div className="flex items-center justify-between text-[10px] font-mono text-[#0E7FE0] mb-1">
+                    <span>{cam.recent_sightings_count || 0} scans (24h)</span>
+                    <span className={`px-1.5 py-0.5 rounded text-[9px] font-bold ${
+                      cam.congestion === 'HIGH' ? 'bg-red-500/20 text-red-400' :
+                      cam.congestion === 'MEDIUM' ? 'bg-amber-500/20 text-amber-400' :
+                      'bg-emerald-500/20 text-emerald-400'
+                    }`}>
+                      {cam.congestion || 'LOW'} TRAFFIC
+                    </span>
                   </div>
                 </div>
               </Popup>

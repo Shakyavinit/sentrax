@@ -20,6 +20,7 @@ import { VehicleDetailsPage } from './pages/VehicleDetailsPage';
 import { DemoMonitor } from './pages/DemoMonitor';
 import DemoResearch from './pages/DemoResearch';
 import { DemoDossier } from './pages/DemoDossier';
+import { AuditLogPage } from './pages/AuditLogPage';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -69,6 +70,7 @@ export const App: React.FC = () => {
             <Route path="/vehicles/details/:plate" element={DEMO_MODE ? <DemoDossier /> : <VehicleDetailsPage />} />
             <Route path="/vehicles/details" element={DEMO_MODE ? <DemoDossier /> : <VehicleDetailsPage />} />
             <Route path="/evidence" element={<EvidenceVaultPage />} />
+            <Route path="/audit" element={<AuditLogPage />} />
             <Route path="/watchlist" element={<WatchlistPage />} />
             <Route path="/alerts" element={<AlertsPage />} />
             <Route path="/cameras" element={<CameraRegistry />} />

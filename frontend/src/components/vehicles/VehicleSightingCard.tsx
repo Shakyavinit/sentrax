@@ -45,6 +45,28 @@ export const VehicleSightingCard: React.FC<VehicleSightingCardProps> = ({
         </span>
       </div>
 
+      {/* Visual ANPR Confidence Progress Bar */}
+      <div className="my-2">
+        <div className="flex justify-between items-center text-[10px] mb-1">
+          <span className="text-[#8FA8C0]">ANPR Confidence</span>
+          <span className={`font-mono font-bold ${
+            (sighting.plate_conf || 0) >= 0.85 ? 'text-[#00C875]' :
+            (sighting.plate_conf || 0) >= 0.70 ? 'text-[#FF8C00]' : 'text-[#FF3B3B]'
+          }`}>
+            {((sighting.plate_conf || 0) * 100).toFixed(1)}%
+          </span>
+        </div>
+        <div className="h-1.5 w-full bg-[#16202C] rounded-full overflow-hidden">
+          <div
+            className={`h-full rounded-full transition-all ${
+              (sighting.plate_conf || 0) >= 0.85 ? 'bg-[#00C875]' :
+              (sighting.plate_conf || 0) >= 0.70 ? 'bg-[#FF8C00]' : 'bg-[#FF3B3B]'
+            }`}
+            style={{ width: `${Math.min(100, Math.max(5, (sighting.plate_conf || 0) * 100))}%` }}
+          />
+        </div>
+      </div>
+
       <div className="flex items-center justify-between pt-2 border-t border-[#1C2E42] text-[11px] text-[#8FA8C0]">
         <div className="capitalize">
           Class: <strong className="text-[#E8EFF7]">{sighting.vehicle_class || 'Vehicle'}</strong>

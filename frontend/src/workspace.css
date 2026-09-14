@@ -151,5 +151,82 @@ img,video { max-width:100%; }
 @media (max-width:1279px) { .metric-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } .app-topbar { gap:14px; } .topbar-product { display:none; } .app-content { padding:24px; } }
 @media (max-width:1023px) { .app-sidebar,.app-sidebar.is-collapsed { width:248px; transform:translateX(-100%); } .app-sidebar.is-open { transform:translateX(0); } .app-workspace,.app-workspace.is-collapsed { margin-left:0; } .app-sidebar.is-collapsed .nav-label,.app-sidebar.is-collapsed .nav-section-label,.app-sidebar.is-collapsed .sidebar-mode { display:revert; } .app-sidebar.is-collapsed .nav-item { justify-content:flex-start; padding:11px 12px; } .app-sidebar.is-collapsed .sidebar-brand { flex-direction:row; height:76px; padding:0 20px; } .desktop-collapse { display:none; } .mobile-close,.mobile-menu { display:inline-flex; } .sidebar-backdrop { display:block; position:fixed; inset:0; z-index:39; background:#0009; backdrop-filter:blur(3px); } .workspace-notice { padding:9px 24px; } .app-topbar { padding:12px 20px; min-height:64px; } }
 @media (max-width:767px) { .app-content { padding:20px 16px; } .overview-primary { grid-template-columns:minmax(0,1fr); } .camera-preview-grid { grid-template-columns:minmax(0,1fr); } .camera-preview-image { aspect-ratio:2/1; } .overview { gap:18px; } .workspace-notice { padding:9px 16px; flex-wrap:wrap; gap:2px; } .workspace-notice span { font-size:10px; } .global-search { display:none; } .app-topbar { gap:10px; padding:10px 12px; } .topbar-context { font-size:12px; } .topbar-actions { gap:0; } .page-heading { gap:14px; } .page-actions { width:100%; } .search-panel { padding:24px 20px; } .panel-heading { padding:20px; } .metric-card { padding:17px 13px; } .metric-card img { width:48px; height:48px; } .metric-card strong { font-size:27px; } .metric-card small { font-size:10px; } .app-content [class*="h-[calc(100vh"] { height:auto; min-height:600px; } .app-content [class*="min-w-["] { min-width:0; } }
-@media (max-width:420px) { .metric-grid { gap:10px; } .metric-card { align-items:flex-start; } .metric-card img { position:absolute; right:8px; bottom:28px; width:36px; height:36px; opacity:.7; } .metric-card small { max-width:120px; } .metric-card p { font-size:11px; } .panel-heading { flex-wrap:wrap; } .review-row { padding:16px; gap:8px; } .plate-search input { font-size:12px; } }
+/* ─── TACTICAL ANIMATIONS & LEAFLET DARK POPUPS ────────────────────────── */
+@keyframes alert-flash {
+  0%   { background: rgba(255, 59, 59, 0.32); }
+  50%  { background: rgba(255, 59, 59, 0.08); }
+  100% { background: transparent; }
+}
+.alert-card.new-alert, .new-alert {
+  animation: alert-flash 1.6s ease;
+}
+
+@keyframes pulse-dot {
+  0%   { transform: scale(1); opacity: 1; }
+  50%  { transform: scale(1.35); opacity: 0.75; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.dark-popup .leaflet-popup-content-wrapper,
+.leaflet-popup-content-wrapper {
+  background: #0D1520 !important;
+  border: 1px solid #233A52 !important;
+  border-radius: 8px !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.75) !important;
+  color: #E8EFF7 !important;
+}
+.dark-popup .leaflet-popup-tip,
+.leaflet-popup-tip {
+  background: #0D1520 !important;
+}
+.dark-popup .leaflet-popup-close-button,
+.leaflet-popup-close-button {
+  color: #4D6B85 !important;
+}
+
+/* Stat card individual category hover glows */
+.metric-grid > a:nth-child(1):hover { border-color: #0E7FE0; box-shadow: 0 0 16px rgba(14, 127, 224, 0.2); }
+.metric-grid > a:nth-child(2):hover { border-color: #00C875; box-shadow: 0 0 16px rgba(0, 200, 117, 0.2); }
+.metric-grid > a:nth-child(3):hover { border-color: #FF8C00; box-shadow: 0 0 16px rgba(255, 140, 0, 0.2); }
+.metric-grid > a:nth-child(4):hover { border-color: #FF3B3B; box-shadow: 0 0 16px rgba(255, 59, 59, 0.2); }
+
+/* ─── CCTV WALL COLUMNS & CRT SCANLINES ──────────────────────────────── */
+.monitor-grid.cols-1 { grid-template-columns: 1fr !important; }
+.monitor-grid.cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+.monitor-grid.cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
+.monitor-grid.cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; }
+.monitor-grid.cols-5 { grid-template-columns: repeat(5, minmax(0, 1fr)) !important; }
+
+@media (max-width: 1200px) {
+  .monitor-grid.cols-4, .monitor-grid.cols-5 { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
+}
+@media (max-width: 860px) {
+  .monitor-grid.cols-3, .monitor-grid.cols-4, .monitor-grid.cols-5 { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+}
+@media (max-width: 580px) {
+  .monitor-grid.cols-2, .monitor-grid.cols-3, .monitor-grid.cols-4, .monitor-grid.cols-5 { grid-template-columns: 1fr !important; }
+}
+
+.cctv-scanline-overlay {
+  background: linear-gradient(
+    rgba(18, 16, 16, 0) 50%,
+    rgba(0, 0, 0, 0.45) 50%
+  ), linear-gradient(
+    90deg,
+    rgba(255, 0, 0, 0.04),
+    rgba(0, 255, 0, 0.02),
+    rgba(0, 0, 255, 0.04)
+  );
+  background-size: 100% 3px, 6px 100%;
+}
+
+.cctv-scanline-subtle {
+  background: linear-gradient(
+    rgba(18, 16, 16, 0) 50%,
+    rgba(0, 0, 0, 0.22) 50%
+  );
+  background-size: 100% 4px;
+}
+
 @media (prefers-reduced-motion:reduce) { *,*::before,*::after { animation:none !important; transition:none !important; scroll-behavior:auto !important; } }
+
