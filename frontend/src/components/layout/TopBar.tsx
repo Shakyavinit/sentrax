@@ -23,13 +23,79 @@ export const TopBar: React.FC = () => {
     window.addEventListener('keydown', shortcut);
     return () => window.removeEventListener('keydown', shortcut);
   }, []);
-  return <header className="app-topbar">
-    <div className="topbar-context"><button className="mobile-menu icon-button" aria-label="Open navigation" aria-expanded={mobileMenuOpen} aria-controls="primary-navigation" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}><Menu size={20}/></button>
-      <span className="topbar-product">Workspace /</span><strong>{titles[pathname] || 'Vehicle dossier'}</strong></div>
-    <form className="global-search" onSubmit={e => { e.preventDefault(); if (query.trim()) { navigate(`/investigation?plate=${encodeURIComponent(query.trim().toUpperCase())}`); setQuery(''); } }}>
-      <Search size={16}/><input ref={input} aria-label="Search registration plate" placeholder="Search a registration plate…" value={query} onChange={e => setQuery(e.target.value)} /><kbd>⌘ K</kbd>
-    </form>
-    <div className="topbar-actions"><button className="icon-button" aria-label="Open alert review" onClick={() => navigate('/alerts')}><Bell size={19}/></button><button className="icon-button" aria-label="Open investigation assistant" onClick={() => setCopilot(true)}><Bot size={19}/></button></div>
-    <CopilotModal isOpen={copilot} onClose={() => setCopilot(false)} />
-  </header>;
+  return (
+    <header className="app-topbar">
+      {/* Left: Mobile Menu & SOC Node Indicator */}
+      <div className="topbar-left flex items-center gap-2 min-w-[120px]">
+        <button
+          className="mobile-menu icon-button"
+          aria-label="Open navigation"
+          aria-expanded={mobileMenuOpen}
+          aria-controls="primary-navigation"
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+        >
+          <Menu size={20} />
+        </button>
+        <span className="hidden md:flex items-center gap-1.5 font-mono text-[10px] text-[#848d9b] tracking-widest uppercase">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+          <span>AHMEDABAD SOC</span>
+        </span>
+      </div>
+
+      {/* Center: Centered Page Heading */}
+      <div className="topbar-center flex items-center justify-center flex-1 text-center">
+        <div className="flex items-center gap-1.5 font-mono uppercase tracking-wider text-xs">
+          <span className="text-[#848d9b] hidden sm:inline">WORKSPACE /</span>
+          <strong className="text-white font-bold text-sm tracking-tight">
+            {titles[pathname] || 'Vehicle dossier'}
+          </strong>
+        </div>
+      </div>
+
+      {/* Right: Global Search Input & Action Icons */}
+      <div className="topbar-right flex items-center justify-end gap-2.5 min-w-[120px]">
+        <form
+          className="global-search"
+          onSubmit={(e) => {
+            e.preventDefault();
+            if (query.trim()) {
+              navigate(`/investigation?plate=${encodeURIComponent(query.trim().toUpperCase())}`);
+              setQuery('');
+            }
+          }}
+        >
+          <Search size={15} />
+          <input
+            ref={input}
+            aria-label="Search registration plate"
+            placeholder="Search a registration plate…"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
+          <kbd>⌘ K</kbd>
+        </form>
+
+        <div className="topbar-actions flex items-center gap-1">
+          <button
+            className="icon-button"
+            aria-label="Open alert review"
+            onClick={() => navigate('/alerts')}
+            title="Alert Review"
+          >
+            <Bell size={18} />
+          </button>
+          <button
+            className="icon-button"
+            aria-label="Open investigation assistant"
+            onClick={() => setCopilot(true)}
+            title="Forensic AI Copilot"
+          >
+            <Bot size={18} />
+          </button>
+        </div>
+      </div>
+
+      <CopilotModal isOpen={copilot} onClose={() => setCopilot(false)} />
+    </header>
+  );
 };

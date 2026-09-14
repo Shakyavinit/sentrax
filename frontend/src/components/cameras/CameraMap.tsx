@@ -70,10 +70,10 @@ export const CameraMap: React.FC<CameraMapProps> = ({
         className="w-full h-full min-h-[300px]"
         scrollWheelZoom={true}
       >
-        {/* CartoDB Dark Matter Tiles — Same as SIH-2026 */}
+        {/* CartoDB Dark Matter Tiles */}
         <TileLayer
           attribution='&copy; <a href="https://carto.com/">CARTO</a> &copy; OpenStreetMap'
-          url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+          url="https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png"
           subdomains="abcd"
           maxZoom={19}
         />

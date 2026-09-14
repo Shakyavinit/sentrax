@@ -99,21 +99,33 @@ export const Investigation: React.FC = () => {
   };
 
   return (
-    <div className="space-y-3 pb-4">
-      {/* ─── TOP HEADER WITH INVESTIGATION EYEBROW (COMPACT) ─── */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-[#1C2E42]">
+    <div className="space-y-2.5 pb-2">
+      {/* ─── TOP COMMAND HEADER WITH INVESTIGATION EYEBROW & LIVE TELEMETRY ─── */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-2.5 pb-2 border-b border-[#1C2E42]">
         <div>
-          {/* USER REQUIREMENT: Vehicle Cross के ऊपर Investigation लिख दो */}
-          <div className="text-[11px] font-mono font-bold text-[#0E7FE0] tracking-widest uppercase flex items-center gap-1.5 mb-0.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#0E7FE0]" />
-            <span>INVESTIGATION</span>
+          {/* Eyebrow badge */}
+          <div className="text-[10px] font-mono font-bold text-[#0E7FE0] tracking-widest uppercase flex items-center gap-1.5 mb-0.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#0E7FE0] animate-pulse" />
+            <span>INVESTIGATION · VEHICLE SIGHTINGS INTELLIGENCE</span>
           </div>
-          <h1 className="text-lg sm:text-xl font-bold text-white tracking-tight flex items-center gap-2">
-            <span>Vehicle Cross-Camera Trajectory Search</span>
-          </h1>
-          <p className="text-xs text-[#8FA8C0]">
-            Forensic sighting correlation & automated movement reconstruction across 15 urban CCTV nodes.
-          </p>
+          <div className="flex flex-wrap items-center gap-3">
+            <h1 className="text-lg font-bold text-white tracking-tight flex items-center gap-2">
+              <span>Vehicle Cross-Camera Trajectory Search</span>
+            </h1>
+            {journey && journey.stops.length > 0 && (
+              <div className="hidden sm:flex items-center gap-1.5 font-mono text-[10px]">
+                <span className="px-2 py-0.5 rounded bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 font-bold">
+                  {journey.unique_cameras} Nodes Correlated
+                </span>
+                <span className="px-2 py-0.5 rounded bg-[#0E7FE0]/15 border border-[#0E7FE0]/30 text-[#0E7FE0] font-bold">
+                  {journey.total_duration_mins}m Travel
+                </span>
+                <span className="px-2 py-0.5 rounded bg-[#162536] border border-[#223850] text-[#8FA8C0]">
+                  Est. {journey.estimated_distance_km} km
+                </span>
+              </div>
+            )}
+          </div>
         </div>
 
         <div className="flex items-center gap-2 flex-shrink-0">
@@ -138,10 +150,10 @@ export const Investigation: React.FC = () => {
         </div>
       </div>
 
-      {/* ─── UNIFIED COMPACT SEARCH & FILTER BAR (MOVED UP) ─── */}
+      {/* ─── UNIFIED COMPACT SEARCH & TARGETS COMMAND BAR ─── */}
       <form
         onSubmit={handleSearchSubmit}
-        className="p-2.5 bg-[#0D1520] border border-[#1C2E42] rounded-lg flex flex-wrap items-center justify-between gap-2 text-xs shadow-md"
+        className="px-3 py-2 bg-[#0D1520] border border-[#1C2E42] rounded-lg flex flex-wrap items-center justify-between gap-2 text-xs shadow-md"
       >
         <div className="flex flex-wrap items-center gap-2 flex-1 min-w-[280px]">
           {/* Plate Search Input */}
@@ -197,37 +209,11 @@ export const Investigation: React.FC = () => {
         </div>
       </form>
 
-      {/* ─── COMPACT JOURNEY STATS BANNER ─── */}
-      {journey && journey.stops.length >= 2 && (
-        <div className="px-3 py-2 bg-[#121E2E] border border-[#0E7FE0]/40 rounded-lg flex flex-wrap items-center justify-between gap-2 text-xs">
-          <div className="flex items-center gap-2">
-            <Compass className="w-4 h-4 text-[#0E7FE0]" />
-            <span className="font-semibold text-white">
-              {journey.plate_text}: Detected across {journey.unique_cameras} CCTV nodes
-            </span>
-            <span className="text-[#8FA8C0] font-mono text-[11px]">
-              · {journey.total_duration_mins} mins travel · Est. {journey.estimated_distance_km} km
-            </span>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() => navigate(`/vehicles/details/${encodeURIComponent(journey.plate_text)}`)}
-              className="text-[#0E7FE0] hover:underline font-mono text-[11px] font-bold flex items-center gap-1"
-            >
-              <FileText size={12} />
-              <span>Full Dossier</span>
-            </button>
-          </div>
-        </div>
-      )}
-
       {/* ─── RESULTS WORKSPACE: SIGHTINGS TIMELINE + REAL CARTO MAP ─── */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 h-[calc(100vh-230px)] min-h-[580px]">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-3.5 h-[calc(100vh-185px)] min-h-[590px]">
         {/* Left Chronological Sightings Panel */}
         <div className="lg:col-span-4 bg-[#0D1520] border border-[#1C2E42] rounded-lg p-3 flex flex-col h-full overflow-hidden shadow-lg">
-          <div className="flex items-center justify-between pb-2 border-b border-[#1C2E42] mb-2.5">
+          <div className="flex items-center justify-between pb-2 border-b border-[#1C2E42] mb-2">
             <div className="flex items-center gap-2">
               <span className="text-xs font-mono font-bold text-white uppercase tracking-wider">
                 Chronological Sightings
@@ -241,8 +227,8 @@ export const Investigation: React.FC = () => {
             </span>
           </div>
 
-          {/* SIGHTINGS LIST: generous bottom padding pb-8 so nothing is squished */}
-          <div className="flex-1 overflow-y-auto space-y-2.5 pr-1.5 pb-8">
+          {/* SIGHTINGS LIST: generous bottom padding pb-12 and custom scroll */}
+          <div className="flex-1 overflow-y-auto space-y-2 pr-1.5 pb-12">
             {isLoading ? (
               <div className="text-center py-20 text-xs text-[#8FA8C0]">
                 Scanning surveillance database...
@@ -256,10 +242,11 @@ export const Investigation: React.FC = () => {
                 </p>
               </div>
             ) : (
-              sightings.map((s) => (
+              sightings.map((s, idx) => (
                 <VehicleSightingCard
                   key={s.id}
                   sighting={s}
+                  index={idx}
                   isSelected={selectedSighting?.id === s.id}
                   onSelect={(sighting) => setSelectedSighting(sighting)}
                   onPreserveEvidence={handlePreserveEvidence}
