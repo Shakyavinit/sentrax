@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { PageHeader } from '../components/layout/PageHeader';
 import { Input } from '../components/ui/Input';
@@ -27,11 +27,18 @@ export const Investigation: React.FC = () => {
   const [selectedSighting, setSelectedSighting] = useState<Sighting | null>(null);
   const [preservedEvidenceModal, setPreservedEvidenceModal] = useState<Evidence | null>(null);
   const [isDossierOpen, setIsDossierOpen] = useState(false);
+  const searchIdRef = useRef(0);
 
   const { data: cameras = [] } = useCameras();
 
   const performSearch = async (plateToSearch: string) => {
-    if (!plateToSearch.trim()) return;
+    if (!plateToSearch.trim()) {
+      setSightings([]);
+      setJourney(null);
+      setSelectedSighting(null);
+      return;
+    }
+    const currentSearchId = ++searchIdRef.current;
     setIsLoading(true);
     try {
       const clean = plateToSearch.replace(/\s/g, '').toUpperCase();
@@ -44,15 +51,27 @@ export const Investigation: React.FC = () => {
         vehiclesApi.getJourney(clean),
       ]);
 
-      setSightings(sightingsRes.items);
-      setJourney(journeyRes);
-      if (sightingsRes.items.length > 0) {
+      if (currentSearchId !== searchIdRef.current) return;
+
+      if (!sightingsRes.items || sightingsRes.items.length === 0) {
+        setSightings([]);
+        setJourney(null);
+        setSelectedSighting(null);
+      } else {
+        setSightings(sightingsRes.items);
+        setJourney(journeyRes);
         setSelectedSighting(sightingsRes.items[0]);
       }
     } catch (e: any) {
+      if (currentSearchId !== searchIdRef.current) return;
+      setSightings([]);
+      setJourney(null);
+      setSelectedSighting(null);
       toast.error(e.message || 'Search failed');
     } finally {
-      setIsLoading(false);
+      if (currentSearchId === searchIdRef.current) {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -68,8 +87,8 @@ export const Investigation: React.FC = () => {
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setSearchParams({ plate: plateInput });
-    performSearch(plateInput);
+    if (searchParams.get('plate') === plateInput) performSearch(plateInput);
+    else setSearchParams({ plate: plateInput });
   };
 
   const handlePreserveEvidence = async (sighting: Sighting) => {

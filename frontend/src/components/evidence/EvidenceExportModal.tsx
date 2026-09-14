@@ -8,6 +8,7 @@ import { ChainOfCustody } from './ChainOfCustody';
 import { AlertTriangle, Download, RefreshCw, CheckCircle2 } from 'lucide-react';
 import { evidenceApi } from '../../api/evidence';
 import { toast } from 'sonner';
+import { DEMO_MODE } from '../../utils/demo';
 
 interface EvidenceExportModalProps {
   evidence: Evidence | null;
@@ -41,7 +42,7 @@ export const EvidenceExportModal: React.FC<EvidenceExportModalProps> = ({
       const res = await evidenceApi.verify(evidence.id);
       setVerificationResult(res);
       if (res.valid) {
-        toast.success('Cryptographic integrity confirmed. All SHA-256 hashes match.');
+        toast.success(DEMO_MODE ? 'Sample metadata hash matches. Original media is not verified.' : 'Cryptographic integrity confirmed. All SHA-256 hashes match.');
       } else {
         toast.error('Warning: Forensic hash mismatch detected.');
       }
@@ -84,6 +85,7 @@ export const EvidenceExportModal: React.FC<EvidenceExportModalProps> = ({
       maxWidth="4xl"
     >
       <div className="space-y-4">
+        {DEMO_MODE && <div className="demo-notice">Demonstration metadata package only. SHA-256 verifies the sample metadata, not the illustrative images. Export contains a JSON manifest, not original CCTV evidence or a legal certificate.</div>}
         <div className="flex flex-wrap items-center justify-between gap-3 p-3 bg-[#080C12] rounded-[6px] border border-[#1C2E42]">
           <div className="flex items-center gap-3">
             <LicensePlate plate={evidence.plate_text || 'UNKNOWN'} size="md" />

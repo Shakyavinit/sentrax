@@ -1,6 +1,9 @@
 import { API_BASE_URL } from '../utils/constants';
+import { DEMO_MODE } from '../utils/demo';
+import { demoRequest } from './demoClient';
 
 export async function apiClient<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
+  if (DEMO_MODE) return demoRequest(endpoint, options) as Promise<T>;
   const token = localStorage.getItem('sentrax_token');
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
@@ -20,7 +23,7 @@ export async function apiClient<T>(endpoint: string, options: RequestInit = {}):
     localStorage.removeItem('sentrax_token');
     localStorage.removeItem('sentrax_user');
     if (!window.location.pathname.includes('/login')) {
-      window.location.href = '/login';
+      window.location.href = `${import.meta.env.BASE_URL}login`;
     }
     throw new Error('Unauthorized');
   }
@@ -42,5 +45,6 @@ export async function apiClient<T>(endpoint: string, options: RequestInit = {}):
     return (await response.blob()) as unknown as T;
   }
 
+  if (response.status === 204) return undefined as T;
   return response.json();
 }

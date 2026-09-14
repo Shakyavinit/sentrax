@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useParams } from 'react-router-dom';
 import { PageHeader } from '../components/layout/PageHeader';
 import { JourneyMap } from '../components/vehicles/JourneyMap';
 import { LicensePlate } from '../components/ui/LicensePlate';
@@ -42,8 +42,9 @@ const PRESET_PLATES = [
 ];
 
 export const VehicleJourney: React.FC = () => {
+  const { plate: pathPlate } = useParams<{ plate?: string }>();
   const [searchParams, setSearchParams] = useSearchParams();
-  const plateParam = (searchParams.get('plate') || 'UP32PQ6677').toUpperCase().replace(/\s+/g, '');
+  const plateParam = (pathPlate || searchParams.get('plate') || 'UP32PQ6677').toUpperCase().replace(/\s+/g, '');
 
   const [searchInput, setSearchInput] = useState(plateParam);
   const [journey, setJourney] = useState<JourneyType | null>(null);

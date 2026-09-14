@@ -8,14 +8,17 @@ interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
 
 export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
   ({ label, error, options, className = '', ...props }, ref) => {
+    const id = React.useId();
     return (
       <div className="w-full">
         {label && (
-          <label className="block text-[11px] font-medium text-[#8FA8C0] mb-1 uppercase tracking-wider">
+          <label htmlFor={props.id || id} className="block text-[11px] font-medium text-[#8FA8C0] mb-1 uppercase tracking-wider">
             {label}
           </label>
         )}
         <select
+          id={props.id || id}
+          aria-label={label || options[0]?.label}
           ref={ref}
           className={`w-full bg-[#121E2E] border border-[#233A52] rounded-[4px] px-3 py-2 text-xs text-[#E8EFF7] focus:outline-none focus:border-[#0E7FE0] focus:ring-1 focus:ring-[#0E7FE0] transition-colors ${className}`}
           {...props}

@@ -8,10 +8,11 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ label, error, icon, className = '', ...props }, ref) => {
+    const id = React.useId();
     return (
       <div className="w-full">
         {label && (
-          <label className="block text-[11px] font-medium text-[#8FA8C0] mb-1 uppercase tracking-wider">
+          <label htmlFor={props.id || id} className="block text-[11px] font-medium text-[#8FA8C0] mb-1 uppercase tracking-wider">
             {label}
           </label>
         )}
@@ -22,6 +23,8 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             </div>
           )}
           <input
+            id={props.id || id}
+            aria-label={label || props.placeholder}
             ref={ref}
             className={`w-full bg-[#121E2E] border border-[#233A52] rounded-[4px] px-3 py-2 text-xs text-[#E8EFF7] placeholder-[#4D6B85] focus:outline-none focus:border-[#0E7FE0] focus:ring-1 focus:ring-[#0E7FE0] transition-colors ${
               icon ? 'pl-9' : ''

@@ -20,7 +20,7 @@ export const CopilotModal: React.FC<CopilotModalProps> = ({
   targetPlate = 'GJ01AB1234',
   context,
 }) => {
-  const [prompt, setPrompt] = useState(`Analyze movement patterns and generate Section 65B forensic brief for target vehicle ${targetPlate}`);
+  const [prompt, setPrompt] = useState(`Summarize sightings and highlight verification steps for vehicle ${targetPlate}`);
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<any>(null);
 
@@ -53,11 +53,11 @@ export const CopilotModal: React.FC<CopilotModalProps> = ({
         <div className="flex items-center justify-between bg-[#121E2E] border border-[#233A52] px-3 py-2 rounded text-xs">
           <div className="flex items-center gap-2">
             <Sparkles className="w-4 h-4 text-[#0E7FE0] animate-pulse" />
-            <span className="font-mono text-[#E8EFF7]">Google Gemini 3.6 Flash & Forensic Engine Active</span>
+            <span className="font-mono text-[#E8EFF7]">Investigation summary · Human review required</span>
           </div>
           <span className="text-[10px] font-mono text-[#00C875] bg-[#00C875]/10 px-2 py-0.5 rounded border border-[#00C875]/30 flex items-center gap-1">
             <span className="w-1.5 h-1.5 rounded-full bg-[#00C875] animate-pulse-dot" />
-            LIVE VERIFIED
+            REVIEW ASSISTANT
           </span>
         </div>
 
@@ -66,13 +66,13 @@ export const CopilotModal: React.FC<CopilotModalProps> = ({
           <button
             type="button"
             onClick={() => {
-              const p = `Generate legal Section 65B Indian Evidence Act certificate for ${targetPlate}`;
+              const p = `Prepare a non-certified evidence review checklist for ${targetPlate}`;
               setPrompt(p);
               handleAskCopilot(p);
             }}
             className="text-[11px] font-mono bg-[#1A2A3D] hover:bg-[#233A52] text-[#8FA8C0] hover:text-white px-2.5 py-1 rounded border border-[#233A52] transition-colors"
           >
-            📋 Section 65B Certificate
+            Evidence review checklist
           </button>
           <button
             type="button"

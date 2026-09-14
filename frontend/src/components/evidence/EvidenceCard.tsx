@@ -5,6 +5,7 @@ import { Badge, ConfidenceBadge } from '../ui/Badge';
 import { formatTimestamp, truncateHash } from '../../utils/format';
 import { Download, ExternalLink, FileCheck } from 'lucide-react';
 import { Button } from '../ui/Button';
+import { DEMO_MODE } from '../../utils/demo';
 
 interface EvidenceCardProps {
   evidence: Evidence;
@@ -17,7 +18,7 @@ export const EvidenceCard: React.FC<EvidenceCardProps> = ({ evidence, onView, on
     <div className="bg-[#0D1520] border border-[#1C2E42] hover:border-[#2E4E70] rounded-[6px] p-4 shadow-[0_1px_3px_rgba(0,0,0,0.5)] transition-all flex flex-col justify-between group">
       <div>
         <div className="flex items-center justify-between mb-3">
-          <Badge variant="ok">SHA-256 SEALED</Badge>
+          <Badge variant="ok">{DEMO_MODE ? 'SAMPLE METADATA HASHED' : 'SHA-256 SEALED'}</Badge>
           <span className="text-[10px] font-mono text-[#8FA8C0]">
             {evidence.case_id || 'GENERAL_LOG'}
           </span>

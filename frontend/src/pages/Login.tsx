@@ -7,10 +7,11 @@ import { authApi } from '../api/auth';
 import { useAuthStore } from '../store/authStore';
 import { Lock, User as UserIcon, ShieldAlert } from 'lucide-react';
 import { toast } from 'sonner';
+import { DEMO_MODE } from '../utils/demo';
 
 export const Login: React.FC = () => {
-  const [username, setUsername] = useState('admin');
-  const [password, setPassword] = useState('SentraxAdmin2024!');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const { setAuth } = useAuthStore();
@@ -27,18 +28,7 @@ export const Login: React.FC = () => {
       toast.success(`Welcome back, Officer ${res.user.username}`);
       navigate('/');
     } catch (err: any) {
-      // If backend is unreachable (e.g. static GitHub Pages deployment):
-      const fallbackUser = {
-        id: 'usr-admin-01',
-        username: username.trim() || 'admin',
-        badge_number: 'GJ-POL-0418',
-        role: 'admin',
-        department: 'Crime Branch Forensic Division',
-      };
-      setAuth(fallbackUser as any, 'demo-sentrax-token-offline');
-      toast.success(`Welcome back, Officer ${fallbackUser.username}`);
-      navigate('/');
-      return;
+      setError(err.message || 'Unable to sign in. Check your credentials and server connection.');
     } finally {
       setIsLoading(false);
     }
@@ -75,7 +65,15 @@ export const Login: React.FC = () => {
         )}
 
         {/* Login Form */}
-        <form onSubmit={handleSubmit} className="space-y-4">
+        {DEMO_MODE ? <div className="space-y-5">
+          <h1 className="text-2xl font-semibold">Investigate the connections.</h1>
+          <p className="text-sm text-[#8FA8C0] leading-relaxed">Explore vehicle search, camera sightings, watchlist review and evidence preservation in a guided sample environment.</p>
+          <div className="demo-notice">Demo workspace · Fictional records and prerecorded footage. No police systems or live cameras connected.</div>
+          <Button className="w-full" size="lg" onClick={() => {
+            setAuth({ id: 'demo-officer', username: 'Demo Officer', email: '', role: 'admin', is_active: true }, 'demo-sentrax-token-offline');
+            navigate('/');
+          }}>Open demo workspace</Button>
+        </div> : <form onSubmit={handleSubmit} className="space-y-4">
           <Input
             label="Officer ID / Username"
             type="text"
@@ -106,20 +104,7 @@ export const Login: React.FC = () => {
             Authenticate & Sign In
           </Button>
 
-          {/* Quick Demo Fill Shortcut */}
-          <div className="pt-2 text-center">
-            <button
-              type="button"
-              onClick={() => {
-                setUsername('admin');
-                setPassword('SentraxAdmin2024!');
-              }}
-              className="text-[11px] font-mono text-[#4D6B85] hover:text-[#0E7FE0] transition-colors"
-            >
-              [Fill Default Admin Credentials]
-            </button>
-          </div>
-        </form>
+        </form>}
 
         {/* Footer */}
         <div className="mt-8 pt-4 border-t border-[#1C2E42] text-center text-[10px] font-mono text-[#4D6B85]">

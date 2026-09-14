@@ -24,6 +24,8 @@ import {
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
+import { DEMO_MODE } from '../../utils/demo';
+import { Modal } from '../ui/Modal';
 
 interface VehicleDossierModalProps {
   plate: string | null;
@@ -73,6 +75,7 @@ export const VehicleDossierModal: React.FC<VehicleDossierModalProps> = ({
   }, [isOpen, onClose]);
 
   if (!isOpen || !plate) return null;
+  if (DEMO_MODE) return <Modal isOpen={isOpen} onClose={onClose} title={`Sample vehicle · ${plate}`}><div className="space-y-4"><div className="demo-notice">No official owner or criminal record is connected. This plate belongs to a fictional demonstration scenario.</div><button className="primary-action" onClick={() => {onClose(); navigate(`/vehicles/details/${encodeURIComponent(plate)}`);}}>Open sample vehicle record</button></div></Modal>;
 
   const handleCopy = (text: string, fieldName: string) => {
     navigator.clipboard.writeText(text);

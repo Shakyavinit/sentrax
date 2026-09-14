@@ -30,14 +30,29 @@ const MapHandler: React.FC<MapHandlerProps> = ({ stops, selectedStopIndex, trigg
   const map = useMap();
   const isInitialFit = useRef(false);
 
-  // Invalidate size on mount and window resize to prevent grey tiles or misalignment
+  // Invalidate size on mount, container resize, and window resize to prevent grey tiles or misalignment
   useEffect(() => {
     const handleResize = () => map.invalidateSize();
     const t = setTimeout(handleResize, 150);
     window.addEventListener('resize', handleResize);
+
+    let ro: ResizeObserver | null = null;
+    if (typeof ResizeObserver !== 'undefined') {
+      try {
+        ro = new ResizeObserver(() => {
+          map.invalidateSize();
+        });
+        const container = map.getContainer();
+        if (container) ro.observe(container);
+      } catch (e) {
+        // Fallback to window resize
+      }
+    }
+
     return () => {
       clearTimeout(t);
       window.removeEventListener('resize', handleResize);
+      if (ro) ro.disconnect();
     };
   }, [map]);
 

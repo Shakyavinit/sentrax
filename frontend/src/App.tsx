@@ -1,5 +1,6 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, HashRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { DEMO_MODE } from './utils/demo';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AppShell } from './components/layout/AppShell';
 import { useAuthStore } from './store/authStore';
@@ -16,6 +17,9 @@ import { CameraRegistry } from './pages/CameraRegistry';
 import { Analytics } from './pages/Analytics';
 import ResearchAgent from './pages/ResearchAgent';
 import { VehicleDetailsPage } from './pages/VehicleDetailsPage';
+import { DemoMonitor } from './pages/DemoMonitor';
+import DemoResearch from './pages/DemoResearch';
+import { DemoDossier } from './pages/DemoDossier';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -57,11 +61,13 @@ export const App: React.FC = () => {
             }
           >
             <Route path="/" element={<Dashboard />} />
-            <Route path="/live" element={<LiveMonitor />} />
+            <Route path="/live" element={DEMO_MODE ? <DemoMonitor /> : <LiveMonitor />} />
             <Route path="/investigation" element={<Investigation />} />
             <Route path="/journey" element={<VehicleJourney />} />
-            <Route path="/vehicles/details/:plate" element={<VehicleDetailsPage />} />
-            <Route path="/vehicles/details" element={<VehicleDetailsPage />} />
+            <Route path="/vehicles/journey" element={<VehicleJourney />} />
+            <Route path="/vehicles/journey/:plate" element={<VehicleJourney />} />
+            <Route path="/vehicles/details/:plate" element={DEMO_MODE ? <DemoDossier /> : <VehicleDetailsPage />} />
+            <Route path="/vehicles/details" element={DEMO_MODE ? <DemoDossier /> : <VehicleDetailsPage />} />
             <Route path="/evidence" element={<EvidenceVaultPage />} />
             <Route path="/watchlist" element={<WatchlistPage />} />
             <Route path="/alerts" element={<AlertsPage />} />
@@ -71,7 +77,7 @@ export const App: React.FC = () => {
               path="/research-agent"
               element={
                 <ProtectedRoute requiredRole="admin">
-                  <ResearchAgent />
+                  {DEMO_MODE ? <DemoResearch /> : <ResearchAgent />}
                 </ProtectedRoute>
               }
             />

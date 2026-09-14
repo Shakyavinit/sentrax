@@ -53,3 +53,5 @@ Thumbs.db
 
 # Logs & Temporary
 *.log
+.vite/
+*.zip

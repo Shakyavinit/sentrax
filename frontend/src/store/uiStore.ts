@@ -1,6 +1,8 @@
 import { create } from 'zustand';
 
 interface UiState {
+  mobileMenuOpen: boolean;
+  setMobileMenuOpen: (open: boolean) => void;
   sidebarCollapsed: boolean;
   gridColumns: 1 | 2 | 3 | 4;
   globalSearchQuery: string;
@@ -10,6 +12,8 @@ interface UiState {
 }
 
 export const useUiStore = create<UiState>((set) => ({
+  mobileMenuOpen: false,
+  setMobileMenuOpen: (mobileMenuOpen) => set({ mobileMenuOpen }),
   sidebarCollapsed: false,
   gridColumns: 2,
   globalSearchQuery: '',

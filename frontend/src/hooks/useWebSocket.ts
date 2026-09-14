@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { WS_BASE_URL } from '../utils/constants';
+import { DEMO_MODE } from '../utils/demo';
 
 export function useWebSocket(path = '/api/v1/ws/monitor') {
   const [connected, setConnected] = useState(false);
@@ -7,6 +8,8 @@ export function useWebSocket(path = '/api/v1/ws/monitor') {
   const handlers = useRef<Map<string, Function>>(new Map());
 
   useEffect(() => {
+    if (DEMO_MODE) return;
+    let disposed = false;
     let reconnectTimeout: any;
     const connect = () => {
       try {
@@ -19,7 +22,7 @@ export function useWebSocket(path = '/api/v1/ws/monitor') {
 
         ws.current.onclose = () => {
           setConnected(false);
-          reconnectTimeout = setTimeout(connect, 3000);
+          if (!disposed) reconnectTimeout = setTimeout(connect, 3000);
         };
 
         ws.current.onerror = () => {
@@ -41,6 +44,7 @@ export function useWebSocket(path = '/api/v1/ws/monitor') {
     connect();
 
     return () => {
+      disposed = true;
       clearTimeout(reconnectTimeout);
       ws.current?.close();
     };

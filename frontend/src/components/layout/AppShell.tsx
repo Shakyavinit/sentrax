@@ -1,37 +1,27 @@
-import React from 'react';
-import { Outlet } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Outlet, useLocation } from 'react-router-dom';
 import { Sidebar } from './Sidebar';
 import { TopBar } from './TopBar';
 import { useUiStore } from '../../store/uiStore';
+import { DEMO_MODE } from '../../utils/demo';
 import { Toaster } from 'sonner';
-
 export const AppShell: React.FC = () => {
-  const { sidebarCollapsed } = useUiStore();
-
-  return (
-    <div className="min-h-screen bg-[#080C12] text-[#E8EFF7] flex">
-      <Sidebar />
-      <div
-        className={`flex-1 flex flex-col min-w-0 transition-all duration-200 ${
-          sidebarCollapsed ? 'pl-14' : 'pl-56'
-        }`}
-      >
-        <TopBar />
-        <main className="flex-1 p-6">
-          <Outlet />
-        </main>
-      </div>
-      <Toaster
-        theme="dark"
-        position="bottom-right"
-        toastOptions={{
-          style: {
-            background: '#0D1520',
-            border: '1px solid #233A52',
-            color: '#E8EFF7',
-          },
-        }}
-      />
+  const { sidebarCollapsed, mobileMenuOpen, setMobileMenuOpen } = useUiStore();
+  const location = useLocation();
+  useEffect(() => { setMobileMenuOpen(false); }, [location.pathname, setMobileMenuOpen]);
+  useEffect(() => {
+    const close = (e: KeyboardEvent) => { if (e.key === 'Escape') setMobileMenuOpen(false); };
+    window.addEventListener('keydown', close); return () => window.removeEventListener('keydown', close);
+  }, [setMobileMenuOpen]);
+  return <div className="app-shell">
+    <a className="skip-link" href="#main-content">Skip to content</a>
+    {mobileMenuOpen && <button className="sidebar-backdrop" onClick={() => setMobileMenuOpen(false)} aria-label="Dismiss navigation" />}
+    <Sidebar />
+    <div className={`app-workspace ${sidebarCollapsed ? 'is-collapsed' : ''}`}>
+      <TopBar />
+      {DEMO_MODE && <div className="workspace-notice"><strong>DEMO WORKSPACE</strong><span>Fictional records · Prerecorded footage · Changes saved on this device only · No police systems connected</span></div>}
+      <main id="main-content" className="app-content" tabIndex={-1}><Outlet /></main>
     </div>
-  );
+    <Toaster theme="dark" position="bottom-right" />
+  </div>;
 };
