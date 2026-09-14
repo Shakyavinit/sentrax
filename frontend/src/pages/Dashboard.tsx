@@ -76,7 +76,7 @@ export const Dashboard: React.FC = () => {
               <strong>{m.value}</strong>
               <small>{m.note}</small>
             </div>
-            <img className="color-reveal" src={assetUrl("images/" + m.image)} alt="" width="84" height="84" />
+            <img className="color-reveal" src={assetUrl("images/" + m.image)} alt="" width="72" height="56" />
             <ArrowUpRight className="metric-arrow" size={15} />
           </Link>
         ))}

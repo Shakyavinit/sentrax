@@ -84,6 +84,137 @@ export const INITIAL_AUDIT_LOG: AuditLogEntry[] = [
   { id: 5, user_id: "usr-1", username: "Inspector V. Sharma", action: "export_evidence", target_type: "evidence", target_id: "Case #2026-003", detail: { format: "ZIP manifest", files: 4 }, ip_address: "192.168.1.10", created_at: "2026-09-14T11:15:01Z" },
 ];
 
+export const INITIAL_EVIDENCE: Evidence[] = [
+  {
+    id: "ev-01",
+    sighting_id: "sighting-scorpio-01",
+    alert_id: "alert-01",
+    case_id: "CR/2026/0418",
+    plate_text: "GJ01AB1234",
+    camera_id: "cam-04",
+    camera_name: "SG Highway Toll",
+    camera_identifier: "CAM04",
+    location_name: "SG Highway Toll Plaza, Ahmedabad",
+    frame_ts: "2026-09-14T14:26:17+05:30",
+    frame_path: assetUrl("images/feed_cam04.jpg"),
+    vehicle_crop_path: assetUrl("images/vehicle_scorpio_crop.jpg"),
+    plate_crop_path: assetUrl("images/hit_scorpio_clean.jpg"),
+    frame_hash: "7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069",
+    vehicle_hash: "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    plate_hash: "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+    metadata_hash: "3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855c",
+    metadata_json: JSON.stringify({
+      case: "CR/2026/0418",
+      sections: "Sec 364A, 386, 120B IPC / BNS",
+      investigator: "ACP Digvijay Singh Jadeja",
+      station: "Navrangpura Police Station",
+      seal_authority: "Gujarat Forensic Science Directorate",
+      legal_basis: "Section 65B Indian Evidence Act / Section 63 BSA 2023",
+      vehicle: { make: "Mahindra", model: "Scorpio-N Z8L 4x4", color: "Everest White", year: 2024 }
+    }),
+    ai_confidence: 0.986,
+    ai_model_version: "YOLOv8x-ANPR-v4.2-LPRNet",
+    exported: false,
+    created_at: "2026-09-14T14:27:00+05:30",
+  },
+  {
+    id: "ev-02",
+    sighting_id: "sighting-fortuner-02",
+    alert_id: "alert-02",
+    case_id: "CR/2026/0891",
+    plate_text: "UP32PQ6677",
+    camera_id: "cam-02",
+    camera_name: "Sardar Bridge Entry",
+    camera_identifier: "CAM02",
+    location_name: "Sardar Patel Bridge, Ahmedabad",
+    frame_ts: "2026-09-14T14:24:02+05:30",
+    frame_path: assetUrl("images/feed_cam02.jpg"),
+    vehicle_crop_path: assetUrl("images/hit_fortuner_clean.jpg"),
+    plate_crop_path: assetUrl("images/car_mh12ef9012.jpg"),
+    frame_hash: "b94d27b9934d3e08a52e52d7da7dabfac484efe37a5380ee9088f7ace2efcde9",
+    vehicle_hash: "d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35",
+    plate_hash: "4e07408562bedb8b60ce05c1decfe3ad16b72230967de01f640b7e4729b49fce",
+    metadata_hash: "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b",
+    metadata_json: JSON.stringify({
+      case: "CR/2026/0891",
+      sections: "Sec 302, 307 IPC / BNS - Non-Bailable Warrant",
+      investigator: "Inspector R. K. Varma",
+      station: "Paldi Police Station",
+      seal_authority: "Gujarat Forensic Science Directorate",
+      legal_basis: "Section 65B Indian Evidence Act",
+      vehicle: { make: "Toyota", model: "Fortuner 4x4", color: "Phantom Black", year: 2023 }
+    }),
+    ai_confidence: 0.972,
+    ai_model_version: "YOLOv8x-ANPR-v4.2-LPRNet",
+    exported: true,
+    created_at: "2026-09-14T14:25:10+05:30",
+  },
+  {
+    id: "ev-03",
+    sighting_id: "sighting-city-03",
+    alert_id: "alert-03",
+    case_id: "TR/2026/1102",
+    plate_text: "GJ05CD5678",
+    camera_id: "cam-03",
+    camera_name: "Vastrapur Lake Gate",
+    camera_identifier: "CAM03",
+    location_name: "Vastrapur Ring Road, Ahmedabad",
+    frame_ts: "2026-09-14T14:21:49+05:30",
+    frame_path: assetUrl("images/feed_cam03.jpg"),
+    vehicle_crop_path: assetUrl("images/car_gj18ij7890.jpg"),
+    plate_crop_path: assetUrl("images/hit_swift_clean.jpg"),
+    frame_hash: "d7a8fbb307d7809469ca9abcb0082e4f8d5651e46d3cdb762d02d0bf37c9e592",
+    vehicle_hash: "ef2d127de37b942baad06145e54b0c619a1f22327b2ebbcfbec78f5564afe39d",
+    plate_hash: "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    metadata_hash: "7d793037a0760186574b0282f2f435e7b1e507746909277cfed96986c050213b",
+    metadata_json: JSON.stringify({
+      case: "TR/2026/1102",
+      sections: "Motor Vehicles Act Sec 183 - High Speed Violation (112 km/h in 50 km/h zone)",
+      investigator: "Sub-Inspector S. Mehta",
+      station: "Ahmedabad Traffic Branch",
+      seal_authority: "Gujarat Forensic Science Directorate",
+      legal_basis: "Section 65B Indian Evidence Act",
+      vehicle: { make: "Honda", model: "City ZX", color: "Radiant Red", year: 2022 }
+    }),
+    ai_confidence: 0.958,
+    ai_model_version: "YOLOv8x-ANPR-v4.2-LPRNet",
+    exported: false,
+    created_at: "2026-09-14T14:22:30+05:30",
+  },
+  {
+    id: "ev-04",
+    sighting_id: "sighting-swift-04",
+    alert_id: "alert-04",
+    case_id: "CR/2026/0334",
+    plate_text: "DL10XY9090",
+    camera_id: "cam-01",
+    camera_name: "MG Road Junction",
+    camera_identifier: "CAM01",
+    location_name: "MG Road & Ashram Road, Ahmedabad",
+    frame_ts: "2026-09-14T14:18:33+05:30",
+    frame_path: assetUrl("images/feed_cam01.jpg"),
+    vehicle_crop_path: assetUrl("images/hit_swift_clean.jpg"),
+    plate_crop_path: assetUrl("images/car_rj14gh3456.jpg"),
+    frame_hash: "8f434346648f6b96df89dda901c5176b10a6d83961dd3c1ac88b59b2dc327aa4",
+    vehicle_hash: "2c624232cdd221771294dfbb310aca000a0df6ec8b6602f720f1dd2ebd4099d4",
+    plate_hash: "19587d40c93ad0e2d72fb056ee31b8f84db93714fa414199da250ab20e8bc179",
+    metadata_hash: "4b227777d4dd1fc61c6f884f48641d02b4d121d3fd328cb08b5531fcacdabf8a",
+    metadata_json: JSON.stringify({
+      case: "CR/2026/0334",
+      sections: "Sec 379 IPC - Stolen Vehicle Cross-Border Alert",
+      investigator: "ACP Digvijay Singh Jadeja",
+      station: "Ellis Bridge Police Station",
+      seal_authority: "Gujarat Forensic Science Directorate",
+      legal_basis: "Section 65B Indian Evidence Act",
+      vehicle: { make: "Maruti Suzuki", model: "Swift ZXi", color: "Magma Grey", year: 2021 }
+    }),
+    ai_confidence: 0.964,
+    ai_model_version: "YOLOv8x-ANPR-v4.2-LPRNet",
+    exported: false,
+    created_at: "2026-09-14T14:19:15+05:30",
+  }
+];
+
 interface State {
   cameras: Camera[];
   watchlist: WatchlistEntry[];
@@ -144,7 +275,7 @@ function initial(): State {
   return {
     cameras: CAMERAS,
     watchlist,
-    evidence: [],
+    evidence: [...INITIAL_EVIDENCE],
     alerts: initialAlerts,
     audit: [...INITIAL_AUDIT_LOG],
   };
@@ -156,6 +287,9 @@ function read(): State {
     if (data?.cameras?.length === 15 && data?.watchlist && data?.alerts && data?.evidence) {
       if (!data.audit || !Array.isArray(data.audit)) {
         data.audit = [...INITIAL_AUDIT_LOG];
+      }
+      if (!data.evidence || !Array.isArray(data.evidence) || data.evidence.length === 0) {
+        data.evidence = [...INITIAL_EVIDENCE];
       }
       return data;
     }

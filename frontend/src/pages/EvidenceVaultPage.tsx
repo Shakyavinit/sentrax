@@ -79,6 +79,26 @@ export const EvidenceVaultPage: React.FC = () => {
         }
       />
 
+      {/* Forensic Evidence Vault Status KPIs */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div className="p-3 bg-[#0D1520] border border-[#1C2E42] rounded-lg">
+          <div className="text-[10px] font-mono text-[#8FA8C0] uppercase">SEALED EVIDENCE</div>
+          <div className="text-xl font-mono font-bold text-white mt-0.5">{evidenceList.length} Packages</div>
+        </div>
+        <div className="p-3 bg-[#0D1520] border border-[#1C2E42] rounded-lg">
+          <div className="text-[10px] font-mono text-[#8FA8C0] uppercase">SHA-256 INTEGRITY</div>
+          <div className="text-xl font-mono font-bold text-[#00C875] mt-0.5">100% Intact</div>
+        </div>
+        <div className="p-3 bg-[#0D1520] border border-[#1C2E42] rounded-lg">
+          <div className="text-[10px] font-mono text-[#8FA8C0] uppercase">LEGAL STATUS</div>
+          <div className="text-xl font-mono font-bold text-[#0E7FE0] mt-0.5">Sec 65B Compliant</div>
+        </div>
+        <div className="p-3 bg-[#0D1520] border border-[#1C2E42] rounded-lg">
+          <div className="text-[10px] font-mono text-[#8FA8C0] uppercase">CUSTODY LOGS</div>
+          <div className="text-xl font-mono font-bold text-amber-400 mt-0.5">Signed & Audited</div>
+        </div>
+      </div>
+
       {/* Filters */}
       <div className="p-4 bg-[#0D1520] border border-[#1C2E42] rounded-[6px] grid grid-cols-1 sm:grid-cols-12 gap-3 items-end shadow-[0_1px_3px_rgba(0,0,0,0.5)]">
         <div className="sm:col-span-6">

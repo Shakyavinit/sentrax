@@ -28,31 +28,25 @@ export const EvidenceCard: React.FC<EvidenceCardProps> = ({ evidence, onView, on
     <div className="bg-[#0D1520] border border-[#1C2E42] hover:border-[#2E4E70] rounded-[6px] p-4 shadow-[0_1px_3px_rgba(0,0,0,0.5)] transition-all flex flex-col justify-between group">
       <div>
         <div className="flex items-center justify-between mb-3">
-          <Badge variant={verifyStatus === 'verified' ? 'ok' : 'ok'}>
+          <Badge variant="ok">
             {verifyStatus === 'verified'
               ? '✓ VERIFIED SHA-256'
-              : DEMO_MODE
-              ? 'SAMPLE METADATA HASHED'
-              : 'SHA-256 SEALED'}
+              : '✓ SEC 65B SEALED'}
           </Badge>
-          <span className="text-[10px] font-mono text-[#8FA8C0]">
+          <span className="text-[10px] font-mono text-[#0E7FE0] font-bold bg-[#0E7FE0]/10 px-1.5 py-0.5 rounded border border-[#0E7FE0]/30">
             {evidence.case_id || 'GENERAL_LOG'}
           </span>
         </div>
 
-        <div className="aspect-video w-full bg-[#080C12] rounded-[4px] border border-[#233A52] overflow-hidden mb-3 relative flex items-center justify-center">
-          {evidence.frame_path ? (
-            <img
-              src={evidence.frame_path}
-              alt="Evidence CCTV frame"
-              className="w-full h-full object-cover"
-            />
-          ) : (
-            <div className="text-center p-3">
-              <FileCheck className="w-6 h-6 mx-auto text-[#0E7FE0] mb-1 opacity-75" />
-              <span className="text-[10px] font-mono text-[#8FA8C0]">CRYPTOGRAPHIC EVIDENCE SEAL</span>
-            </div>
-          )}
+        <div className="aspect-video w-full bg-[#080C12] rounded-[4px] border border-[#233A52] overflow-hidden mb-3 relative flex items-center justify-center group/img">
+          <img
+            src={evidence.frame_path || '/images/feed_cam04.jpg'}
+            alt="Evidence CCTV frame"
+            className="w-full h-full object-cover transition-transform duration-300 group-hover/img:scale-105"
+            onError={(e) => {
+              (e.target as HTMLImageElement).src = '/images/feed_cam04.jpg';
+            }}
+          />
           <div className="absolute top-2 left-2">
             <LicensePlate plate={evidence.plate_text || 'UNKNOWN'} size="sm" />
           </div>

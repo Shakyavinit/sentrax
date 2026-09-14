@@ -24,15 +24,21 @@ import {
   Compass,
   Zap,
   ExternalLink,
+  Eye,
+  RefreshCw,
+  FileText,
+  ShieldAlert,
 } from 'lucide-react';
 import { camerasApi } from '../api/cameras';
 import { vehiclesApi } from '../api/vehicles';
 import { PageHeader } from '../components/layout/PageHeader';
 import { Modal } from '../components/ui/Modal';
+import { LicensePlate } from '../components/ui/LicensePlate';
 import { CctvLiveTile } from '../components/cameras/CctvLiveTile';
 import { CctvOfflinePattern } from '../components/cameras/CctvOfflinePattern';
 import { formatTimestamp } from '../utils/format';
 import { SAMPLE_PLATES } from '../api/demoClient';
+import { assetUrl } from '../utils/demo';
 import { toast } from 'sonner';
 
 export const DemoMonitor: React.FC = () => {
@@ -50,6 +56,7 @@ export const DemoMonitor: React.FC = () => {
   const [isModalMuted, setIsModalMuted] = useState(true);
   const [playbackSpeed, setPlaybackSpeed] = useState<number>(1);
   const [showModalAi, setShowModalAi] = useState(true);
+  const [modalNightVision, setModalNightVision] = useState(false);
   const modalVideoRef = useRef<HTMLVideoElement | null>(null);
 
   const { data: cameras = [] } = useQuery({
@@ -326,7 +333,11 @@ export const DemoMonitor: React.FC = () => {
               className="bg-[#0D1520] border border-[#1C2E42] rounded-lg overflow-hidden flex flex-col shadow-lg transition-all hover:border-[#0E7FE0]/50"
             >
               {/* Camera Video or SMPTE Test Pattern Viewport */}
-              <div className="relative aspect-[16/10] w-full bg-black overflow-hidden">
+              <div
+                className="relative aspect-[16/10] w-full bg-black overflow-hidden cursor-pointer group/tile"
+                onClick={() => setParams({ camera: c.id })}
+                title={`Click to inspect ${c.name} (${c.camera_id}) in Pop-up Box`}
+              >
                 {isOffline ? (
                   <CctvOfflinePattern
                     camera={c}
@@ -406,101 +417,246 @@ export const DemoMonitor: React.FC = () => {
       <Modal
         isOpen={!!selected}
         onClose={() => setParams({})}
-        title={selected ? `${selected.camera_id} — ${selected.name}` : 'Camera Inspection'}
-        maxWidth="4xl"
+        title={selected ? `${selected.camera_id} · ${selected.name} — Live Surveillance Workstation` : 'Camera Inspection'}
+        maxWidth="6xl"
       >
-        {selected && (
-          <div className="space-y-4">
-            {/* Modal Sub-Header with Navigation controls */}
-            <div className="flex items-center justify-between px-3 py-2 bg-[#080C12] border border-[#1C2E42] rounded-lg flex-wrap gap-2 text-xs font-mono">
-              <div className="flex items-center gap-2">
-                <span
-                  className={`w-2 h-2 rounded-full ${
-                    selected.status === 'online' ? 'bg-[#00C875] animate-ping' : 'bg-red-500'
-                  }`}
-                />
-                <span className="text-white font-bold">{selected.name}</span>
-                <span className="text-[#8FA8C0]">({selected.location_name})</span>
-                <span
-                  className={`px-1.5 py-0.5 rounded text-[10px] font-bold ${
-                    selected.status === 'online'
-                      ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
-                      : 'bg-red-500/20 text-red-400 border border-red-500/30'
-                  }`}
-                >
-                  {selected.status.toUpperCase()}
-                </span>
-              </div>
+        {selected && (() => {
+          const currentPlate = SAMPLE_PLATES[selectedIndex % SAMPLE_PLATES.length];
+          const currentVehicles = [
+            { model: 'Mahindra Scorpio-N Z8L', type: 'SUV (White)', speed: '58 km/h', conf: '98.6%', warrant: false, crop: assetUrl('images/vehicle_scorpio_crop.jpg') },
+            { model: 'Toyota Fortuner 4x4', type: 'SUV (Black)', speed: '64 km/h', conf: '97.2%', warrant: true, crop: assetUrl('images/hit_fortuner_clean.jpg') },
+            { model: 'Honda City ZX', type: 'Sedan (Red)', speed: '112 km/h (ANOMALY)', conf: '95.8%', warrant: false, crop: assetUrl('images/car_gj18ij7890.jpg') },
+            { model: 'Maruti Suzuki Swift', type: 'Hatchback (Grey)', speed: '48 km/h', conf: '96.4%', warrant: false, crop: assetUrl('images/hit_swift_clean.jpg') },
+            { model: 'Ashok Leyland 1618', type: 'Heavy Commercial', speed: '42 km/h', conf: '94.7%', warrant: false, crop: assetUrl('images/car_rj14gh3456.jpg') },
+          ];
+          const currentTarget = currentVehicles[selectedIndex % currentVehicles.length];
 
-              {/* Prev / Next camera buttons & New Tab Fullscreen */}
-              <div className="flex items-center gap-1.5">
-                <a
-                  href={`/camera-stream/${selected.id}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-2.5 py-1 bg-[#0E7FE0] hover:bg-[#108BFA] text-white rounded flex items-center gap-1.5 font-bold transition-all shadow-md shadow-[#0E7FE0]/25 text-xs font-mono"
-                  title="Open Dedicated Fullscreen Surveillance Workstation in New Tab"
-                >
-                  <ExternalLink size={12} />
-                  <span>OPEN IN NEW TAB</span>
-                </a>
-                <button
-                  type="button"
-                  onClick={handleSelectPrev}
-                  className="px-2 py-1 bg-[#121E2E] hover:bg-[#1C2E42] text-white/80 hover:text-white rounded flex items-center gap-1 border border-[#1C2E42] transition-colors"
-                  title="Previous Camera"
-                >
-                  <ChevronLeft size={14} />
-                  <span>PREV</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={handleSelectNext}
-                  className="px-2 py-1 bg-[#121E2E] hover:bg-[#1C2E42] text-white/80 hover:text-white rounded flex items-center gap-1 border border-[#1C2E42] transition-colors"
-                  title="Next Camera"
-                >
-                  <span>NEXT</span>
-                  <ChevronRight size={14} />
-                </button>
-              </div>
-            </div>
-
-            {/* ─── VIDEO PLAYER OR SMPTE PATTERN ─── */}
-            <div className="relative aspect-[16/9] w-full rounded-lg overflow-hidden bg-black border border-[#1C2E42] shadow-2xl">
-              {selected.status === 'online' && selected.hls_url ? (
-                <>
-                  <video
-                    ref={modalVideoRef}
-                    key={selected.id}
-                    src={selected.hls_url}
-                    autoPlay
-                    loop
-                    muted={isModalMuted}
-                    playsInline
-                    className="w-full h-full object-cover"
+          return (
+            <div className="space-y-4">
+              {/* Modal Sub-Header with Navigation controls */}
+              <div className="flex items-center justify-between px-3 py-2 bg-[#080C12] border border-[#1C2E42] rounded-lg flex-wrap gap-2 text-xs font-mono">
+                <div className="flex items-center gap-2">
+                  <span
+                    className={`w-2 h-2 rounded-full ${
+                      selected.status === 'online' ? 'bg-[#00C875] animate-ping' : 'bg-red-500'
+                    }`}
                   />
+                  <span className="text-white font-bold">{selected.name}</span>
+                  <span className="text-[#8FA8C0]">({selected.location_name})</span>
+                  <span
+                    className={`px-1.5 py-0.5 rounded text-[10px] font-bold ${
+                      selected.status === 'online'
+                        ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+                        : 'bg-red-500/20 text-red-400 border border-red-500/30'
+                    }`}
+                  >
+                    {selected.status.toUpperCase()}
+                  </span>
+                </div>
 
-                  {/* High-tech ANPR Overlay */}
-                  {showModalAi && (
-                    <div
-                      className="absolute z-20 pointer-events-none border-2 border-[#00C875] rounded-[3px] shadow-[0_0_16px_rgba(0,200,117,0.6)]"
-                      style={{ top: '28%', left: '26%', width: '42%', height: '38%' }}
-                    >
-                      <div className="absolute -top-1 -left-1 w-3 h-3 border-t-2 border-l-2 border-white" />
-                      <div className="absolute -top-1 -right-1 w-3 h-3 border-t-2 border-r-2 border-white" />
-                      <div className="absolute -bottom-1 -left-1 w-3 h-3 border-b-2 border-l-2 border-white" />
-                      <div className="absolute -bottom-1 -right-1 w-3 h-3 border-b-2 border-r-2 border-white" />
+                {/* Prev / Next camera buttons & New Tab Fullscreen */}
+                <div className="flex items-center gap-1.5">
+                  <a
+                    href={`/camera-stream/${selected.id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-2.5 py-1 bg-[#0E7FE0] hover:bg-[#108BFA] text-white rounded flex items-center gap-1.5 font-bold transition-all shadow-md shadow-[#0E7FE0]/25 text-xs font-mono"
+                    title="Open Dedicated Fullscreen Surveillance Workstation in New Tab"
+                  >
+                    <ExternalLink size={12} />
+                    <span>OPEN IN NEW TAB</span>
+                  </a>
+                  <button
+                    type="button"
+                    onClick={handleSelectPrev}
+                    className="px-2 py-1 bg-[#121E2E] hover:bg-[#1C2E42] text-white/80 hover:text-white rounded flex items-center gap-1 border border-[#1C2E42] transition-colors cursor-pointer"
+                    title="Previous Camera"
+                  >
+                    <ChevronLeft size={14} />
+                    <span>PREV</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleSelectNext}
+                    className="px-2 py-1 bg-[#121E2E] hover:bg-[#1C2E42] text-white/80 hover:text-white rounded flex items-center gap-1 border border-[#1C2E42] transition-colors cursor-pointer"
+                    title="Next Camera"
+                  >
+                    <span>NEXT</span>
+                    <ChevronRight size={14} />
+                  </button>
+                </div>
+              </div>
 
-                      <div className="absolute -top-6 left-0 bg-[#080C12]/95 border border-[#00C875] text-[#00C875] px-2 py-0.5 rounded font-mono text-xs font-bold whitespace-nowrap flex items-center gap-1.5 shadow-xl">
+              {/* ─── 3-COLUMN WORKSTATION CONSOLE ─── */}
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
+                {/* ─── LEFT SIDE: CURRENT DETECTED PLATE (3 COLS ON LG) ─── */}
+                <div className="lg:col-span-3 flex flex-col gap-3">
+                  <div className="p-3.5 bg-[#080D14] border border-[#1C2E42] rounded-lg shadow-inner flex flex-col gap-2.5">
+                    <div className="flex items-center justify-between border-b border-[#1C2E42] pb-2">
+                      <span className="text-[10px] font-mono font-bold text-[#00C875] flex items-center gap-1.5 uppercase tracking-wider">
                         <span className="w-2 h-2 rounded-full bg-[#00C875] animate-ping" />
-                        <span>{SAMPLE_PLATES[selectedIndex % SAMPLE_PLATES.length]}</span>
-                        <span className="text-white/60 font-normal">(97.8% ANPR CONFIDENCE)</span>
+                        TARGET DETECTED
+                      </span>
+                      <span className="text-[9px] font-mono text-[#8FA8C0] px-1.5 py-0.5 rounded bg-white/5 border border-white/10">
+                        {selected.camera_id}
+                      </span>
+                    </div>
+
+                    {/* IND Plate Badge with Large Visual Display */}
+                    <div className="p-2 rounded bg-[#0D1520] border border-[#1C2E42] flex flex-col items-center justify-center gap-1">
+                      <span className="text-[9px] font-mono text-[#8FA8C0] uppercase">CURRENT PLATE SCAN</span>
+                      <LicensePlate plate={currentPlate} size="md" />
+                    </div>
+
+                    {/* Target Status Tag */}
+                    {currentTarget.warrant ? (
+                      <div className="p-1.5 rounded bg-red-500/15 border border-red-500/40 text-red-400 font-mono text-[10px] font-bold flex items-center justify-center gap-1.5 animate-pulse">
+                        <ShieldAlert size={13} />
+                        <span>CRITICAL: ACTIVE WARRANT</span>
+                      </div>
+                    ) : (
+                      <div className="p-1.5 rounded bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-mono text-[10px] font-bold flex items-center justify-center gap-1.5">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                        <span>MATCH CONFIRMED · VALID RC</span>
+                      </div>
+                    )}
+
+                    {/* Telemetry Details */}
+                    <div className="space-y-1.5 text-xs font-mono bg-[#0D1520] p-2.5 rounded border border-[#162436]">
+                      <div className="flex justify-between items-center">
+                        <span className="text-white/50 text-[10px]">AI OCR CONF:</span>
+                        <span className="text-[#00C875] font-bold text-[11px]">{currentTarget.conf}</span>
+                      </div>
+                      <div className="w-full bg-[#121E2E] h-1.5 rounded-full overflow-hidden">
+                        <div className="bg-[#00C875] h-full rounded-full" style={{ width: currentTarget.conf }} />
+                      </div>
+
+                      <div className="flex justify-between items-center pt-1 border-t border-white/5">
+                        <span className="text-white/50 text-[10px]">VEHICLE:</span>
+                        <span className="text-white font-bold truncate max-w-[130px]" title={currentTarget.model}>
+                          {currentTarget.model}
+                        </span>
+                      </div>
+
+                      <div className="flex justify-between items-center">
+                        <span className="text-white/50 text-[10px]">TYPE:</span>
+                        <span className="text-[#8FA8C0]">{currentTarget.type}</span>
+                      </div>
+
+                      <div className="flex justify-between items-center">
+                        <span className="text-white/50 text-[10px]">SPEED:</span>
+                        <span className={`font-bold ${currentTarget.speed.includes('ANOMALY') ? 'text-red-400' : 'text-amber-400'}`}>
+                          {currentTarget.speed}
+                        </span>
                       </div>
                     </div>
-                  )}
 
-                  {/* Player Overlay Controls */}
-                  <div className="absolute bottom-3 left-3 right-3 z-30 p-2.5 rounded-lg bg-[#080C12]/90 border border-white/10 backdrop-blur flex items-center justify-between gap-3 text-xs font-mono text-white">
+                    {/* Plate / Vehicle Crop Preview */}
+                    <div>
+                      <span className="text-[9px] font-mono text-white/50 block mb-1 uppercase">DETECTED VEHICLE ROI</span>
+                      <div className="aspect-[2/1] bg-black rounded border border-[#1C2E42] overflow-hidden relative group shadow-md">
+                        <img src={currentTarget.crop} alt="Vehicle crop" className="w-full h-full object-cover" />
+                        <div className="absolute inset-1 border border-[#00C875]/50 pointer-events-none rounded-[2px]" />
+                        <div className="absolute bottom-1 right-1 px-1 py-0.2 rounded bg-black/80 font-mono text-[8px] text-[#00C875]">
+                          YOLOv8 + LPRNet
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Direct Action Links */}
+                    <div className="flex flex-col gap-1.5 pt-1">
+                      <Link
+                        to={`/vehicles/details/${encodeURIComponent(currentPlate)}`}
+                        className="w-full py-2 px-2.5 bg-[#0E7FE0] hover:bg-[#108BFA] text-white rounded font-mono text-xs font-bold flex items-center justify-center gap-1.5 shadow-md transition-all text-center"
+                      >
+                        <FileText size={13} />
+                        <span>Open Full Dossier</span>
+                      </Link>
+                      <Link
+                        to={`/investigation?plate=${encodeURIComponent(currentPlate)}`}
+                        className="w-full py-1.5 px-2.5 bg-[#121E2E] hover:bg-[#1C2E42] text-[#8FA8C0] hover:text-white border border-[#233B57] rounded font-mono text-xs font-bold flex items-center justify-center gap-1.5 transition-colors text-center"
+                      >
+                        <Compass size={13} />
+                        <span>Trace Trajectory</span>
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+
+                {/* ─── CENTER: LIVE VIDEO VIEWPORT (6 COLS ON LG) ─── */}
+                <div className="lg:col-span-6 flex flex-col gap-2">
+                  <div className="relative aspect-[16/9] w-full rounded-lg overflow-hidden bg-black border border-[#1C2E42] shadow-2xl flex items-center justify-center">
+                    {selected.status === 'online' && selected.hls_url ? (
+                      <>
+                        <video
+                          ref={modalVideoRef}
+                          key={selected.id}
+                          src={selected.hls_url}
+                          autoPlay
+                          loop
+                          muted={isModalMuted}
+                          playsInline
+                          className="w-full h-full object-cover transition-all"
+                          style={{
+                            filter: modalNightVision ? 'invert(1) hue-rotate(90deg) contrast(1.4)' : 'none',
+                          }}
+                        />
+
+                        {/* High-tech ANPR Overlay */}
+                        {showModalAi && (
+                          <div
+                            className="absolute z-20 pointer-events-none border-2 border-[#00C875] rounded-[3px] shadow-[0_0_16px_rgba(0,200,117,0.6)] animate-pulse"
+                            style={{ top: '28%', left: '26%', width: '42%', height: '38%' }}
+                          >
+                            <div className="absolute -top-1 -left-1 w-3 h-3 border-t-2 border-l-2 border-white" />
+                            <div className="absolute -top-1 -right-1 w-3 h-3 border-t-2 border-r-2 border-white" />
+                            <div className="absolute -bottom-1 -left-1 w-3 h-3 border-b-2 border-l-2 border-white" />
+                            <div className="absolute -bottom-1 -right-1 w-3 h-3 border-b-2 border-r-2 border-white" />
+
+                            <div className="absolute -top-6 left-0 bg-[#080C12]/95 border border-[#00C875] text-[#00C875] px-2 py-0.5 rounded font-mono text-xs font-bold whitespace-nowrap flex items-center gap-1.5 shadow-xl">
+                              <span className="w-2 h-2 rounded-full bg-[#00C875] animate-ping" />
+                              <span>{currentPlate}</span>
+                              <span className="text-white/60 font-normal">({currentTarget.conf} CONF)</span>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Top HUD */}
+                        <div className="absolute top-2.5 left-2.5 right-2.5 z-20 flex items-center justify-between pointer-events-none text-xs font-mono">
+                          <div className="flex items-center gap-1.5 px-2 py-0.5 rounded bg-black/80 border border-white/10 text-white">
+                            <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-ping" />
+                            <span className="text-red-400 font-bold">LIVE REC</span>
+                            <span className="text-white/40">|</span>
+                            <span>{selected.camera_id}</span>
+                          </div>
+                          <div className="px-2 py-0.5 rounded bg-black/80 border border-white/10 text-[#00C875] font-bold">
+                            25 FPS · 1080P
+                          </div>
+                        </div>
+
+                        {/* Bottom HUD bar */}
+                        <div className="absolute bottom-2.5 left-2.5 right-2.5 z-20 flex items-center justify-between pointer-events-none text-[10px] font-mono text-white/80">
+                          <div className="px-2 py-0.5 rounded bg-black/80 border border-white/10 flex items-center gap-1.5">
+                            <MapPin size={11} className="text-[#0E7FE0]" />
+                            <span>{selected.location_name}</span>
+                          </div>
+                          <div className="px-2 py-0.5 rounded bg-black/80 border border-white/10">
+                            {selected.latitude?.toFixed(4)}° N, {selected.longitude?.toFixed(4)}° E
+                          </div>
+                        </div>
+                      </>
+                    ) : (
+                      <CctvOfflinePattern
+                        camera={selected}
+                        showControls={true}
+                        onRetry={() => handlePingRetry(selected.id)}
+                        isRetrying={retryingCamId === selected.id}
+                      />
+                    )}
+                  </div>
+
+                  {/* Video Playback Bar */}
+                  <div className="p-2.5 bg-[#080D14] border border-[#1C2E42] rounded-lg flex items-center justify-between gap-2 text-xs font-mono">
                     <div className="flex items-center gap-2">
                       <button
                         type="button"
@@ -511,10 +667,10 @@ export const DemoMonitor: React.FC = () => {
                             setIsPlaying(!isPlaying);
                           }
                         }}
-                        className="p-1.5 rounded bg-white/10 hover:bg-white/20 transition-colors"
+                        className="p-1.5 rounded bg-[#131F30] hover:bg-[#1C2E42] text-white border border-[#233B57] transition-colors cursor-pointer"
                         title={isPlaying ? 'Pause' : 'Play'}
                       >
-                        {isPlaying ? <Pause size={14} /> : <Play size={14} />}
+                        {isPlaying ? <Pause size={13} /> : <Play size={13} />}
                       </button>
 
                       <button
@@ -523,23 +679,24 @@ export const DemoMonitor: React.FC = () => {
                           setIsModalMuted(!isModalMuted);
                           if (modalVideoRef.current) modalVideoRef.current.muted = !isModalMuted;
                         }}
-                        className="p-1.5 rounded bg-white/10 hover:bg-white/20 transition-colors"
+                        className="p-1.5 rounded bg-[#131F30] hover:bg-[#1C2E42] text-white border border-[#233B57] transition-colors cursor-pointer"
                         title={isModalMuted ? 'Unmute' : 'Mute'}
                       >
-                        {isModalMuted ? <VolumeX size={14} /> : <Volume2 size={14} className="text-[#00C875]" />}
+                        {isModalMuted ? <VolumeX size={13} /> : <Volume2 size={13} className="text-[#00C875]" />}
                       </button>
 
-                      <div className="flex items-center gap-1 ml-1">
-                        <span className="text-white/60">Speed:</span>
-                        {[1, 2, 4].map((spd) => (
+                      <div className="flex items-center gap-1 ml-1 text-[11px]">
+                        <span className="text-[#6F87A1]">Speed:</span>
+                        {[0.5, 1, 2, 4].map((spd) => (
                           <button
                             key={spd}
+                            type="button"
                             onClick={() => {
                               setPlaybackSpeed(spd);
                               if (modalVideoRef.current) modalVideoRef.current.playbackRate = spd;
                             }}
-                            className={`px-1.5 py-0.5 rounded text-[10px] ${
-                              playbackSpeed === spd ? 'bg-[#0E7FE0] text-white font-bold' : 'text-white/60'
+                            className={`px-1.5 py-0.5 rounded text-[10px] cursor-pointer ${
+                              playbackSpeed === spd ? 'bg-[#0E7FE0] text-white font-bold' : 'text-[#8FA8C0] hover:text-white'
                             }`}
                           >
                             {spd}x
@@ -549,158 +706,111 @@ export const DemoMonitor: React.FC = () => {
                     </div>
 
                     <div className="flex items-center gap-2">
-                      <button
-                        type="button"
-                        onClick={() => setShowModalAi(!showModalAi)}
-                        className={`px-2 py-1 rounded text-[10px] font-bold border transition-colors ${
-                          showModalAi
-                            ? 'bg-[#00C875]/20 text-[#00C875] border-[#00C875]/40'
-                            : 'bg-white/5 text-white/50 border-white/10'
-                        }`}
-                      >
-                        AI BOXES {showModalAi ? 'ON' : 'OFF'}
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={handleCaptureSnapshot}
-                        className="px-2.5 py-1 bg-[#1C2E42] hover:bg-[#0E7FE0] text-white rounded text-[10px] font-bold flex items-center gap-1 transition-all"
-                      >
-                        <Camera size={12} />
-                        <span>CAPTURE SNAPSHOT</span>
-                      </button>
+                      <span className="text-[10px] text-[#6F87A1]">LATENCY: 38ms</span>
+                      <span className="text-[10px] text-[#00C875] font-bold">LOSS: 0.02%</span>
                     </div>
                   </div>
-                </>
-              ) : (
-                /* OFFLINE CAMERA DISPLAY: FULL SMPTE PATTERN */
-                <CctvOfflinePattern
-                  camera={selected}
-                  showControls={true}
-                  onRetry={() => handlePingRetry(selected.id)}
-                  isRetrying={retryingCamId === selected.id}
-                />
-              )}
-            </div>
+                </div>
 
-            {/* ─── MANAGED TELEMETRY & SPECIFICATIONS CARDS ─── */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
-              <div className="p-3 bg-[#080C12] border border-[#1C2E42] rounded-lg">
-                <div className="font-mono text-[#8FA8C0] text-[10px] uppercase font-bold mb-2">
-                  HARDWARE & ENCODING
-                </div>
-                <div className="space-y-1.5 font-mono text-[11px]">
-                  <div className="flex justify-between">
-                    <span className="text-white/50">Resolution:</span>
-                    <span className="text-white">{selected.resolution || '1920×1080 FHD'}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-white/50">Framerate:</span>
-                    <span className="text-white">{selected.fps || 25} FPS (Progressive)</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-white/50">Protocol:</span>
-                    <span className="text-[#0E7FE0]">HLS / RTSP over TCP</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-white/50">Bitrate:</span>
-                    <span className="text-white">4.2 Mbps CBR</span>
-                  </div>
-                </div>
-              </div>
+                {/* ─── RIGHT SIDE: CONTROL BUTTONS (3 COLS ON LG) ─── */}
+                <div className="lg:col-span-3 flex flex-col gap-2.5">
+                  <div className="p-3.5 bg-[#080D14] border border-[#1C2E42] rounded-lg shadow-inner flex flex-col gap-2">
+                    <div className="flex items-center justify-between border-b border-[#1C2E42] pb-2">
+                      <span className="text-[10px] font-mono font-bold text-white uppercase tracking-wider">
+                        COMMAND & CONTROLS
+                      </span>
+                      <span className="text-[9px] font-mono text-[#00C875] font-bold">NODE READY</span>
+                    </div>
 
-              <div className="p-3 bg-[#080C12] border border-[#1C2E42] rounded-lg">
-                <div className="font-mono text-[#8FA8C0] text-[10px] uppercase font-bold mb-2">
-                  NETWORK TOPOLOGY
-                </div>
-                <div className="space-y-1.5 font-mono text-[11px]">
-                  <div className="flex justify-between">
-                    <span className="text-white/50">Coordinates:</span>
-                    <span className="text-white font-mono">
-                      {selected.latitude?.toFixed(4)}° N, {selected.longitude?.toFixed(4)}° E
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-white/50">Stream URI:</span>
-                    <span className="text-[#0E7FE0] truncate max-w-[170px]" title={selected.rtsp_url}>
-                      {selected.rtsp_url}
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-white/50">Traffic Status:</span>
-                    <span
-                      className={`font-bold ${
-                        selected.congestion === 'HIGH'
-                          ? 'text-red-400'
-                          : selected.congestion === 'MEDIUM'
-                          ? 'text-amber-400'
-                          : 'text-emerald-400'
+                    {/* Button 1: Open in New Tab (target="_blank") */}
+                    <a
+                      href={`/camera-stream/${selected.id}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full py-2 px-3 bg-[#0E7FE0] hover:bg-[#108BFA] text-white rounded font-mono text-xs font-bold flex items-center justify-center gap-2 transition-all shadow-md shadow-[#0E7FE0]/25"
+                      title="Open Dedicated Fullscreen Surveillance Workstation in New Browser Tab"
+                    >
+                      <ExternalLink size={14} />
+                      <span>OPEN IN NEW TAB</span>
+                    </a>
+
+                    {/* Button 2: Toggle AI Boxes */}
+                    <button
+                      type="button"
+                      onClick={() => setShowModalAi(!showModalAi)}
+                      className={`w-full py-2 px-3 rounded font-mono text-xs font-bold flex items-center justify-between border transition-all cursor-pointer ${
+                        showModalAi
+                          ? 'bg-[#00C875]/15 text-[#00C875] border-[#00C875]/40'
+                          : 'bg-[#121E2E] text-white/60 border-[#1C2E42] hover:text-white'
                       }`}
                     >
-                      {selected.congestion || 'LOW'} DENSITY
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-white/50">Packet Loss:</span>
-                    <span className={selected.status === 'offline' ? 'text-red-400' : 'text-emerald-400'}>
-                      {selected.metadata?.packet_loss || (selected.status === 'offline' ? '100%' : '0.01%')}
-                    </span>
+                      <span className="flex items-center gap-1.5">
+                        <Eye size={14} />
+                        <span>AI OVERLAYS</span>
+                      </span>
+                      <span className="text-[10px] uppercase font-bold">{showModalAi ? 'ON' : 'OFF'}</span>
+                    </button>
+
+                    {/* Button 3: Capture Snapshot */}
+                    <button
+                      type="button"
+                      onClick={handleCaptureSnapshot}
+                      className="w-full py-2 px-3 bg-[#121E2E] hover:bg-[#1C2E42] text-white border border-[#233B57] rounded font-mono text-xs font-bold flex items-center justify-center gap-2 transition-colors cursor-pointer"
+                    >
+                      <Camera size={14} />
+                      <span>CAPTURE SNAPSHOT</span>
+                    </button>
+
+                    {/* Button 4: Night Vision Filter Toggle */}
+                    <button
+                      type="button"
+                      onClick={() => setModalNightVision(!modalNightVision)}
+                      className={`w-full py-2 px-3 rounded font-mono text-xs font-bold flex items-center justify-between border transition-all cursor-pointer ${
+                        modalNightVision
+                          ? 'bg-purple-500/20 text-purple-300 border-purple-500/50'
+                          : 'bg-[#121E2E] text-white/60 border-[#1C2E42] hover:text-white'
+                      }`}
+                    >
+                      <span className="flex items-center gap-1.5">
+                        <ShieldAlert size={14} />
+                        <span>NIGHT VISION</span>
+                      </span>
+                      <span className="text-[10px] uppercase font-bold">{modalNightVision ? 'ACTIVE' : 'OFF'}</span>
+                    </button>
+
+                    {/* Button 5: Ping Stream Node */}
+                    <button
+                      type="button"
+                      onClick={() => handlePingRetry(selected.id)}
+                      disabled={retryingCamId === selected.id}
+                      className="w-full py-2 px-3 bg-[#121E2E] hover:bg-[#1C2E42] text-[#8FA8C0] hover:text-white border border-[#1C2E42] rounded font-mono text-xs font-bold flex items-center justify-center gap-2 transition-colors cursor-pointer disabled:opacity-50"
+                    >
+                      <RefreshCw size={13} className={retryingCamId === selected.id ? 'animate-spin' : ''} />
+                      <span>{retryingCamId === selected.id ? 'Pinging Node...' : 'PING STREAM NODE'}</span>
+                    </button>
+
+                    {/* Simulated PTZ Directional Controls */}
+                    <div className="pt-2 border-t border-[#1C2E42]">
+                      <span className="text-[9px] font-mono text-[#8FA8C0] block mb-1.5 uppercase font-bold">
+                        SIMULATED PTZ CONTROLS
+                      </span>
+                      <div className="grid grid-cols-3 gap-1 font-mono text-[10px]">
+                        <div />
+                        <button type="button" onClick={() => toast.info('PTZ: Tilt Up 5°')} className="p-1.5 bg-[#121E2E] hover:bg-[#1C2E42] text-white rounded text-center cursor-pointer">▲</button>
+                        <div />
+                        <button type="button" onClick={() => toast.info('PTZ: Pan Left 5°')} className="p-1.5 bg-[#121E2E] hover:bg-[#1C2E42] text-white rounded text-center cursor-pointer">◀</button>
+                        <button type="button" onClick={() => toast.info('PTZ: Center Position')} className="p-1.5 bg-[#121E2E] hover:bg-[#1C2E42] text-white rounded text-center cursor-pointer font-bold">●</button>
+                        <button type="button" onClick={() => toast.info('PTZ: Pan Right 5°')} className="p-1.5 bg-[#121E2E] hover:bg-[#1C2E42] text-white rounded text-center cursor-pointer">▶</button>
+                        <div />
+                        <button type="button" onClick={() => toast.info('PTZ: Tilt Down 5°')} className="p-1.5 bg-[#121E2E] hover:bg-[#1C2E42] text-white rounded text-center cursor-pointer">▼</button>
+                        <div />
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
 
-              <div className="p-3 bg-[#080C12] border border-[#1C2E42] rounded-lg">
-                <div className="font-mono text-[#8FA8C0] text-[10px] uppercase font-bold mb-2">
-                  SIMULATED PTZ CONTROLS
-                </div>
-                <div className="grid grid-cols-3 gap-1.5 font-mono text-[10px]">
-                  <button
-                    type="button"
-                    onClick={() => toast.info('PTZ: Panning Left 5°')}
-                    className="p-1.5 bg-[#121E2E] hover:bg-[#1C2E42] text-white rounded text-center"
-                  >
-                    ◀ PAN L
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => toast.info('PTZ: Tilting Up 5°')}
-                    className="p-1.5 bg-[#121E2E] hover:bg-[#1C2E42] text-white rounded text-center"
-                  >
-                    ▲ TILT U
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => toast.info('PTZ: Panning Right 5°')}
-                    className="p-1.5 bg-[#121E2E] hover:bg-[#1C2E42] text-white rounded text-center"
-                  >
-                    PAN R ▶
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => toast.info('PTZ: Zooming In 1.5x')}
-                    className="p-1.5 bg-[#121E2E] hover:bg-[#1C2E42] text-[#00C875] rounded text-center font-bold"
-                  >
-                    ZOOM +
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => toast.info('PTZ: Resetting to Preset 1')}
-                    className="p-1.5 bg-[#121E2E] hover:bg-[#1C2E42] text-white rounded text-center"
-                  >
-                    RESET
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => toast.info('PTZ: Zooming Out')}
-                    className="p-1.5 bg-[#121E2E] hover:bg-[#1C2E42] text-[#0E7FE0] rounded text-center font-bold"
-                  >
-                    ZOOM -
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* ─── CORRELATED SIGHTINGS AT THIS CAMERA ─── */}
+              {/* ─── CORRELATED SIGHTINGS AT THIS CAMERA ─── */}
             <div className="p-3 bg-[#080C12] border border-[#1C2E42] rounded-lg">
               <div className="flex items-center justify-between mb-2">
                 <span className="font-mono text-xs font-bold text-white uppercase tracking-wider">
@@ -747,7 +857,8 @@ export const DemoMonitor: React.FC = () => {
               </div>
             </div>
           </div>
-        )}
+          );
+        })()}
       </Modal>
     </div>
   );
