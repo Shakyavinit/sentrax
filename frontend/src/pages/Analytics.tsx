@@ -1,52 +1,39 @@
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { useNavigate } from 'react-router-dom';
-import { PageHeader } from '../components/layout/PageHeader';
-import { ActivityChart } from '../components/analytics/ActivityChart';
-import { HeatmapChart } from '../components/analytics/HeatmapChart';
-import { Card } from '../components/ui/Card';
-import { LicensePlate } from '../components/ui/LicensePlate';
-import { Badge } from '../components/ui/Badge';
-import { analyticsApi } from '../api/analytics';
-import { assetUrl } from '../utils/demo';
-import { TrendingUp, ArrowUpRight, CheckCircle2, AlertTriangle } from 'lucide-react';
+import { useNavigate, Link } from 'react-router-dom';
 import {
-  ResponsiveContainer,
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  CartesianGrid,
-} from 'recharts';
-
-const PLATE_PHOTOS: Record<string, string> = {
-  GJ01AB1234: 'hit_scorpio_clean.jpg',
-  UP32PQ6677: 'hit_fortuner_clean.jpg',
-  GJ05CD5678: 'hit_swift_clean.jpg',
-  GJ18IJ7890: 'car_gj18ij7890.jpg',
-  MH12EF9012: 'car_mh12ef9012.jpg',
-  RJ14GH3456: 'car_rj14gh3456.jpg',
-};
-
-const VEHICLE_CLASSES = [
-  { name: 'Light Passenger / Car', share: '64%', count: '3,635', image: 'hit_swift_clean.jpg', color: 'bg-[#0E7FE0]' },
-  { name: 'Commercial / Heavy Cargo', share: '22%', count: '1,250', image: 'car_rj14gh3456.jpg', color: 'bg-amber-500' },
-  { name: 'Two-Wheeler / Commuter', share: '10%', count: '568', image: 'car_gj18ij7890.jpg', color: 'bg-emerald-500' },
-  { name: 'Transit / Public Bus', share: '4%', count: '227', image: 'car_mh12ef9012.jpg', color: 'bg-purple-500' },
-];
+  TrendingUp,
+  Activity,
+  Radio,
+  Car,
+  ShieldAlert,
+  Scan,
+  Crosshair,
+  ArrowUpRight,
+  Clock,
+  MapPin,
+  ChevronRight,
+  BarChart3,
+  CheckCircle2,
+  Layers,
+  Truck,
+  Bike
+} from 'lucide-react';
+import { analyticsApi } from '../api/analytics';
+import { ActivityChart } from '../components/analytics/ActivityChart';
+import { formatTimestamp } from '../utils/format';
 
 export const Analytics: React.FC = () => {
-  const [period, setPeriod] = useState<'24h' | '7d' | '30d'>('24h');
   const navigate = useNavigate();
+  const [period, setPeriod] = useState<'24h' | '7d' | '30d'>('24h');
 
   const { data: summary } = useQuery({
-    queryKey: ['analyticsSummary'],
+    queryKey: ['summary'],
     queryFn: analyticsApi.getSummary,
   });
 
   const { data: activity = [] } = useQuery({
-    queryKey: ['analyticsActivity', period],
+    queryKey: ['activity', period],
     queryFn: () => analyticsApi.getActivity(period),
   });
 
@@ -70,27 +57,33 @@ export const Analytics: React.FC = () => {
       label: 'Operational Surveillance Nodes',
       value: `${summary?.cameras_online ?? 11} / ${summary?.cameras_total ?? 15}`,
       subValue: '11 Live Feeds · 4 Signal Loss',
-      image: 'cctv_camera_3d.png',
       badge: 'ACTIVE SOC',
       badgeColor: 'text-emerald-400 bg-emerald-500/15 border-emerald-500/30',
+      icon: Radio,
+      iconColor: 'text-emerald-400',
+      iconBg: 'bg-emerald-500/10 border-emerald-500/25',
       to: '/cameras',
     },
     {
       label: 'Correlated Vehicle Scans',
       value: summary?.vehicles_detected_today ? `${summary.vehicles_detected_today * 4}` : '5,680',
       subValue: '+14.2% scanning velocity',
-      image: 'police_car_3d.png',
       badge: '+14.2% TODAY',
       badgeColor: 'text-[#0E7FE0] bg-[#0E7FE0]/15 border-[#0E7FE0]/30',
+      icon: Car,
+      iconColor: 'text-[#0E7FE0]',
+      iconBg: 'bg-[#0E7FE0]/10 border-[#0E7FE0]/25',
       to: '/investigation',
     },
     {
       label: 'Flagged Interceptions',
       value: `${summary?.active_alerts ?? 3} Alerts`,
       subValue: '2 Warrants · 1 Speed Anomaly',
-      image: 'alert_beacon_3d.png',
       badge: 'HIGH PRIORITY',
       badgeColor: 'text-red-400 bg-red-500/15 border-red-500/30',
+      icon: ShieldAlert,
+      iconColor: 'text-red-400',
+      iconBg: 'bg-red-500/10 border-red-500/25',
       highlightAlert: true,
       to: '/alerts',
     },
@@ -98,28 +91,31 @@ export const Analytics: React.FC = () => {
       label: 'Validated Plate Extractions',
       value: summary?.plates_scanned ? `${summary.plates_scanned}` : '8,924',
       subValue: '96.2% Indian Syntax Match',
-      image: 'plate_scanner_3d.png',
       badge: '96.2% OCR CONF',
       badgeColor: 'text-cyan-400 bg-cyan-500/15 border-cyan-500/30',
+      icon: Scan,
+      iconColor: 'text-cyan-400',
+      iconBg: 'bg-cyan-500/10 border-cyan-500/25',
       to: '/investigation',
     },
   ];
 
+  // Vehicle categories with colors and percentages
+  const vehicleClasses = [
+    { type: 'SUVs & Tactical Patrols', pct: 38, count: '2,158', color: 'bg-[#0E7FE0]', icon: Car },
+    { type: 'Sedans & Personal Cars', pct: 27, count: '1,533', color: 'bg-emerald-500', icon: Car },
+    { type: 'Hatchbacks & Compacts', pct: 19, count: '1,079', color: 'bg-amber-500', icon: Car },
+    { type: 'Commercial Transport & Trucks', pct: 11, count: '624', color: 'bg-purple-500', icon: Truck },
+    { type: 'Two-Wheelers & Motorcycles', pct: 5, count: '286', color: 'bg-cyan-400', icon: Bike },
+  ];
+
   return (
-    <div className="space-y-4 pb-4">
-      {/* ─── PAGE HEADER WITH TACTICAL EYEBROW & PERIOD SELECTOR ─── */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-[#1C2E42]">
-        <div>
-          <div className="text-[10px] font-mono font-bold text-[#0E7FE0] tracking-widest uppercase flex items-center gap-1.5 mb-0.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#0E7FE0] animate-pulse" />
-            <span>ANALYTICS & DIGITAL FORENSICS INTELLIGENCE</span>
-          </div>
-          <h1 className="text-lg font-bold text-white tracking-tight flex items-center gap-2">
-            <span>Forensic Analytics & Intelligence Metrics</span>
-          </h1>
-          <p className="text-xs text-[#8FA8C0]">
-            Surveillance telemetry, traffic intensity heatmaps, and ANPR OCR model diagnostics.
-          </p>
+    <div className="space-y-4 pb-6 font-sans">
+      {/* ─── COMPACT TOOLBAR WITH TACTICAL EYEBROW & PERIOD SELECTOR ─── */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-[#1C2E42]">
+        <div className="text-[10px] font-mono font-bold text-[#0E7FE0] tracking-widest uppercase flex items-center gap-1.5">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#0E7FE0] animate-pulse" />
+          <span>ANALYTICS & DIGITAL FORENSICS INTELLIGENCE</span>
         </div>
 
         {/* Time Period Filter Tabs */}
@@ -128,9 +124,9 @@ export const Analytics: React.FC = () => {
             <button
               key={p}
               onClick={() => setPeriod(p)}
-              className={`px-3 py-1 rounded transition-colors ${
+              className={`px-3 py-1 rounded transition-colors cursor-pointer ${
                 period === p
-                  ? 'bg-[#0E7FE0] text-white font-bold'
+                  ? 'bg-[#0E7FE0] text-white font-bold shadow'
                   : 'text-[#8FA8C0] hover:text-white'
               }`}
             >
@@ -140,64 +136,61 @@ export const Analytics: React.FC = () => {
         </div>
       </div>
 
-      {/* ─── ROW 1: KPI STAT CARDS WITH 3D PHOTOS & HOVER COLOR REVEAL ─── */}
+      {/* ─── ROW 1: 4 TACTICAL KPI CARDS WITH CLEAN VECTOR BADGES ─── */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-        {kpis.map((kpi) => (
-          <div
-            key={kpi.label}
-            onClick={() => navigate(kpi.to)}
-            className={`p-3.5 bg-[#0D1520] border rounded-lg shadow-md transition-all cursor-pointer relative overflow-hidden group ${
-              kpi.highlightAlert
-                ? 'border-red-500/50 bg-red-950/10 hover:border-red-400'
-                : 'border-[#1C2E42] hover:border-[#385575] hover:bg-[#101B2B]'
-            }`}
-          >
-            <div className="flex items-start justify-between gap-2">
-              <div className="flex-1 min-w-0 pr-2">
-                <div className="flex items-center gap-1.5 mb-1">
-                  <span className={`px-1.5 py-0.2 rounded font-mono text-[9px] font-bold border ${kpi.badgeColor}`}>
-                    {kpi.badge}
-                  </span>
+        {kpis.map((kpi) => {
+          const IconComponent = kpi.icon;
+          return (
+            <div
+              key={kpi.label}
+              onClick={() => navigate(kpi.to)}
+              className={`p-3.5 bg-[#0D1520] border rounded-lg shadow-md transition-all cursor-pointer relative overflow-hidden group ${
+                kpi.highlightAlert
+                  ? 'border-red-500/50 bg-red-950/10 hover:border-red-400'
+                  : 'border-[#1C2E42] hover:border-[#385575] hover:bg-[#101B2B]'
+              }`}
+            >
+              <div className="flex items-start justify-between gap-2">
+                <div className="flex-1 min-w-0 pr-2">
+                  <div className="flex items-center gap-1.5 mb-1">
+                    <span className={`px-1.5 py-0.2 rounded font-mono text-[9px] font-bold border ${kpi.badgeColor}`}>
+                      {kpi.badge}
+                    </span>
+                  </div>
+                  <div className="text-[11px] font-mono text-[#8FA8C0] uppercase tracking-wider truncate mb-1">
+                    {kpi.label}
+                  </div>
+                  <div className="text-2xl font-mono font-bold text-white tracking-tight mb-1">
+                    {kpi.value}
+                  </div>
+                  <div className="text-[10px] font-mono text-[#8FA8C0] truncate">
+                    {kpi.subValue}
+                  </div>
                 </div>
-                <div className="text-[11px] font-mono text-[#8FA8C0] uppercase tracking-wider truncate mb-1">
-                  {kpi.label}
-                </div>
-                <div className="text-2xl font-mono font-bold text-white tracking-tight mb-1">
-                  {kpi.value}
-                </div>
-                <div className="text-[10px] font-mono text-[#8FA8C0] truncate">
-                  {kpi.subValue}
+
+                {/* Tactical Glowing Vector Glyph */}
+                <div className={`w-12 h-12 rounded-lg flex-shrink-0 flex items-center justify-center border shadow-inner ${kpi.iconBg}`}>
+                  <IconComponent className={`w-6 h-6 ${kpi.iconColor}`} />
                 </div>
               </div>
 
-              {/* Real 3D Photographic Asset with Color Reveal on Hover */}
-              <div className="w-16 h-16 flex-shrink-0 flex items-center justify-center relative">
-                <img
-                  src={assetUrl('images/' + kpi.image)}
-                  alt={kpi.label}
-                  className="w-14 h-14 object-contain color-reveal transition-all duration-300"
-                />
+              <div className="absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity text-[#8FA8C0]">
+                <ArrowUpRight size={14} />
               </div>
             </div>
-
-            <div className="absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity text-[#8FA8C0]">
-              <ArrowUpRight size={14} />
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
-      {/* ─── ROW 2: VELOCITY TREND (7 cols) + TOP PLATES DOSSIERS (5 cols) ─── */}
+      {/* ─── ROW 2: VELOCITY TREND (7 cols) + TOP IDENTIFIED PLATES (5 cols) ─── */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-3.5">
         {/* Detection Velocity Chart */}
         <div className="lg:col-span-7 bg-[#0D1520] border border-[#1C2E42] rounded-lg p-3.5 shadow-lg flex flex-col">
           <div className="flex items-center justify-between pb-2.5 border-b border-[#1C2E42] mb-3">
-            <div className="flex items-center gap-2.5">
-              <img
-                src={assetUrl('images/traffic_city_junction_thumb.jpg')}
-                alt="Traffic"
-                className="w-7 h-7 rounded object-cover border border-[#1C2E42] color-reveal"
-              />
+            <div className="flex items-center gap-2">
+              <div className="w-6 h-6 rounded bg-[#0E7FE0]/15 border border-[#0E7FE0]/30 flex items-center justify-center text-[#0E7FE0]">
+                <TrendingUp size={13} />
+              </div>
               <div>
                 <h3 className="text-xs font-mono font-bold text-white uppercase tracking-wider">
                   Vehicle Detection Velocity Trend
@@ -207,8 +200,9 @@ export const Analytics: React.FC = () => {
                 </p>
               </div>
             </div>
-            <span className="text-[10px] font-mono text-[#00C875] bg-[#00C875]/10 border border-[#00C875]/30 px-2 py-0.5 rounded">
-              ● REAL-TIME AGGREGATION
+            <span className="text-[10px] font-mono text-[#00C875] bg-[#00C875]/10 border border-[#00C875]/30 px-2 py-0.5 rounded flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#00C875] animate-pulse" />
+              <span>REAL-TIME AGGREGATION</span>
             </span>
           </div>
 
@@ -217,26 +211,24 @@ export const Analytics: React.FC = () => {
           </div>
         </div>
 
-        {/* Most Frequently Seen Registrations with Real Vehicle Crop Photos */}
+        {/* Most Frequently Seen Registrations with Clean Badges */}
         <div className="lg:col-span-5 bg-[#0D1520] border border-[#1C2E42] rounded-lg p-3.5 shadow-lg flex flex-col">
           <div className="flex items-center justify-between pb-2.5 border-b border-[#1C2E42] mb-2.5">
-            <div className="flex items-center gap-2.5">
-              <img
-                src={assetUrl('images/hit_scorpio_clean.jpg')}
-                alt="Target Vehicle"
-                className="w-7 h-7 rounded object-cover border border-[#1C2E42] color-reveal"
-              />
+            <div className="flex items-center gap-2">
+              <div className="w-6 h-6 rounded bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+                <Crosshair size={13} />
+              </div>
               <div>
                 <h3 className="text-xs font-mono font-bold text-white uppercase tracking-wider">
                   Frequently Identified Registrations
                 </h3>
                 <p className="text-[10px] text-[#8FA8C0]">
-                  Top vehicles correlated in the surveillance observation window
+                  Top correlated plates with immediate dossier access
                 </p>
               </div>
             </div>
             <span className="text-[10px] font-mono text-[#8FA8C0]">
-              TOP {topPlates.slice(0, 6).length}
+              TOP {topPlates.slice(0, 5).length || 5}
             </span>
           </div>
 
@@ -244,168 +236,186 @@ export const Analytics: React.FC = () => {
             <table className="w-full text-left text-xs">
               <thead className="text-[10px] font-mono text-[#8FA8C0] border-b border-[#1C2E42] uppercase">
                 <tr>
-                  <th className="pb-2">Vehicle / Plate</th>
+                  <th className="pb-2">Plate Number</th>
                   <th className="pb-2">Detections</th>
                   <th className="pb-2">Last Seen</th>
-                  <th className="pb-2 text-right">Status</th>
+                  <th className="pb-2 text-right">Dossier</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#1C2E42]">
-                {topPlates.slice(0, 6).map((tp) => {
-                  const photo = PLATE_PHOTOS[tp.plate_text] || 'hit_swift_clean.jpg';
-
-                  return (
-                    <tr
-                      key={tp.plate_text}
-                      onClick={() => navigate(`/investigation?plate=${tp.plate_text}`)}
-                      className="hover:bg-[#121E2E] cursor-pointer transition-colors group"
-                    >
-                      <td className="py-2">
-                        <div className="flex items-center gap-2">
-                          <img
-                            src={assetUrl('images/' + photo)}
-                            alt={tp.plate_text}
-                            className="w-9 h-6 object-cover rounded border border-[#1C2E42] color-reveal group-hover:scale-105 transition-transform"
+              <tbody className="divide-y divide-[#162436] font-mono">
+                {(topPlates.length > 0 ? topPlates.slice(0, 5) : [
+                  { plate_text: 'GJ01AB1234', count: 5, last_seen: '2026-09-14 14:26:17' },
+                  { plate_text: 'UP32PQ6677', count: 5, last_seen: '2026-09-14 14:24:02' },
+                  { plate_text: 'GJ05CD5678', count: 5, last_seen: '2026-09-14 14:21:49' },
+                  { plate_text: 'DL10XY9090', count: 5, last_seen: '2026-09-14 14:18:33' },
+                  { plate_text: 'RJ14GH3456', count: 5, last_seen: '2026-09-14 13:58:10' },
+                ]).map((tp) => (
+                  <tr key={tp.plate_text} className="hover:bg-[#111A26] transition-colors">
+                    <td className="py-2.5">
+                      <span className="inline-flex items-center bg-white text-black font-mono font-extrabold text-[11px] px-1.5 py-0.5 rounded border border-gray-400 tracking-wider">
+                        <span className="text-[7px] mr-1 text-blue-800 font-bold">IND</span>
+                        {tp.plate_text}
+                      </span>
+                    </td>
+                    <td className="py-2.5">
+                      <div className="flex items-center gap-2">
+                        <span className="text-white font-bold">{tp.count}</span>
+                        <div className="w-12 h-1.5 bg-[#162436] rounded-full overflow-hidden">
+                          <div
+                            className="h-full bg-[#0E7FE0] rounded-full"
+                            style={{ width: `${Math.min(100, tp.count * 20)}%` }}
                           />
-                          <LicensePlate plate={tp.plate_text} size="sm" />
                         </div>
-                      </td>
-                      <td className="py-2 font-mono text-white font-bold">{tp.count}</td>
-                      <td className="py-2 text-[10px] font-mono text-[#8FA8C0]">{tp.last_seen}</td>
-                      <td className="py-2 text-right">
-                        {tp.is_watchlist ? (
-                          <Badge variant="alert">WATCHLIST</Badge>
-                        ) : (
-                          <Badge variant="ok">CLEAN</Badge>
-                        )}
-                      </td>
-                    </tr>
-                  );
-                })}
+                      </div>
+                    </td>
+                    <td className="py-2.5 text-[#8FA8C0] text-[10px]">
+                      {tp.last_seen ? formatTimestamp(tp.last_seen) : 'Recent'}
+                    </td>
+                    <td className="py-2.5 text-right">
+                      <Link
+                        to={`/vehicles/details/${tp.plate_text}`}
+                        className="px-2 py-1 bg-[#131F30] hover:bg-[#0E7FE0] text-[#8FA8C0] hover:text-white rounded text-[10px] font-mono font-bold transition-colors inline-flex items-center gap-1"
+                        title="View Full User & Vehicle Dossier"
+                      >
+                        <span>Dossier</span>
+                        <ChevronRight size={11} />
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
         </div>
       </div>
 
-      {/* ─── ROW 3: SPATIAL HEATMAP (7 cols) + OCR CONFIDENCE & VEHICLE CLASSES (5 cols) ─── */}
+      {/* ─── ROW 3: HEATMAP (7 cols) + VEHICLE CLASSIFICATION (5 cols) ─── */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-3.5">
-        {/* Heatmap Matrix */}
+        {/* Surveillance Intensity Heatmap */}
         <div className="lg:col-span-7 bg-[#0D1520] border border-[#1C2E42] rounded-lg p-3.5 shadow-lg flex flex-col">
           <div className="flex items-center justify-between pb-2.5 border-b border-[#1C2E42] mb-3">
-            <div className="flex items-center gap-2.5">
-              <img
-                src={assetUrl('images/gujarat_hud_map.jpg')}
-                alt="Topology"
-                className="w-7 h-7 rounded object-cover border border-[#1C2E42] color-reveal"
-              />
+            <div className="flex items-center gap-2">
+              <div className="w-6 h-6 rounded bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400">
+                <BarChart3 size={13} />
+              </div>
               <div>
                 <h3 className="text-xs font-mono font-bold text-white uppercase tracking-wider">
                   Surveillance Intensity Heatmap (Camera vs. Hour)
                 </h3>
                 <p className="text-[10px] text-[#8FA8C0]">
-                  Density correlation across urban CCTV nodes over 24-hour cycle
+                  Normalized vehicle traffic density across all 15 CCTV nodes
                 </p>
               </div>
             </div>
-            <span className="text-[10px] font-mono text-[#0E7FE0]">
-              24-HR CYCLE
-            </span>
+            <span className="text-[10px] font-mono text-[#8FA8C0]">24-HR CYCLE</span>
           </div>
 
-          <div className="flex-1">
-            <HeatmapChart data={heatmapData} />
+          <div className="space-y-2 flex-1">
+            {heatmapData.length > 0 ? (
+              heatmapData.slice(0, 6).map((hm: any) => (
+                <div key={hm.camera_id} className="flex items-center gap-2.5 text-xs font-mono">
+                  <span className="w-14 truncate text-[#8FA8C0] text-[10px]">{hm.camera_name.split(' ')[0]}</span>
+                  <div className="flex-1 grid grid-cols-12 gap-1">
+                    {(hm.hourly_counts || [1, 2, 4, 8, 12, 15, 14, 10, 8, 6, 3, 1]).map((cnt: number, idx: number) => {
+                      const intensity = Math.min(1, cnt / 15);
+                      return (
+                        <div
+                          key={idx}
+                          className="h-5 rounded-[2px] transition-all hover:scale-110"
+                          style={{
+                            backgroundColor:
+                              intensity > 0.7
+                                ? '#0E7FE0'
+                                : intensity > 0.4
+                                ? '#00C875'
+                                : intensity > 0.1
+                                ? '#1A334E'
+                                : '#101B27',
+                          }}
+                          title={`Hour ${idx * 2}:00 — ${cnt} scans`}
+                        />
+                      );
+                    })}
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="space-y-2">
+                {['MG Road', 'Sardar Brg', 'Vastrapur', 'SG Toll', 'GIFT City', 'GNLU Gate'].map((cam, idx) => (
+                  <div key={cam} className="flex items-center gap-2.5 text-xs font-mono">
+                    <span className="w-16 truncate text-[#8FA8C0] text-[10px]">{cam}</span>
+                    <div className="flex-1 grid grid-cols-12 gap-1">
+                      {Array.from({ length: 12 }).map((_, h) => {
+                        const val = ((idx + 1) * (h + 1)) % 10;
+                        return (
+                          <div
+                            key={h}
+                            className="h-4 rounded-[2px]"
+                            style={{
+                              backgroundColor: val > 6 ? '#0E7FE0' : val > 3 ? '#00C875' : '#142233',
+                            }}
+                          />
+                        );
+                      })}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
-        {/* OCR Confidence Histogram & Vehicle Class Breakdown */}
-        <div className="lg:col-span-5 bg-[#0D1520] border border-[#1C2E42] rounded-lg p-3.5 shadow-lg flex flex-col gap-3">
-          {/* Section A: Vehicle Class Breakdown with Real Photos */}
-          <div>
-            <div className="flex items-center gap-2 pb-1.5 border-b border-[#1C2E42] mb-2">
-              <img
-                src={assetUrl('images/police_car_3d.png')}
-                alt="Vehicle Classes"
-                className="w-5 h-5 object-contain color-reveal"
-              />
-              <span className="text-xs font-mono font-bold text-white uppercase">
-                Vehicle Classification Breakdown
-              </span>
+        {/* Vehicle Classification Breakdown with Rich Colored Progress Bars */}
+        <div className="lg:col-span-5 bg-[#0D1520] border border-[#1C2E42] rounded-lg p-3.5 shadow-lg flex flex-col">
+          <div className="flex items-center justify-between pb-2.5 border-b border-[#1C2E42] mb-3">
+            <div className="flex items-center gap-2">
+              <div className="w-6 h-6 rounded bg-purple-500/15 border border-purple-500/30 flex items-center justify-center text-purple-400">
+                <Layers size={13} />
+              </div>
+              <div>
+                <h3 className="text-xs font-mono font-bold text-white uppercase tracking-wider">
+                  Vehicle Classification Breakdown
+                </h3>
+                <p className="text-[10px] text-[#8FA8C0]">
+                  YOLOv8 vehicle category telemetry
+                </p>
+              </div>
             </div>
-
-            <div className="grid grid-cols-2 gap-2">
-              {VEHICLE_CLASSES.map((vc) => (
-                <div
-                  key={vc.name}
-                  className="p-2 bg-[#080C12] border border-[#1C2E42] rounded flex items-center gap-2 group hover:border-[#2A4462] transition-colors"
-                >
-                  <img
-                    src={assetUrl('images/' + vc.image)}
-                    alt={vc.name}
-                    className="w-8 h-6 object-cover rounded border border-[#1C2E42] color-reveal group-hover:scale-105 transition-transform"
-                  />
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between text-[10px] font-mono">
-                      <span className="text-white font-bold">{vc.share}</span>
-                      <span className="text-[#8FA8C0]">{vc.count}</span>
-                    </div>
-                    <div className="text-[9px] text-[#8FA8C0] truncate">{vc.name}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
+            <span className="text-[10px] font-mono text-[#00C875] font-bold">5 CATEGORIES</span>
           </div>
 
-          {/* Section B: OCR Model Confidence Distribution */}
-          <div className="flex-1 flex flex-col pt-1 border-t border-[#1C2E42]">
-            <div className="flex items-center justify-between mb-1.5">
-              <div className="flex items-center gap-2">
-                <img
-                  src={assetUrl('images/plate_scanner_3d.png')}
-                  alt="OCR"
-                  className="w-5 h-5 object-contain color-reveal"
-                />
-                <span className="text-xs font-mono font-bold text-white uppercase">
-                  OCR Accuracy Distribution
-                </span>
-              </div>
-              <span className="text-[10px] font-mono text-[#00C875]">96.2% AVG ACCURACY</span>
-            </div>
+          <div className="space-y-3 flex-1">
+            {vehicleClasses.map((vc) => {
+              const VcIcon = vc.icon;
+              return (
+                <div key={vc.type} className="space-y-1">
+                  <div className="flex items-center justify-between text-xs font-mono">
+                    <span className="text-white font-medium flex items-center gap-1.5">
+                      <VcIcon size={12} className="text-[#8FA8C0]" />
+                      <span>{vc.type}</span>
+                    </span>
+                    <span className="text-[#8FA8C0]">
+                      <strong className="text-white">{vc.pct}%</strong> ({vc.count})
+                    </span>
+                  </div>
+                  <div className="w-full h-2 bg-[#101B27] rounded-full overflow-hidden">
+                    <div
+                      className={`h-full ${vc.color} rounded-full transition-all duration-500`}
+                      style={{ width: `${vc.pct}%` }}
+                    />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
 
-            <div className="h-36 w-full">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={confDist} margin={{ top: 5, right: 10, left: -25, bottom: 0 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#1C2E42" vertical={false} />
-                  <XAxis
-                    dataKey="bucket"
-                    stroke="#4D6B85"
-                    fontSize={10}
-                    tickLine={false}
-                    fontFamily="JetBrains Mono, monospace"
-                  />
-                  <YAxis
-                    stroke="#4D6B85"
-                    fontSize={10}
-                    tickLine={false}
-                    fontFamily="JetBrains Mono, monospace"
-                  />
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: '#0D1520',
-                      border: '1px solid #233A52',
-                      borderRadius: '4px',
-                      fontFamily: 'JetBrains Mono, monospace',
-                      fontSize: '11px',
-                      color: '#E8EFF7',
-                    }}
-                  />
-                  <Bar dataKey="count" name="Plate Detections" fill="#0E7FE0" radius={[4, 4, 0, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
+          <div className="pt-3 border-t border-[#1C2E42] mt-3 flex items-center justify-between text-[11px] font-mono text-[#8FA8C0]">
+            <span>Average OCR Confidence:</span>
+            <span className="text-[#00C875] font-bold">96.2% High Accuracy</span>
           </div>
         </div>
       </div>
     </div>
   );
 };
+export default Analytics;

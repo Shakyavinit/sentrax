@@ -41,8 +41,8 @@ img,video { max-width:100%; }
 .app-sidebar.is-collapsed .sidebar-user .icon-button { margin:0; }
 .mobile-close,.mobile-menu,.sidebar-backdrop { display:none; }
 .app-topbar { min-height:64px; padding:12px 30px; display:flex; align-items:center; justify-content:space-between; gap:20px; background:#101216ee; border-bottom:1px solid #292d35; position:sticky; top:0; z-index:30; backdrop-filter:blur(14px); }
-.topbar-left { display:flex; align-items:center; gap:10px; flex:0 0 auto; }
-.topbar-center { display:flex; align-items:center; justify-content:center; flex:1 1 auto; text-align:center; }
+.topbar-left { display:flex; align-items:center; gap:10px; flex:1 1 auto; min-width:0; }
+.topbar-center { display:none; }
 .topbar-right { display:flex; align-items:center; justify-content:flex-end; gap:14px; flex:0 0 auto; }
 .topbar-context { display:flex; align-items:center; gap:10px; font-size:13px; }
 .topbar-context strong { font-weight:600; }
@@ -69,15 +69,16 @@ img,video { max-width:100%; }
 .metric-card p { font-size:12px; color:#a4adbb; }
 .metric-card strong { display:block; font-size:30px; font-weight:600; letter-spacing:-.05em; line-height:1.8; white-space:nowrap; }
 .metric-card small { font-size:10px; color:#919aa8; display:block; }
+.metric-card img { width:72px; height:72px; object-fit:contain; }
 .color-reveal {
-  filter: grayscale(100%) contrast(1.1) brightness(0.88);
-  transition: filter 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  filter: grayscale(100%) contrast(1.05) brightness(0.9);
+  transition: filter 0.35s ease, transform 0.35s ease;
 }
 .metric-card:hover .color-reveal,
 .metric-card:focus-visible .color-reveal,
 .color-reveal:hover {
-  filter: grayscale(0%) saturate(1.25) brightness(1.05);
-  transform: translateY(-4px) scale(1.06);
+  filter: grayscale(0%) saturate(1.2) brightness(1.05);
+  transform: translateY(-3px) scale(1.05);
 }
 .metric-arrow { position:absolute; top:13px; right:13px; color:#7e8796; }
 .overview-primary { display:grid; grid-template-columns:minmax(0,1.35fr) minmax(0,1fr); gap:24px; }

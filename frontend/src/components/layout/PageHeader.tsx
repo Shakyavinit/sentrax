@@ -1,2 +1,15 @@
 import React from 'react';
-export const PageHeader: React.FC<{title: string; description?: string; actions?: React.ReactNode}> = ({title,description,actions}) => <div className="page-heading"><div><h1>{title}</h1>{description && <p>{description}</p>}</div>{actions && <div className="page-actions">{actions}</div>}</div>;
+
+export const PageHeader: React.FC<{
+  title?: string;
+  description?: string;
+  actions?: React.ReactNode;
+}> = ({ actions }) => {
+  if (!actions) return null;
+  return (
+    <div className="flex items-center justify-end gap-2 mb-3">
+      {actions}
+    </div>
+  );
+};
+

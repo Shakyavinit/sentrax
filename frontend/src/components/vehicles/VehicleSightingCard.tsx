@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Sighting } from '../../types';
 import { LicensePlate } from '../ui/LicensePlate';
 import { formatTimestamp } from '../../utils/format';
@@ -75,21 +76,31 @@ export const VehicleSightingCard: React.FC<VehicleSightingCardProps> = ({
           </span>
         </div>
 
-        {/* Preserve Button */}
-        {onPreserveEvidence && (
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              onPreserveEvidence(sighting);
-            }}
-            className="px-2 py-0.5 rounded bg-[#162334] hover:bg-[#0E7FE0] text-[#8FA8C0] hover:text-white border border-[#223850] hover:border-[#0E7FE0] font-mono text-[10px] font-semibold flex items-center gap-1 transition-colors"
-            title="Preserve cryptographic evidence"
+        {/* Action Buttons: Dossier + Preserve */}
+        <div className="flex items-center gap-1.5 shrink-0">
+          <Link
+            to={`/vehicles/details/${encodeURIComponent(sighting.plate_text || 'UNKNOWN')}`}
+            onClick={(e) => e.stopPropagation()}
+            className="px-2 py-0.5 rounded bg-[#131F30] hover:bg-[#0E7FE0] text-[#8FA8C0] hover:text-white border border-[#223850] font-mono text-[10px] font-semibold flex items-center gap-1 transition-colors"
+            title="Open Full Owner & Research Dossier"
           >
-            <Archive className="w-2.5 h-2.5" />
-            <span>Preserve</span>
-          </button>
-        )}
+            <span>Dossier</span>
+          </Link>
+          {onPreserveEvidence && (
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                onPreserveEvidence(sighting);
+              }}
+              className="px-2 py-0.5 rounded bg-[#162334] hover:bg-[#0E7FE0] text-[#8FA8C0] hover:text-white border border-[#223850] hover:border-[#0E7FE0] font-mono text-[10px] font-semibold flex items-center gap-1 transition-colors"
+              title="Preserve cryptographic evidence"
+            >
+              <Archive className="w-2.5 h-2.5" />
+              <span>Preserve</span>
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );

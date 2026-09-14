@@ -23,6 +23,7 @@ import {
   Maximize,
   Compass,
   Zap,
+  ExternalLink,
 } from 'lucide-react';
 import { camerasApi } from '../api/cameras';
 import { vehiclesApi } from '../api/vehicles';
@@ -368,15 +369,27 @@ export const DemoMonitor: React.FC = () => {
                   </div>
                 </div>
 
-                <button
-                  type="button"
-                  onClick={() => setParams({ camera: c.id })}
-                  className="px-2.5 py-1 bg-[#162334] hover:bg-[#0E7FE0] text-white/80 hover:text-white rounded text-[11px] font-mono font-bold flex items-center gap-1 transition-all border border-[#233A52] flex-shrink-0 cursor-pointer"
-                  title={`Inspect ${c.camera_id}`}
-                >
-                  <span>OPEN</span>
-                  <ArrowUpRight size={13} />
-                </button>
+                <div className="flex items-center gap-1.5">
+                  <a
+                    href={`/camera-stream/${c.id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-1.5 bg-[#162334] hover:bg-[#0E7FE0] text-white/80 hover:text-white rounded text-[11px] font-mono transition-all border border-[#233A52] flex-shrink-0 cursor-pointer"
+                    title={`Open ${c.camera_id} in New Tab Fullscreen`}
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <ExternalLink size={12} />
+                  </a>
+                  <button
+                    type="button"
+                    onClick={() => setParams({ camera: c.id })}
+                    className="px-2.5 py-1 bg-[#162334] hover:bg-[#0E7FE0] text-white/80 hover:text-white rounded text-[11px] font-mono font-bold flex items-center gap-1 transition-all border border-[#233A52] flex-shrink-0 cursor-pointer"
+                    title={`Inspect ${c.camera_id}`}
+                  >
+                    <span>OPEN</span>
+                    <ArrowUpRight size={13} />
+                  </button>
+                </div>
               </div>
             </div>
           );
@@ -419,8 +432,18 @@ export const DemoMonitor: React.FC = () => {
                 </span>
               </div>
 
-              {/* Prev / Next camera buttons */}
-              <div className="flex items-center gap-1">
+              {/* Prev / Next camera buttons & New Tab Fullscreen */}
+              <div className="flex items-center gap-1.5">
+                <a
+                  href={`/camera-stream/${selected.id}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-2.5 py-1 bg-[#0E7FE0] hover:bg-[#108BFA] text-white rounded flex items-center gap-1.5 font-bold transition-all shadow-md shadow-[#0E7FE0]/25 text-xs font-mono"
+                  title="Open Dedicated Fullscreen Surveillance Workstation in New Tab"
+                >
+                  <ExternalLink size={12} />
+                  <span>OPEN IN NEW TAB</span>
+                </a>
                 <button
                   type="button"
                   onClick={handleSelectPrev}

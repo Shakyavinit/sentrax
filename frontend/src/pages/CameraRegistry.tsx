@@ -134,21 +134,10 @@ export const CameraRegistry: React.FC = () => {
 
   return (
     <div className="space-y-2.5 pb-2">
-      {/* ─── PAGE HEADER WITH ACTIONS & COMPACT TELEMETRY ─── */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-2 border-b border-[#1C2E42]">
-        <div>
-          <div className="text-[10px] font-mono font-bold text-[#0E7FE0] tracking-widest uppercase flex items-center gap-1.5 mb-0.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#0E7FE0] animate-pulse" />
-            <span>SURVEILLANCE NODE NETWORK</span>
-          </div>
-          <h1 className="text-lg font-bold text-white tracking-tight flex items-center gap-2">
-            <span>Surveillance Camera Registry</span>
-          </h1>
-        </div>
-
-        {/* Action Button & Quick Telemetry Chips */}
+      {/* ─── COMPACT TOOLBAR WITH TELEMETRY CHIPS & ACTIONS ─── */}
+      <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-[#1C2E42]">
+        {/* Status Chips */}
         <div className="flex flex-wrap items-center gap-2">
-          {/* Status Chips */}
           <div className="flex items-center gap-1.5 font-mono text-[11px]">
             <span className="px-2 py-1 rounded bg-[#0D1520] border border-[#1C2E42] text-white/90">
               <strong className="text-white">{cameras.length}</strong> Nodes
@@ -452,18 +441,20 @@ export const CameraRegistry: React.FC = () => {
 
                 {/* Quick Actions Bar */}
                 <div className="grid grid-cols-2 gap-2 pt-1.5 border-t border-[#1C2E42]">
-                  <button
-                    type="button"
-                    onClick={() => navigate(`/live?camera=${activeCam.id}`)}
-                    className="px-2.5 py-1 bg-[#0E7FE0] hover:bg-[#0E7FE0]/90 text-white font-mono text-[11px] font-bold rounded flex items-center justify-center gap-1 transition-all"
+                  <a
+                    href={`/camera-stream/${activeCam.id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-2.5 py-1.5 bg-[#0E7FE0] hover:bg-[#108BFA] text-white font-mono text-[11px] font-bold rounded flex items-center justify-center gap-1.5 transition-all shadow-sm"
+                    title="Open Fullscreen Workstation in New Tab"
                   >
-                    <Video size={12} />
-                    <span>Watch in Monitor</span>
-                  </button>
+                    <ExternalLink size={12} />
+                    <span>Open in New Tab</span>
+                  </a>
                   <button
                     type="button"
-                    onClick={() => navigate(`/investigation?camera_id=${activeCam.id}`)}
-                    className="px-2.5 py-1 bg-[#162334] hover:bg-[#1C2E42] text-white border border-[#233A52] font-mono text-[11px] font-bold rounded flex items-center justify-center gap-1 transition-all"
+                    onClick={() => navigate(`/investigation?camera=${activeCam.id}`)}
+                    className="px-2.5 py-1.5 bg-[#121E2E] hover:bg-[#1C2E42] text-[#8FA8C0] hover:text-white font-mono text-[11px] font-medium rounded border border-[#1C2E42] flex items-center justify-center gap-1 transition-all"
                   >
                     <Search size={12} />
                     <span>Search Sightings</span>

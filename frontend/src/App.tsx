@@ -21,6 +21,7 @@ import { DemoMonitor } from './pages/DemoMonitor';
 import DemoResearch from './pages/DemoResearch';
 import { DemoDossier } from './pages/DemoDossier';
 import { AuditLogPage } from './pages/AuditLogPage';
+import { CameraStreamPage } from './pages/CameraStreamPage';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -67,8 +68,14 @@ export const App: React.FC = () => {
             <Route path="/journey" element={<VehicleJourney />} />
             <Route path="/vehicles/journey" element={<VehicleJourney />} />
             <Route path="/vehicles/journey/:plate" element={<VehicleJourney />} />
-            <Route path="/vehicles/details/:plate" element={DEMO_MODE ? <DemoDossier /> : <VehicleDetailsPage />} />
-            <Route path="/vehicles/details" element={DEMO_MODE ? <DemoDossier /> : <VehicleDetailsPage />} />
+            <Route path="/vehicles/details/:plate" element={<VehicleDetailsPage />} />
+            <Route path="/vehicles/details" element={<VehicleDetailsPage />} />
+            <Route path="/vehicle/:plate" element={<VehicleDetailsPage />} />
+            <Route path="/vehicle" element={<VehicleDetailsPage />} />
+            <Route path="/dossier/:plate" element={<VehicleDetailsPage />} />
+            <Route path="/dossier" element={<VehicleDetailsPage />} />
+            <Route path="/camera-stream/:id" element={<CameraStreamPage />} />
+            <Route path="/camera-stream" element={<CameraStreamPage />} />
             <Route path="/evidence" element={<EvidenceVaultPage />} />
             <Route path="/audit" element={<AuditLogPage />} />
             <Route path="/watchlist" element={<WatchlistPage />} />

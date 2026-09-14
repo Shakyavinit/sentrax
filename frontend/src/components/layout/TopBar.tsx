@@ -3,12 +3,32 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Bell, Search, Menu, Bot } from 'lucide-react';
 import { CopilotModal } from '../ui/CopilotModal';
 import { useUiStore } from '../../store/uiStore';
-const titles: Record<string, string> = { '/': 'Overview', '/live': 'Camera monitor', '/investigation': 'Vehicle search', '/journey': 'Journey reconstruction', '/alerts': 'Alert review', '/watchlist': 'Watchlist', '/evidence': 'Evidence vault', '/audit': 'Forensic audit trail', '/cameras': 'Camera registry', '/analytics': 'Analytics', '/research-agent': 'Research assistant' };
+const titles: Record<string, string> = {
+  '/': 'Investigation Overview',
+  '/live': 'Surveillance Camera Monitor',
+  '/investigation': 'Vehicle Search & Sightings',
+  '/journey': 'Vehicle Journey Reconstruction',
+  '/alerts': 'Forensic Alert Review',
+  '/watchlist': 'Surveillance Target Watchlist',
+  '/evidence': 'Forensic Evidence Vault',
+  '/audit': 'Forensic Audit Trail',
+  '/cameras': 'Surveillance Camera Registry',
+  '/analytics': 'Forensic Analytics & Intelligence',
+  '/research-agent': 'Forensic Research Assistant',
+};
+
 export const TopBar: React.FC = () => {
   const { pathname } = useLocation(), navigate = useNavigate();
   const { mobileMenuOpen, setMobileMenuOpen } = useUiStore();
   const [query, setQuery] = useState(''), [copilot, setCopilot] = useState(false);
   const input = useRef<HTMLInputElement>(null);
+
+  const getPageTitle = () => {
+    if (titles[pathname]) return titles[pathname];
+    if (pathname.startsWith('/vehicle')) return 'Vehicle Dossier';
+    return 'Forensic Workspace';
+  };
+
   useEffect(() => {
     const shortcut = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
@@ -23,10 +43,11 @@ export const TopBar: React.FC = () => {
     window.addEventListener('keydown', shortcut);
     return () => window.removeEventListener('keydown', shortcut);
   }, []);
+
   return (
     <header className="app-topbar">
-      {/* Left: Mobile Menu & SOC Node Indicator */}
-      <div className="topbar-left flex items-center gap-2 min-w-[120px]">
+      {/* Left: Mobile Menu + SOC Node Indicator + Full Page Title */}
+      <div className="topbar-left flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
         <button
           className="mobile-menu icon-button"
           aria-label="Open navigation"
@@ -36,19 +57,15 @@ export const TopBar: React.FC = () => {
         >
           <Menu size={20} />
         </button>
-        <span className="hidden md:flex items-center gap-1.5 font-mono text-[10px] text-[#848d9b] tracking-widest uppercase">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-          <span>AHMEDABAD SOC</span>
-        </span>
-      </div>
-
-      {/* Center: Centered Page Heading */}
-      <div className="topbar-center flex items-center justify-center flex-1 text-center">
-        <div className="flex items-center gap-1.5 font-mono uppercase tracking-wider text-xs">
-          <span className="text-[#848d9b] hidden sm:inline">WORKSPACE /</span>
-          <strong className="text-white font-bold text-sm tracking-tight">
-            {titles[pathname] || 'Vehicle dossier'}
-          </strong>
+        <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
+          <span className="inline-flex items-center gap-1.5 font-mono text-[10px] text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded tracking-wider uppercase font-semibold shrink-0">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span>AHMEDABAD SOC</span>
+          </span>
+          <span className="text-[#3a4454] font-mono text-sm shrink-0">/</span>
+          <h1 className="text-white font-bold text-sm sm:text-base tracking-tight truncate font-sans">
+            {getPageTitle()}
+          </h1>
         </div>
       </div>
 
