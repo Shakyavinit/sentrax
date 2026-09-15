@@ -55,3 +55,4 @@ Thumbs.db
 *.log
 .vite/
 *.zip
+backend/agent_ops/

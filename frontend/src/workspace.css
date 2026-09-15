@@ -72,8 +72,8 @@ img,video { max-width:100%; }
 .metric-card img { width:72px; height:56px; object-fit:contain; flex-shrink:0; }
 .metric-card:nth-child(3) img,
 .metric-card:nth-child(4) img {
-  width: 84px;
-  height: 72px;
+  width: 76px;
+  height: 64px;
 }
 .color-reveal {
   filter: grayscale(100%) contrast(1.05) brightness(0.9);

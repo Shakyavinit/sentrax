@@ -659,5 +659,37 @@ export async function demoRequest(endpoint: string, options: RequestInit = {}): 
     return [{ bucket: "60–70%", count: 5 }, { bucket: "80–90%", count: 5 }, { bucket: "90–100%", count: 15 }];
   }
 
+  if (path === "/system/background-status") {
+    return {
+      status: "operational",
+      timestamp: new Date().toISOString(),
+      redis_connected: true,
+      celery_workers_online: 1,
+      active_ai_camera_limit: 4,
+      active_ai_cameras_count: 4,
+      queues: { celery: 0, frames: 0, evidence: 0, alerts: 0 },
+      workers: [
+        { id: "camera_health", name: "Camera Health Worker", status: "completed", last_run: new Date().toISOString(), success_count: 14, failure_count: 0, last_error: null },
+        { id: "ai_processing", name: "AI Processing Worker", status: "completed", last_run: new Date().toISOString(), success_count: 28, failure_count: 0, last_error: null },
+        { id: "anpr_consensus", name: "Multi-Frame ANPR Consensus Worker", status: "completed", last_run: new Date().toISOString(), success_count: 19, failure_count: 0, last_error: null },
+        { id: "watchlist_correlation", name: "Watchlist Correlation Worker", status: "completed", last_run: new Date().toISOString(), success_count: 32, failure_count: 0, last_error: null },
+        { id: "cross_camera_correlation", name: "Cross-Camera Correlation Worker", status: "completed", last_run: new Date().toISOString(), success_count: 8, failure_count: 0, last_error: null },
+        { id: "evidence_integrity", name: "Evidence Integrity Verification Worker", status: "completed", last_run: new Date().toISOString(), success_count: 11, failure_count: 0, last_error: null },
+        { id: "research_agent_ops", name: "Research & Improvement Worker (agent_ops)", status: "completed", last_run: new Date().toISOString(), success_count: 6, failure_count: 0, last_error: null },
+      ],
+      recent_tasks: []
+    };
+  }
+
+  if (path === "/system/trigger-worker") {
+    const wid = body?.worker_id || "camera_health";
+    return {
+      dispatched: true,
+      task_id: "demo-task-" + Date.now(),
+      worker_id: wid,
+      message: `${wid} triggered in simulation mode.`
+    };
+  }
+
   throw new Error("This service requires a connected backend. The demo does not simulate this integration.");
 }

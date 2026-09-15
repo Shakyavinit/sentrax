@@ -12,6 +12,7 @@ import { PageHeader } from "../components/layout/PageHeader";
 import { CctvOfflinePattern } from "../components/cameras/CctvOfflinePattern";
 import { formatTimestamp } from "../utils/format";
 import { toast } from "sonner";
+import { BackgroundOperationsWidget } from "../components/dashboard/BackgroundOperationsWidget";
 
 export const Dashboard: React.FC = () => {
   const navigate = useNavigate();
@@ -114,6 +115,9 @@ export const Dashboard: React.FC = () => {
           <span>AHMEDABAD SOC ONLINE</span>
         </div>
       </div>
+
+      {/* BACKGROUND WORKERS & DISTRIBUTED QUEUES */}
+      <BackgroundOperationsWidget />
 
       <div className="overview-primary">
         <section className="work-panel search-panel">

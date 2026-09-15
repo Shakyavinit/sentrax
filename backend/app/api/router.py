@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from app.api.v1 import auth, cameras, vehicles, watchlist, alerts, evidence, analytics, stream, copilot
+from app.api.v1 import auth, cameras, vehicles, watchlist, alerts, evidence, analytics, stream, copilot, system
 
 api_router = APIRouter()
 
@@ -12,3 +12,4 @@ api_router.include_router(evidence.router)
 api_router.include_router(analytics.router)
 api_router.include_router(stream.router)
 api_router.include_router(copilot.router)
+api_router.include_router(system.router)

@@ -32,8 +32,8 @@ export function formatConfidence(conf?: number): string {
   return `${(conf * 100).toFixed(1)}%`;
 }
 
-export function truncateHash(hash?: string): string {
+export function truncateHash(hash?: string, chars: number = 8): string {
   if (!hash) return 'N/A';
-  if (hash.length <= 16) return hash;
-  return `${hash.slice(0, 8)}...${hash.slice(-8)}`;
+  if (hash.length <= chars * 2) return hash;
+  return `${hash.slice(0, chars)}...${hash.slice(-chars)}`;
 }

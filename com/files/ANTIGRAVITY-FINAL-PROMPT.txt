@@ -1,0 +1,187 @@
+╔════════════════════════════════════════════════════════════════════════════╗
+║                    ANTIGRAVITY — FINAL SENTRAX ASSIGNMENT                 ║
+║                      (This is the LAST modification round)                 ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+---
+
+YOU HAVE:
+1. /mnt/user-data/outputs/index.html (current working demo - 87KB, 2021 lines)
+2. /mnt/user-data/outputs/SENTRAX_MASTER_SPEC.md (complete spec - read if stuck)
+3. /mnt/user-data/outputs/SENTRAX_IMPROVEMENT_PROMPT.md (detailed fixes - follow this)
+4. /mnt/user-data/outputs/SENTRAX-FINAL-README.md (deployment guide)
+
+---
+
+YOUR TASK:
+
+Enhance the existing index.html with ALL improvements from SENTRAX_IMPROVEMENT_PROMPT.md
+
+Priority order (DO IN THIS ORDER):
+
+TIER 1 — CRITICAL (without these, it fails):
+  1. Add Leaflet.js CDN to <head>
+  2. Replace map placeholders with real Leaflet maps (3 places: investigation, journey, cameras)
+  3. Add camera GPS coordinates (lat/lng) to CAMERAS array
+  4. Fix icon colors (B&W default → color on hover, grayscale CSS filter)
+  5. Add Demo Mode button with full automated scenario playback
+
+TIER 2 — POLISH (makes it win):
+  6. Animated journey vehicle replay (🚗 moves, timeline syncs)
+  7. Live counter animations on dashboard
+  8. Proper responsive breakpoints (tablet 900px, mobile 640px)
+  9. Confidence bars on timeline items
+  10. Alert flash animation on new alerts
+
+TIER 3 — NICE-TO-HAVE (if time):
+  11. Speed anomaly alert type
+  12. Audit log page
+  13. MTTD/MTTR performance bar
+  14. Congestion status per camera
+
+---
+
+IMPLEMENTATION STRATEGY:
+
+For each feature:
+  a) Read the detailed code block from SENTRAX_IMPROVEMENT_PROMPT.md
+  b) Copy the JavaScript code into the <script> section
+  c) Copy the CSS code into the <style> section
+  d) Copy the HTML into the page section
+  e) Test in browser (F12 console - zero errors!)
+  f) Move to next feature
+
+DO NOT:
+  ✗ Delete existing code
+  ✗ Change page structure
+  ✗ Remove any 9 pages
+  ✗ Touch MASTER_SPEC data (cameras, alerts, etc)
+  ✗ Add external libraries beyond CDNs
+
+DO:
+  ✓ Add CSS to existing <style>
+  ✓ Add JS to existing <script>
+  ✓ Replace placeholder map divs with real Leaflet
+  ✓ Keep all existing functionality
+  ✓ Test every single page after changes
+
+---
+
+TESTING — DO THIS AFTER EACH TIER:
+
+After TIER 1:
+  □ Open /mnt/user-data/outputs/index.html in browser
+  □ Go to Investigation page
+  □ See real map with grid (CartoDB dark tiles)
+  □ Search for GJ01AB1234
+  □ Map shows camera pins
+  □ F12 console = zero errors
+
+After TIER 2:
+  □ Go to Journey page
+  □ Click "Play Journey" button
+  □ See 🚗 icon move across map smoothly
+  □ Timeline auto-scrolls with vehicle
+  □ Stats on dashboard animate on load (2847, 1924, etc.)
+  □ All hover animations work (icons, buttons, cards)
+
+After TIER 3:
+  □ Dashboard → click "Demo Mode" button
+  □ Auto-plays: alert shown → jumps to investigation → searches plate → shows map
+  □ Mobile 375px width → works perfectly
+  □ Tablet 768px width → 2-col layout
+  □ Desktop 1920px width → full 4-col layout
+
+---
+
+DEPLOYMENT:
+
+When all tests pass:
+
+  1. Copy updated index.html to your project root
+  2. Commit: git add index.html && git commit -m "sentrax: production final - leaflet maps, animations, demo mode"
+  3. Push to main: git push origin main
+  4. Push to gh-pages: git push origin main:gh-pages
+  5. Open https://shakyavinit.github.io/sentrax/
+  6. Test live in browser
+  7. Click "Demo Mode" → Full scenario plays
+
+---
+
+SUCCESS CRITERIA (ALL MUST BE TRUE):
+
+  ✅ All 9 pages load without errors
+  ✅ Real Leaflet maps visible (not CSS placeholder)
+  ✅ Icons are B&W default, color on hover/active
+  ✅ Journey animation plays smoothly
+  ✅ Demo Mode button exists, works, plays full scenario
+  ✅ Mobile 375px layout perfect (no cutoff, hamburger menu works)
+  ✅ Zero console errors in F12 DevTools
+  ✅ All buttons clickable and responsive
+  ✅ Animations smooth (no jank, 60fps)
+  ✅ Professional dark theme throughout
+  ✅ Live in 30 seconds or less (no lag)
+
+---
+
+IF STUCK:
+
+  1. Leaflet map not showing?
+     → Check CDN links are in <head>
+     → Map container div must have height: 400px (or value)
+     → Call initLeafletMap() AFTER page is visible
+
+  2. Icons not changing color?
+     → Check CSS has filter: grayscale(1) on base
+     → Check :hover has filter: grayscale(0)
+     → Inspect with F12 to see computed styles
+
+  3. Journey animation stuttering?
+     → Use requestAnimationFrame, not setInterval
+     → Keep animation loop clean
+     → Test with 60fps monitor
+
+  4. Demo Mode doesn't work?
+     → Check button click handler is attached
+     → Check navigate() function exists
+     → Check showToast() function works
+     → Test with console.log() calls
+
+  5. Mobile layout broken?
+     → Check @media (max-width: 900px)
+     → Check @media (max-width: 640px)
+     → Use DevTools mobile view to test
+     → Grid should change from 4-col → 2-col → 1-col
+
+---
+
+TIME ESTIMATE:
+
+TIER 1: 20-30 minutes
+TIER 2: 30-40 minutes  
+TIER 3: 20 minutes
+Testing: 15-20 minutes
+
+TOTAL: ~90 minutes for COMPLETE production-ready file
+
+---
+
+FINAL REMINDER:
+
+This is your LAST submission. No revisions after pushing to gh-pages.
+Make sure EVERY feature works perfectly before committing.
+
+Test on:
+  - Chrome (main browser)
+  - Safari (if on Mac)
+  - Firefox (if possible)
+  - Mobile browser (DevTools mobile view minimum)
+
+Then ship it.
+
+---
+
+Questions? Read SENTRAX_IMPROVEMENT_PROMPT.md — all code is there.
+
+You got this.
+

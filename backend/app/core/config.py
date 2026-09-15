@@ -27,6 +27,7 @@ class Settings(BaseSettings):
     # AI Models
     YOLO_MODEL_PATH: str = "/app/models/yolov8n.pt"
     PLATE_MODEL_PATH: str = "/app/models/plate_detector.pt"
+    ACTIVE_AI_CAMERA_LIMIT: int = 4
     
     # Media Storage
     MEDIA_ROOT: str = "/app/media"
