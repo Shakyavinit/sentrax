@@ -1,0 +1,16 @@
+[
+  {
+    "id": "REC-20260914-200145",
+    "generated_at": "2026-09-14T20:01:45.732033",
+    "source": "research_agent_ops_worker",
+    "telemetry": {
+      "total_cameras": 10,
+      "online_cameras": 10,
+      "network_uptime_pct": 100.0,
+      "total_sightings": 14788,
+      "total_alerts": 1095
+    },
+    "recommendation_text": "Surveillance network uptime is 100.0%. Camera cluster is operating normally. Recommendation: maintain current Active AI Camera limit.",
+    "status": "pending_controller_review"
+  }
+]
