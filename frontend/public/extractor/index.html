@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SENTRAX // Media Extractor — Extract Photos & Videos from Any Website</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              bg: '#080C14',
+              surface: '#0D1520',
+              border: '#1C2E42',
+              accent: '#0E7FE0',
+              accentHover: '#1A9FFF',
+              text: '#F0F6FC',
+              muted: '#8FA8C0'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace']
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- JSZip for batch zip downloading -->
+  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+  <!-- FileSaver for triggering download -->
+  <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
+
+  <style>
+    body {
+      background-color: #080C14;
+      color: #F0F6FC;
+      font-family: 'Inter', sans-serif;
+    }
+    .grid-bg {
+      background-size: 32px 32px;
+      background-image: 
+        linear-gradient(to right, rgba(28, 46, 66, 0.25) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(28, 46, 66, 0.25) 1px, transparent 1px);
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #0D1520;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #1C2E42;
+      border-radius: 3px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #0E7FE0;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col grid-bg custom-scrollbar">
+
+  <!-- Top Navigation Bar -->
+  <header class="border-b border-[#1C2E42] bg-[#0D1520]/80 backdrop-blur-md sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-lg bg-[#0E7FE0]/15 border border-[#0E7FE0]/40 flex items-center justify-center text-[#0E7FE0] shadow-lg shadow-[#0E7FE0]/10">
+          <i data-lucide="layers" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="font-mono font-bold tracking-wider text-sm sm:text-base text-white">SENTRAX</span>
+            <span class="text-xs font-mono text-[#0E7FE0] px-1.5 py-0.5 rounded bg-[#0E7FE0]/10 border border-[#0E7FE0]/30 font-semibold">MEDIA EXTRACTOR</span>
+          </div>
+          <p class="text-[10px] text-[#8FA8C0] hidden sm:block">Universal Web Photo & Video Extraction Engine</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2 sm:gap-3">
+        <a href="../" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-mono font-medium text-[#8FA8C0] hover:text-white bg-[#131F30] hover:bg-[#1A2D42] border border-[#1C2E42] transition-colors">
+          <i data-lucide="shield" class="w-3.5 h-3.5 text-[#0E7FE0]"></i>
+          <span class="hidden sm:inline">Sentrax App</span>
+        </a>
+        <a href="https://github.com/Shakyavinit/sentrax" target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-mono font-medium text-[#8FA8C0] hover:text-white bg-[#131F30] hover:bg-[#1A2D42] border border-[#1C2E42] transition-colors">
+          <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+          <span class="hidden sm:inline">GitHub</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col gap-8">
+
+    <!-- Hero / Input Section -->
+    <section class="flex flex-col items-center text-center max-w-3xl mx-auto w-full pt-4">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#0E7FE0]/10 border border-[#0E7FE0]/30 text-[#0E7FE0] text-xs font-mono mb-4">
+        <span class="w-2 h-2 rounded-full bg-[#0E7FE0] animate-pulse"></span>
+        <span>Universal Web Scraper & Batch ZIP Export</span>
+      </div>
+      <h1 class="text-2xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight">
+        Extract <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#0E7FE0] to-[#38BDF8]">Photos & Videos</span> from Any Website
+      </h1>
+      <p class="text-sm sm:text-base text-[#8FA8C0] mt-2 max-w-xl">
+        Enter any website link below to extract high-resolution images, videos, SVGs, and social assets directly to your device.
+      </p>
+
+      <!-- URL Input Form -->
+      <form id="extract-form" class="w-full mt-6 flex flex-col gap-3">
+        <div class="relative flex items-center w-full shadow-2xl">
+          <div class="absolute left-4 text-[#4D6B85] flex items-center pointer-events-none">
+            <i data-lucide="globe" class="w-5 h-5"></i>
+          </div>
+          <input 
+            type="text" 
+            id="url-input" 
+            placeholder="Enter website link, e.g. https://en.wikipedia.org/wiki/Earth or any URL..." 
+            class="w-full pl-12 pr-32 py-3.5 bg-[#0D1520] border-2 border-[#1C2E42] focus:border-[#0E7FE0] rounded-xl text-white placeholder-[#4D6B85] text-sm font-mono transition-all outline-none shadow-inner"
+            required 
+            autocomplete="off" 
+            spellcheck="false"
+          />
+          <div class="absolute right-2 flex items-center gap-1">
+            <button 
+              type="button" 
+              id="clear-btn" 
+              class="hidden p-2 text-[#8FA8C0] hover:text-white transition-colors" 
+              title="Clear input"
+            >
+              <i data-lucide="x" class="w-4 h-4"></i>
+            </button>
+            <button 
+              type="submit" 
+              id="submit-btn" 
+              class="inline-flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-lg bg-[#0E7FE0] hover:bg-[#1A9FFF] text-white font-mono font-semibold text-xs sm:text-sm transition-all shadow-lg shadow-[#0E7FE0]/25 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <i data-lucide="sparkles" class="w-4 h-4"></i>
+              <span>Extract</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Quick Sample Chips -->
+        <div class="flex flex-wrap items-center justify-center gap-2 pt-1 text-xs">
+          <span class="text-[#4D6B85] font-mono text-[11px]">Try samples:</span>
+          <button type="button" class="sample-chip px-2.5 py-1 rounded bg-[#131F30] hover:bg-[#1A2E44] border border-[#1C2E42] text-[#8FA8C0] hover:text-white font-mono text-[11px] transition-colors" data-url="https://en.wikipedia.org/wiki/Earth">
+            Wikipedia (Earth)
+          </button>
+          <button type="button" class="sample-chip px-2.5 py-1 rounded bg-[#131F30] hover:bg-[#1A2E44] border border-[#1C2E42] text-[#8FA8C0] hover:text-white font-mono text-[11px] transition-colors" data-url="https://html5demos.com/video/">
+            HTML5 Video Demo
+          </button>
+          <button type="button" class="sample-chip px-2.5 py-1 rounded bg-[#131F30] hover:bg-[#1A2E44] border border-[#1C2E42] text-[#8FA8C0] hover:text-white font-mono text-[11px] transition-colors" data-url="https://news.ycombinator.com">
+            Hacker News
+          </button>
+          <button type="button" class="sample-chip px-2.5 py-1 rounded bg-[#131F30] hover:bg-[#1A2E44] border border-[#1C2E42] text-[#8FA8C0] hover:text-white font-mono text-[11px] transition-colors" data-url="https://shakyavinit.github.io/sentrax/">
+            SENTRAX Live
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Loading Indicator -->
+    <section id="loading-state" class="hidden flex-col items-center justify-center py-16 text-center">
+      <div class="relative w-16 h-16">
+        <div class="w-16 h-16 rounded-full border-4 border-[#1C2E42] border-t-[#0E7FE0] animate-spin"></div>
+        <div class="absolute inset-0 flex items-center justify-center text-[#0E7FE0]">
+          <i data-lucide="scan" class="w-6 h-6 animate-pulse"></i>
+        </div>
+      </div>
+      <h3 class="text-base font-mono font-bold text-white mt-4" id="loading-title">Extracting media assets...</h3>
+      <p class="text-xs text-[#8FA8C0] mt-1 max-w-sm" id="loading-subtitle">Scraping photos, videos, icons and metadata</p>
+    </section>
+
+    <!-- Results Section -->
+    <section id="results-section" class="hidden flex-col gap-6">
+
+      <!-- Result Header & Metadata -->
+      <div class="bg-[#0D1520] border border-[#1C2E42] rounded-xl p-4 sm:p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-lg">
+        <div class="flex items-center gap-3">
+          <img id="res-favicon" src="" alt="" class="w-8 h-8 rounded p-1 bg-[#131F30] border border-[#1C2E42] object-contain hidden" />
+          <div class="overflow-hidden">
+            <h2 id="res-title" class="text-base sm:text-lg font-bold text-white truncate">Website Title</h2>
+            <p id="res-url" class="text-xs font-mono text-[#0E7FE0] truncate mt-0.5">https://example.com</p>
+          </div>
+        </div>
+
+        <!-- Global Action Buttons -->
+        <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
+          <button 
+            type="button" 
+            id="select-all-btn" 
+            class="px-3 py-1.5 rounded-lg bg-[#131F30] hover:bg-[#1A2D42] border border-[#1C2E42] text-xs font-mono text-[#8FA8C0] hover:text-white transition-colors inline-flex items-center gap-1.5"
+          >
+            <i data-lucide="check-square" class="w-3.5 h-3.5 text-[#0E7FE0]"></i>
+            <span>Select All</span>
+          </button>
+          <button 
+            type="button" 
+            id="download-selected-zip-btn" 
+            class="flex-1 md:flex-initial px-4 py-1.5 rounded-lg bg-[#0E7FE0] hover:bg-[#1A9FFF] text-white text-xs font-mono font-bold transition-all shadow-md shadow-[#0E7FE0]/20 inline-flex items-center justify-center gap-2"
+          >
+            <i data-lucide="archive" class="w-4 h-4"></i>
+            <span id="zip-btn-text">Download All as ZIP</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Filters & Tab Controls -->
+      <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 border-b border-[#1C2E42] pb-3">
+        <!-- Tabs -->
+        <div class="flex items-center gap-2 overflow-x-auto custom-scrollbar pb-1 sm:pb-0">
+          <button class="tab-btn px-3 py-1.5 rounded-lg text-xs font-mono font-medium transition-colors bg-[#0E7FE0] text-white" data-filter="all">
+            All Media (<span id="count-all">0</span>)
+          </button>
+          <button class="tab-btn px-3 py-1.5 rounded-lg text-xs font-mono font-medium transition-colors bg-[#131F30] text-[#8FA8C0] hover:text-white" data-filter="photo">
+            Photos (<span id="count-photos">0</span>)
+          </button>
+          <button class="tab-btn px-3 py-1.5 rounded-lg text-xs font-mono font-medium transition-colors bg-[#131F30] text-[#8FA8C0] hover:text-white" data-filter="video">
+            Videos (<span id="count-videos">0</span>)
+          </button>
+          <button class="tab-btn px-3 py-1.5 rounded-lg text-xs font-mono font-medium transition-colors bg-[#131F30] text-[#8FA8C0] hover:text-white" data-filter="vector">
+            SVGs & Icons (<span id="count-vectors">0</span>)
+          </button>
+        </div>
+
+        <!-- Search input within results -->
+        <div class="relative w-full sm:w-64">
+          <i data-lucide="search" class="w-3.5 h-3.5 absolute left-3 top-3 text-[#4D6B85]"></i>
+          <input 
+            type="text" 
+            id="filter-search" 
+            placeholder="Search filename or format..." 
+            class="w-full pl-9 pr-3 py-1.5 bg-[#0D1520] border border-[#1C2E42] rounded-lg text-xs font-mono text-white placeholder-[#4D6B85] focus:border-[#0E7FE0] outline-none"
+          />
+        </div>
+      </div>
+
+      <!-- Media Grid -->
+      <div id="media-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <!-- Media Cards injected by JavaScript -->
+      </div>
+
+      <!-- Empty State -->
+      <div id="empty-filtered-state" class="hidden flex-col items-center justify-center py-12 text-center text-[#8FA8C0]">
+        <i data-lucide="filter-x" class="w-10 h-10 text-[#4D6B85] mb-2"></i>
+        <p class="text-sm font-mono">No media matches current filter</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Lightbox Modal -->
+  <div id="lightbox-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black/90 backdrop-blur-md p-4">
+    <div class="relative max-w-5xl w-full max-h-[90vh] bg-[#0D1520] border border-[#1C2E42] rounded-xl flex flex-col overflow-hidden shadow-2xl">
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between px-4 py-3 border-b border-[#1C2E42]">
+        <div class="flex items-center gap-2 overflow-hidden">
+          <span id="lightbox-type" class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#0E7FE0]/20 text-[#0E7FE0]">IMAGE</span>
+          <span id="lightbox-filename" class="text-xs font-mono text-white truncate max-w-md">filename.jpg</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <button id="lightbox-dl-btn" class="p-1.5 rounded-lg bg-[#0E7FE0] hover:bg-[#1A9FFF] text-white text-xs font-mono font-bold inline-flex items-center gap-1.5 px-3">
+            <i data-lucide="download" class="w-3.5 h-3.5"></i>
+            <span>Download</span>
+          </button>
+          <button id="lightbox-close-btn" class="p-1.5 text-[#8FA8C0] hover:text-white transition-colors">
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
+        </div>
+      </div>
+      <!-- Modal Body -->
+      <div class="flex-1 overflow-auto p-4 flex items-center justify-center min-h-[300px] bg-[#080C14]">
+        <div id="lightbox-content" class="w-full flex items-center justify-center"></div>
+      </div>
+      <!-- Modal Footer -->
+      <div class="px-4 py-2 bg-[#0D1520] border-t border-[#1C2E42] text-[11px] font-mono text-[#8FA8C0] flex items-center justify-between">
+        <a id="lightbox-origin-link" href="#" target="_blank" rel="noopener" class="text-[#0E7FE0] hover:underline truncate max-w-xl"></a>
+        <button id="lightbox-copy-btn" class="hover:text-white flex items-center gap-1 ml-2 flex-shrink-0">
+          <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+          <span>Copy URL</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ZIP Progress Modal -->
+  <div id="zip-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black/85 backdrop-blur-sm p-4">
+    <div class="max-w-md w-full bg-[#0D1520] border border-[#1C2E42] rounded-xl p-6 flex flex-col gap-4 shadow-2xl">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-lg bg-[#0E7FE0]/20 border border-[#0E7FE0]/40 flex items-center justify-center text-[#0E7FE0]">
+          <i data-lucide="archive" class="w-5 h-5 animate-pulse"></i>
+        </div>
+        <div>
+          <h3 class="text-sm font-bold text-white font-mono">PACKAGING ZIP ARCHIVE</h3>
+          <p id="zip-modal-status" class="text-xs text-[#8FA8C0]">Downloading media assets...</p>
+        </div>
+      </div>
+      
+      <!-- Progress Bar -->
+      <div class="w-full bg-[#131F30] rounded-full h-3 overflow-hidden border border-[#1C2E42]">
+        <div id="zip-modal-bar" class="bg-[#0E7FE0] h-full transition-all duration-150 rounded-full" style="width: 0%"></div>
+      </div>
+
+      <div class="flex items-center justify-between text-xs font-mono text-[#8FA8C0]">
+        <span id="zip-modal-count">0 / 0 files</span>
+        <span id="zip-modal-percent">0%</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+    <div class="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-[#0D1520] border border-[#1C2E42] text-white text-xs font-mono shadow-2xl">
+      <span id="toast-icon"></span>
+      <span id="toast-msg">Notification</span>
+    </div>
+  </div>
+
+  <!-- Main JavaScript Logic -->
+  <script>
+    // State
+    let extractedMedia = [];
+    let currentFilter = 'all';
+    let searchQuery = '';
+    let currentTargetUrl = '';
+    let currentDomain = '';
+
+    // DOM Elements
+    const form = document.getElementById('extract-form');
+    const urlInput = document.getElementById('url-input');
+    const clearBtn = document.getElementById('clear-btn');
+    const submitBtn = document.getElementById('submit-btn');
+    const loadingState = document.getElementById('loading-state');
+    const loadingTitle = document.getElementById('loading-title');
+    const resultsSection = document.getElementById('results-section');
+    const mediaGrid = document.getElementById('media-grid');
+    const emptyFilteredState = document.getElementById('empty-filtered-state');
+    const filterSearch = document.getElementById('filter-search');
+    const selectAllBtn = document.getElementById('select-all-btn');
+    const downloadSelectedZipBtn = document.getElementById('download-selected-zip-btn');
+    const zipBtnText = document.getElementById('zip-btn-text');
+
+    // Lightbox Elements
+    const lightboxModal = document.getElementById('lightbox-modal');
+    const lightboxType = document.getElementById('lightbox-type');
+    const lightboxFilename = document.getElementById('lightbox-filename');
+    const lightboxContent = document.getElementById('lightbox-content');
+    const lightboxDlBtn = document.getElementById('lightbox-dl-btn');
+    const lightboxCloseBtn = document.getElementById('lightbox-close-btn');
+    const lightboxOriginLink = document.getElementById('lightbox-origin-link');
+    const lightboxCopyBtn = document.getElementById('lightbox-copy-btn');
+    let currentActiveMedia = null;
+
+    // Initialize Lucide Icons
+    function refreshIcons() {
+      if (window.lucide) {
+        window.lucide.createIcons();
+      }
+    }
+    refreshIcons();
+
+    // Input handlers
+    urlInput.addEventListener('input', () => {
+      clearBtn.classList.toggle('hidden', !urlInput.value.trim());
+    });
+    clearBtn.addEventListener('click', () => {
+      urlInput.value = '';
+      clearBtn.classList.add('hidden');
+      urlInput.focus();
+    });
+
+    // Sample chips
+    document.querySelectorAll('.sample-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        urlInput.value = chip.dataset.url;
+        clearBtn.classList.remove('hidden');
+        form.dispatchEvent(new Event('submit'));
+      });
+    });
+
+    // Toast function
+    function showToast(message, type = 'info') {
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toast-msg');
+      const toastIcon = document.getElementById('toast-icon');
+
+      toastMsg.textContent = message;
+      if (type === 'success') {
+        toastIcon.innerHTML = '<span class="text-emerald-400">✓</span>';
+      } else if (type === 'error') {
+        toastIcon.innerHTML = '<span class="text-red-400">✕</span>';
+      } else {
+        toastIcon.innerHTML = '<span class="text-[#0E7FE0]">ℹ</span>';
+      }
+
+      toast.classList.remove('translate-y-20', 'opacity-0');
+      setTimeout(() => {
+        toast.classList.add('translate-y-20', 'opacity-0');
+      }, 3000);
+    }
+
+    // URL resolution helper
+    function resolveUrl(relativeOrAbsolute, baseUrl) {
+      try {
+        if (!relativeOrAbsolute) return null;
+        const cleaned = relativeOrAbsolute.trim();
+        if (cleaned.startsWith('data:') && cleaned.length < 100) return null; // skip tiny placeholders
+        return new URL(cleaned, baseUrl).href;
+      } catch (e) {
+        return null;
+      }
+    }
+
+    // Media Collector
+    class MediaCollector {
+      constructor(baseUrl) {
+        this.baseUrl = baseUrl;
+        this.items = new Map();
+      }
+
+      add(url, type, format, sourceTag, context = '') {
+        const fullUrl = resolveUrl(url, this.baseUrl);
+        if (!fullUrl) return;
+        if (fullUrl.startsWith('javascript:')) return;
+        if (this.items.has(fullUrl)) return;
+
+        let filename = 'media';
+        try {
+          const pathParts = new URL(fullUrl).pathname.split('/');
+          const last = pathParts[pathParts.length - 1];
+          if (last && last.length > 0) {
+            filename = decodeURIComponent(last.split('?')[0]);
+          }
+        } catch (_) {}
+
+        // Format detection
+        let detectedFormat = format;
+        if (!detectedFormat) {
+          const ext = filename.split('.').pop()?.toUpperCase();
+          if (ext && ext.length <= 4) detectedFormat = ext;
+          else detectedFormat = type === 'video' ? 'VIDEO' : 'IMAGE';
+        }
+
+        this.items.set(fullUrl, {
+          url: fullUrl,
+          type: type, // 'photo' | 'video' | 'vector'
+          format: detectedFormat,
+          sourceTag: sourceTag,
+          filename: filename,
+          context: context,
+          selected: true
+        });
+      }
+
+      toArray() {
+        return Array.from(this.items.values());
+      }
+    }
+
+    // MULTI-ENGINE SCRAPER
+    async function extractFromUrl(targetUrl) {
+      const collector = new MediaCollector(targetUrl);
+      let pageTitle = '';
+      let faviconUrl = '';
+      const domain = new URL(targetUrl).hostname;
+
+      loadingTitle.textContent = `Analyzing ${domain}...`;
+
+      // Strategy A: Check Wikipedia REST API if Wikipedia
+      if (domain.includes('wikipedia.org')) {
+        try {
+          const pathParts = new URL(targetUrl).pathname.split('/');
+          const title = pathParts[pathParts.length - 1];
+          if (title) {
+            loadingTitle.textContent = 'Querying Wikipedia Media REST API...';
+            const lang = domain.split('.')[0] || 'en';
+            const res = await fetch(`https://${lang}.wikipedia.org/api/rest_v1/page/media-list/${encodeURIComponent(title)}`);
+            if (res.ok) {
+              const data = await res.json();
+              if (data.items && Array.isArray(data.items)) {
+                data.items.forEach(item => {
+                  if (item.srcset && Array.isArray(item.srcset) && item.srcset.length > 0) {
+                    const topSrc = item.srcset[item.srcset.length - 1].src;
+                    const isSvg = topSrc.endsWith('.svg') || topSrc.includes('.svg');
+                    collector.add(topSrc, isSvg ? 'vector' : (item.type === 'video' ? 'video' : 'photo'), isSvg ? 'SVG' : '', 'wikipedia-api', item.title || '');
+                  }
+                });
+              }
+            }
+          }
+        } catch (e) {
+          console.warn('Wikipedia API check skipped:', e);
+        }
+      }
+
+      // Strategy B: Jina AI Universal Web Reader (free, fast, resolves client-side SPA DOM and markdown images)
+      try {
+        loadingTitle.textContent = 'Scraping content via Universal Reader Engine...';
+        const jinaController = new AbortController();
+        const timeoutId = setTimeout(() => jinaController.abort(), 10000);
+        const jinaRes = await fetch(`https://r.jina.ai/${targetUrl}`, { signal: jinaController.signal });
+        clearTimeout(timeoutId);
+
+        if (jinaRes.ok) {
+          const text = await jinaRes.text();
+
+          // Extract Title
+          const titleMatch = text.match(/Title:\s*(.+)/i);
+          if (titleMatch && titleMatch[1]) {
+            pageTitle = titleMatch[1].trim();
+          }
+
+          // Extract Markdown Images: ![alt](url)
+          const imgRegex = /!\[([^\]]*)\]\((https?:\/\/[^\s\)\"\']+)\)/gi;
+          let match;
+          while ((match = imgRegex.exec(text)) !== null) {
+            const alt = match[1];
+            const url = match[2];
+            const isSvg = url.toLowerCase().includes('.svg');
+            collector.add(url, isSvg ? 'vector' : 'photo', isSvg ? 'SVG' : '', 'reader image', alt);
+          }
+
+          // Extract Media Links: [alt](url.mp4/webm/jpg/png...)
+          const linkRegex = /\[([^\]]*)\]\((https?:\/\/[^\s\)\"\']+\.(jpg|jpeg|png|webp|gif|svg|mp4|webm|mov|mkv)(?:\?[^\s\)\"\']*)?)\)/gi;
+          while ((match = linkRegex.exec(text)) !== null) {
+            const alt = match[1];
+            const url = match[2];
+            const ext = match[3].toLowerCase();
+            const isVideo = ['mp4', 'webm', 'mov', 'mkv'].includes(ext);
+            const isSvg = ext === 'svg';
+            collector.add(url, isVideo ? 'video' : (isSvg ? 'vector' : 'photo'), ext.toUpperCase(), 'reader link', alt);
+          }
+
+          // Extract YouTube / Vimeo embeds in text
+          const ytRegex = /(https?:\/\/(?:www\.)?(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)[a-zA-Z0-9_-]+)/gi;
+          while ((match = ytRegex.exec(text)) !== null) {
+            collector.add(match[1], 'video', 'YOUTUBE', 'embed');
+          }
+        }
+      } catch (e) {
+        console.warn('Jina reader fallback:', e.message);
+      }
+
+      // Strategy C: Microlink Media API (High quality social / og / video / hero images)
+      try {
+        loadingTitle.textContent = 'Extracting metadata & media records...';
+        const mlRes = await fetch(`https://api.microlink.io/?url=${encodeURIComponent(targetUrl)}&video=true`);
+        if (mlRes.ok) {
+          const json = await mlRes.json();
+          if (json.data) {
+            if (!pageTitle && json.data.title) pageTitle = json.data.title;
+            if (json.data.image && json.data.image.url) {
+              collector.add(json.data.image.url, 'photo', (json.data.image.type || 'HERO').toUpperCase(), 'og/hero image');
+            }
+            if (json.data.logo && json.data.logo.url) {
+              faviconUrl = json.data.logo.url;
+              collector.add(json.data.logo.url, 'vector', 'LOGO', 'logo/icon');
+            }
+            if (json.data.video && json.data.video.url) {
+              collector.add(json.data.video.url, 'video', (json.data.video.type || 'MP4').toUpperCase(), 'og:video');
+            }
+          }
+        }
+      } catch (e) {
+        console.warn('Microlink error:', e.message);
+      }
+
+      // Strategy D: Fallback direct HTML Scraper via CodeTabs / AllOrigins
+      if (collector.items.size < 5) {
+        try {
+          loadingTitle.textContent = 'Extracting DOM tree...';
+          const proxyRes = await fetch(`https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(targetUrl)}`);
+          if (proxyRes.ok) {
+            const html = await proxyRes.text();
+            if (html) {
+              parseHtmlDom(html, targetUrl, collector);
+            }
+          }
+        } catch (e) {
+          console.warn('DOM proxy fallback error:', e.message);
+        }
+      }
+
+      return {
+        title: pageTitle || domain,
+        favicon: faviconUrl || `https://www.google.com/s2/favicons?domain=${domain}&sz=64`,
+        media: collector.toArray()
+      };
+    }
+
+    function parseHtmlDom(html, baseUrl, collector) {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, 'text/html');
+
+      // 1. Meta / OpenGraph
+      doc.querySelectorAll('meta[property="og:image"], meta[property="og:image:secure_url"], meta[name="twitter:image"]').forEach(m => {
+        collector.add(m.getAttribute('content'), 'photo', 'OG-IMG', 'meta');
+      });
+      doc.querySelectorAll('meta[property="og:video"], meta[property="og:video:secure_url"]').forEach(m => {
+        collector.add(m.getAttribute('content'), 'video', 'OG-VID', 'meta');
+      });
+
+      // 2. Images
+      doc.querySelectorAll('img').forEach(img => {
+        const src = img.getAttribute('src');
+        const dataSrc = img.getAttribute('data-src') || img.getAttribute('data-original') || img.getAttribute('data-lazy-src');
+        const srcset = img.getAttribute('srcset') || img.getAttribute('data-srcset');
+
+        if (srcset) {
+          const candidates = srcset.split(',').map(s => s.trim().split(' ')[0]).filter(Boolean);
+          if (candidates.length > 0) {
+            collector.add(candidates[candidates.length - 1], 'photo', '', 'img (srcset)', img.alt || '');
+          }
+        }
+        if (dataSrc) collector.add(dataSrc, 'photo', '', 'img (data-src)', img.alt || '');
+        if (src) {
+          const isSvg = src.toLowerCase().endsWith('.svg') || src.includes('.svg?');
+          collector.add(src, isSvg ? 'vector' : 'photo', isSvg ? 'SVG' : '', 'img', img.alt || '');
+        }
+      });
+
+      // 3. Videos
+      doc.querySelectorAll('video').forEach(video => {
+        if (video.src) collector.add(video.src, 'video', 'MP4', 'video');
+        if (video.poster) collector.add(video.poster, 'photo', 'POSTER', 'video poster');
+        video.querySelectorAll('source').forEach(s => {
+          if (s.src) collector.add(s.src, 'video', (s.type ? s.type.split('/')[1] : 'MP4').toUpperCase(), 'video source');
+        });
+      });
+
+      // 4. iframes
+      doc.querySelectorAll('iframe').forEach(iframe => {
+        const src = iframe.getAttribute('src') || iframe.getAttribute('data-src');
+        if (!src) return;
+        const resolved = resolveUrl(src, baseUrl);
+        if (!resolved) return;
+        if (resolved.includes('youtube.com') || resolved.includes('youtu.be')) {
+          collector.add(resolved, 'video', 'YOUTUBE', 'iframe embed');
+        } else if (resolved.includes('vimeo.com')) {
+          collector.add(resolved, 'video', 'VIMEO', 'iframe embed');
+        }
+      });
+    }
+
+    // Main extraction submission
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      let rawUrl = urlInput.value.trim();
+      if (!rawUrl) return;
+
+      if (!rawUrl.startsWith('http://') && !rawUrl.startsWith('https://')) {
+        rawUrl = 'https://' + rawUrl;
+        urlInput.value = rawUrl;
+      }
+
+      try {
+        const parsedBase = new URL(rawUrl);
+        currentTargetUrl = rawUrl;
+        currentDomain = parsedBase.hostname;
+      } catch (err) {
+        showToast('Please enter a valid web URL', 'error');
+        return;
+      }
+
+      // UI state transition
+      submitBtn.disabled = true;
+      loadingState.classList.remove('hidden');
+      resultsSection.classList.add('hidden');
+
+      try {
+        const result = await extractFromUrl(rawUrl);
+        extractedMedia = result.media;
+
+        // Header Info
+        document.getElementById('res-title').textContent = result.title;
+        document.getElementById('res-url').textContent = rawUrl;
+
+        const faviconImg = document.getElementById('res-favicon');
+        if (result.favicon) {
+          faviconImg.src = result.favicon;
+          faviconImg.classList.remove('hidden');
+        } else {
+          faviconImg.classList.add('hidden');
+        }
+
+        // Render Results
+        updateCounts();
+        resultsSection.classList.remove('hidden');
+        renderGrid();
+
+        if (extractedMedia.length > 0) {
+          showToast(`Successfully extracted ${extractedMedia.length} media assets!`, 'success');
+        } else {
+          showToast('Extraction complete, but no media files were discovered on this page.', 'info');
+        }
+      } catch (err) {
+        console.error(err);
+        showToast('Extraction error: ' + (err.message || 'Unable to load website'), 'error');
+      } finally {
+        submitBtn.disabled = false;
+        loadingState.classList.add('hidden');
+        refreshIcons();
+      }
+    });
+
+    function updateCounts() {
+      const allCount = extractedMedia.length;
+      const photoCount = extractedMedia.filter(m => m.type === 'photo').length;
+      const videoCount = extractedMedia.filter(m => m.type === 'video').length;
+      const vectorCount = extractedMedia.filter(m => m.type === 'vector').length;
+
+      document.getElementById('count-all').textContent = allCount;
+      document.getElementById('count-photos').textContent = photoCount;
+      document.getElementById('count-videos').textContent = videoCount;
+      document.getElementById('count-vectors').textContent = vectorCount;
+
+      const selectedCount = extractedMedia.filter(m => m.selected).length;
+      zipBtnText.textContent = selectedCount === allCount 
+        ? 'Download All as ZIP' 
+        : `Download Selected (${selectedCount}) as ZIP`;
+    }
+
+    // Filter tab clicks
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => {
+          b.classList.remove('bg-[#0E7FE0]', 'text-white');
+          b.classList.add('bg-[#131F30]', 'text-[#8FA8C0]');
+        });
+        btn.classList.remove('bg-[#131F30]', 'text-[#8FA8C0]');
+        btn.classList.add('bg-[#0E7FE0]', 'text-white');
+
+        currentFilter = btn.dataset.filter;
+        renderGrid();
+      });
+    });
+
+    // In-page search filter
+    filterSearch.addEventListener('input', (e) => {
+      searchQuery = e.target.value.toLowerCase().trim();
+      renderGrid();
+    });
+
+    // Render Media Grid
+    function renderGrid() {
+      mediaGrid.innerHTML = '';
+
+      const filtered = extractedMedia.filter(item => {
+        if (currentFilter !== 'all' && item.type !== currentFilter) return false;
+        if (searchQuery) {
+          return item.filename.toLowerCase().includes(searchQuery) ||
+                 item.format.toLowerCase().includes(searchQuery) ||
+                 item.url.toLowerCase().includes(searchQuery);
+        }
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        emptyFilteredState.classList.remove('hidden');
+      } else {
+        emptyFilteredState.classList.add('hidden');
+      }
+
+      filtered.forEach((item, index) => {
+        const card = document.createElement('div');
+        card.className = 'group relative bg-[#0D1520] border border-[#1C2E42] hover:border-[#0E7FE0]/60 rounded-xl overflow-hidden shadow-lg transition-all flex flex-col';
+
+        // Checkbox & Type badge header
+        const cardHeader = document.createElement('div');
+        cardHeader.className = 'absolute top-2.5 left-2.5 right-2.5 flex items-center justify-between z-10 pointer-events-auto';
+
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.checked = item.selected;
+        checkbox.className = 'w-4 h-4 rounded border-[#1C2E42] text-[#0E7FE0] focus:ring-0 focus:ring-offset-0 bg-[#080C14]/80 cursor-pointer';
+        checkbox.addEventListener('change', (e) => {
+          item.selected = e.target.checked;
+          updateCounts();
+        });
+
+        const badge = document.createElement('span');
+        badge.className = `px-2 py-0.5 rounded text-[9px] font-mono font-bold tracking-wider backdrop-blur-md shadow ${
+          item.type === 'video' ? 'bg-red-500/20 text-red-400 border border-red-500/30' :
+          item.type === 'vector' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' :
+          'bg-[#0E7FE0]/20 text-[#0E7FE0] border border-[#0E7FE0]/30'
+        }`;
+        badge.textContent = item.format;
+
+        cardHeader.appendChild(checkbox);
+        cardHeader.appendChild(badge);
+        card.appendChild(cardHeader);
+
+        // Media Preview Area
+        const mediaContainer = document.createElement('div');
+        mediaContainer.className = 'relative w-full h-44 bg-[#080C14] flex items-center justify-center overflow-hidden cursor-pointer';
+        mediaContainer.addEventListener('click', (e) => {
+          if (e.target.tagName !== 'INPUT') {
+            openLightbox(item);
+          }
+        });
+
+        if (item.type === 'video') {
+          if (item.format === 'YOUTUBE' || item.format === 'VIMEO') {
+            mediaContainer.innerHTML = `
+              <div class="flex flex-col items-center justify-center p-4 text-center">
+                <div class="w-12 h-12 rounded-full bg-red-500/20 border border-red-500/30 flex items-center justify-center text-red-400 mb-2">
+                  <i data-lucide="play" class="w-6 h-6 fill-current"></i>
+                </div>
+                <span class="text-xs font-mono text-white font-semibold">${item.format} Embed</span>
+              </div>
+            `;
+          } else {
+            mediaContainer.innerHTML = `
+              <div class="flex flex-col items-center justify-center p-4 text-center">
+                <div class="w-12 h-12 rounded-full bg-[#0E7FE0]/20 border border-[#0E7FE0]/30 flex items-center justify-center text-[#0E7FE0] mb-2">
+                  <i data-lucide="video" class="w-6 h-6"></i>
+                </div>
+                <span class="text-xs font-mono text-white truncate max-w-[160px]">${item.filename}</span>
+              </div>
+            `;
+          }
+        } else {
+          // Photo or Vector
+          const img = document.createElement('img');
+          img.src = item.url;
+          img.alt = item.filename;
+          img.loading = 'lazy';
+          img.className = 'w-full h-full object-contain p-2 transition-transform duration-300 group-hover:scale-105';
+          img.onerror = () => {
+            img.style.display = 'none';
+            const fallback = document.createElement('div');
+            fallback.className = 'text-[#4D6B85] text-xs font-mono flex flex-col items-center';
+            fallback.innerHTML = '<i data-lucide="image-off" class="w-8 h-8 mb-1"></i><span class="text-[10px]">Direct View Only</span>';
+            mediaContainer.appendChild(fallback);
+            refreshIcons();
+          };
+          mediaContainer.appendChild(img);
+        }
+        card.appendChild(mediaContainer);
+
+        // Card Details & Actions Footer
+        const cardFooter = document.createElement('div');
+        cardFooter.className = 'p-3 border-t border-[#1C2E42] bg-[#0D1520] flex flex-col gap-2 mt-auto';
+
+        const fileInfo = document.createElement('div');
+        fileInfo.className = 'flex items-center justify-between text-[11px] font-mono text-[#8FA8C0]';
+        fileInfo.innerHTML = `
+          <span class="truncate max-w-[150px]" title="${item.filename}">${item.filename}</span>
+          <span class="text-[10px] text-[#4D6B85] uppercase">${item.sourceTag}</span>
+        `;
+        cardFooter.appendChild(fileInfo);
+
+        const actions = document.createElement('div');
+        actions.className = 'flex items-center justify-between gap-1 pt-1';
+
+        actions.innerHTML = `
+          <div class="flex items-center gap-1">
+            <button class="preview-btn p-1.5 rounded hover:bg-[#1C2E42] text-[#8FA8C0] hover:text-white transition-colors" title="Full Preview">
+              <i data-lucide="maximize-2" class="w-3.5 h-3.5"></i>
+            </button>
+            <a href="${item.url}" target="_blank" rel="noopener" class="p-1.5 rounded hover:bg-[#1C2E42] text-[#8FA8C0] hover:text-white transition-colors" title="Open in new tab">
+              <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+            </a>
+            <button class="copy-url-btn p-1.5 rounded hover:bg-[#1C2E42] text-[#8FA8C0] hover:text-white transition-colors" title="Copy URL">
+              <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
+          <button class="download-single-btn px-2.5 py-1 rounded bg-[#131F30] hover:bg-[#0E7FE0] text-[#8FA8C0] hover:text-white text-xs font-mono font-semibold transition-colors flex items-center gap-1">
+            <i data-lucide="download" class="w-3 h-3"></i>
+            <span>Save</span>
+          </button>
+        `;
+
+        actions.querySelector('.preview-btn').addEventListener('click', () => openLightbox(item));
+        actions.querySelector('.copy-url-btn').addEventListener('click', () => {
+          navigator.clipboard.writeText(item.url);
+          showToast('Copied media URL to clipboard!', 'success');
+        });
+        actions.querySelector('.download-single-btn').addEventListener('click', () => downloadSingle(item));
+
+        cardFooter.appendChild(actions);
+        card.appendChild(cardFooter);
+
+        mediaGrid.appendChild(card);
+      });
+
+      refreshIcons();
+    }
+
+    // Select all / Deselect all
+    selectAllBtn.addEventListener('click', () => {
+      const allSelected = extractedMedia.every(m => m.selected);
+      extractedMedia.forEach(m => m.selected = !allSelected);
+      selectAllBtn.querySelector('span').textContent = allSelected ? 'Select All' : 'Deselect All';
+      updateCounts();
+      renderGrid();
+    });
+
+    // Single item download
+    async function downloadSingle(item) {
+      showToast(`Starting download: ${item.filename}`, 'info');
+      try {
+        const blob = await fetchBlobSafe(item.url);
+        saveAs(blob, item.filename);
+        showToast(`Downloaded ${item.filename}`, 'success');
+      } catch (err) {
+        console.warn('Direct blob fetch failed, opening in tab:', err);
+        window.open(item.url, '_blank');
+      }
+    }
+
+    // Safe blob fetcher
+    async function fetchBlobSafe(url) {
+      try {
+        const res = await fetch(url, { mode: 'cors' });
+        if (res.ok) return await res.blob();
+      } catch (_) {}
+
+      // Fallback via codetabs
+      try {
+        const res = await fetch(`https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`);
+        if (res.ok) return await res.blob();
+      } catch (_) {}
+
+      throw new Error('Could not fetch asset blob due to host restrictions');
+    }
+
+    // Lightbox modal logic
+    function openLightbox(item) {
+      currentActiveMedia = item;
+      lightboxType.textContent = item.format;
+      lightboxFilename.textContent = item.filename;
+      lightboxOriginLink.textContent = item.url;
+      lightboxOriginLink.href = item.url;
+
+      lightboxContent.innerHTML = '';
+      if (item.type === 'video') {
+        if (item.format === 'YOUTUBE' || item.format === 'VIMEO') {
+          lightboxContent.innerHTML = `
+            <iframe src="${item.url}" class="w-full max-w-3xl aspect-video rounded-lg border border-[#1C2E42]" frameborder="0" allowfullscreen></iframe>
+          `;
+        } else {
+          lightboxContent.innerHTML = `
+            <video controls autoplay class="max-h-[70vh] max-w-full rounded-lg shadow-lg">
+              <source src="${item.url}">
+              Your browser does not support HTML5 video.
+            </video>
+          `;
+        }
+      } else {
+        lightboxContent.innerHTML = `
+          <img src="${item.url}" alt="${item.filename}" class="max-h-[70vh] max-w-full object-contain rounded-lg shadow-lg" />
+        `;
+      }
+
+      lightboxModal.classList.remove('hidden');
+      refreshIcons();
+    }
+
+    lightboxCloseBtn.addEventListener('click', () => {
+      lightboxModal.classList.add('hidden');
+      lightboxContent.innerHTML = '';
+    });
+    lightboxModal.addEventListener('click', (e) => {
+      if (e.target === lightboxModal) {
+        lightboxModal.classList.add('hidden');
+        lightboxContent.innerHTML = '';
+      }
+    });
+    lightboxDlBtn.addEventListener('click', () => {
+      if (currentActiveMedia) downloadSingle(currentActiveMedia);
+    });
+    lightboxCopyBtn.addEventListener('click', () => {
+      if (currentActiveMedia) {
+        navigator.clipboard.writeText(currentActiveMedia.url);
+        showToast('Copied media URL to clipboard!', 'success');
+      }
+    });
+
+    // ZIP Download Engine
+    downloadSelectedZipBtn.addEventListener('click', async () => {
+      const selected = extractedMedia.filter(m => m.selected);
+      if (selected.length === 0) {
+        showToast('Please select at least one media item to download', 'error');
+        return;
+      }
+
+      const zipModal = document.getElementById('zip-modal');
+      const zipBar = document.getElementById('zip-modal-bar');
+      const zipCount = document.getElementById('zip-modal-count');
+      const zipPercent = document.getElementById('zip-modal-percent');
+      const zipStatus = document.getElementById('zip-modal-status');
+
+      zipModal.classList.remove('hidden');
+      downloadSelectedZipBtn.disabled = true;
+
+      const zip = new JSZip();
+      const photosFolder = zip.folder('photos');
+      const videosFolder = zip.folder('videos');
+
+      let completed = 0;
+      const total = selected.length;
+
+      zipStatus.textContent = 'Fetching and archiving assets...';
+
+      for (let i = 0; i < selected.length; i++) {
+        const item = selected[i];
+        zipCount.textContent = `${i + 1} / ${total} files`;
+        const pct = Math.round(((i) / total) * 100);
+        zipBar.style.width = `${pct}%`;
+        zipPercent.textContent = `${pct}%`;
+
+        try {
+          const blob = await fetchBlobSafe(item.url);
+          const safeName = `${String(i + 1).padStart(3, '0')}_${item.filename.replace(/[^a-zA-Z0-9._-]/g, '_')}`;
+          if (item.type === 'video') {
+            videosFolder.file(safeName, blob);
+          } else {
+            photosFolder.file(safeName, blob);
+          }
+        } catch (err) {
+          console.warn('Skipping un-fetchable item:', item.url);
+        }
+        completed++;
+      }
+
+      // Add manifest metadata.json
+      zip.file('metadata.json', JSON.stringify({
+        source_url: currentTargetUrl,
+        domain: currentDomain,
+        extracted_at: new Date().toISOString(),
+        total_items: selected.length,
+        items: selected.map(s => ({
+          filename: s.filename,
+          url: s.url,
+          type: s.type,
+          format: s.format
+        }))
+      }, null, 2));
+
+      zipBar.style.width = '100%';
+      zipPercent.textContent = '100%';
+      zipStatus.textContent = 'Compressing archive...';
+
+      try {
+        const zipBlob = await zip.generateAsync({ type: 'blob' });
+        const dateStr = new Date().toISOString().slice(0, 10);
+        const zipName = `sentrax_media_${currentDomain.replace(/[^a-zA-Z0-9.-]/g, '_')}_${dateStr}.zip`;
+        saveAs(zipBlob, zipName);
+        showToast('ZIP archive downloaded successfully!', 'success');
+      } catch (err) {
+        showToast('Failed to generate ZIP: ' + err.message, 'error');
+      } finally {
+        zipModal.classList.add('hidden');
+        downloadSelectedZipBtn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

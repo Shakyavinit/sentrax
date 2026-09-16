@@ -72,8 +72,8 @@ export const CameraMap: React.FC<CameraMapProps> = ({
       >
         {/* CartoDB Dark Matter Tiles */}
         <TileLayer
-          attribution='&copy; <a href="https://carto.com/">CARTO</a> &copy; OpenStreetMap'
-          url="https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png"
+          attribution=""
+          url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
           subdomains="abcd"
           maxZoom={19}
         />

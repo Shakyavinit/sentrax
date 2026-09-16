@@ -1,0 +1,25 @@
+{
+  "name": "site-shooter",
+  "version": "1.0.0",
+  "description": "Automated CLI website screenshot crawler and visual gallery generator powered by Playwright",
+  "main": "crawl.js",
+  "bin": {
+    "site-shooter": "./crawl.js"
+  },
+  "scripts": {
+    "crawl": "node crawl.js"
+  },
+  "keywords": [
+    "crawler",
+    "playwright",
+    "screenshots",
+    "gallery",
+    "spa",
+    "visual-regression"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "playwright": "^1.63.0"
+  }
+}

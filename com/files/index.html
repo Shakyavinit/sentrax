@@ -257,15 +257,16 @@ img { max-width: 100%; }
   height: 15px;
   color: var(--text-3);
   flex-shrink: 0;
-  transition: color 140ms var(--ease);
+  filter: grayscale(1);
+  transition: filter 160ms ease, color 160ms ease;
 }
 
 .nav-item:hover {
   background: var(--elevated);
   color: var(--text-1);
 }
-.nav-item:hover .nav-icon {
-  color: var(--text-2);
+.nav-item:hover .nav-icon, .nav-item.active .nav-icon {
+  filter: grayscale(0);
 }
 
 .nav-item.active {
@@ -611,7 +612,7 @@ img { max-width: 100%; }
   cursor: default;
 }
 .stat-card:hover {
-  border-color: var(--border-bright);
+  border-color: #284560 !important;
   transform: translateY(-1px);
 }
 .stat-card::before {
@@ -647,41 +648,11 @@ img { max-width: 100%; }
   transition: color 240ms var(--ease);
 }
 
-.stat-card:nth-child(1):hover .stat-icon {
-  background: rgba(0,111,214,0.15);
-  transform: scale(1.08);
-}
-.stat-card:nth-child(1):hover .stat-icon i,
-.stat-card:nth-child(1):hover .stat-icon svg {
-  color: var(--accent);
-}
-
-.stat-card:nth-child(2):hover .stat-icon {
-  background: rgba(0,184,122,0.12);
-  transform: scale(1.08);
-}
-.stat-card:nth-child(2):hover .stat-icon i,
-.stat-card:nth-child(2):hover .stat-icon svg {
-  color: var(--green);
-}
-
-.stat-card:nth-child(3):hover .stat-icon {
-  background: rgba(232,64,64,0.12);
-  transform: scale(1.08);
-}
-.stat-card:nth-child(3):hover .stat-icon i,
-.stat-card:nth-child(3):hover .stat-icon svg {
-  color: var(--red);
-}
-
-.stat-card:nth-child(4):hover .stat-icon {
-  background: rgba(124,58,237,0.12);
-  transform: scale(1.08);
-}
-.stat-card:nth-child(4):hover .stat-icon i,
-.stat-card:nth-child(4):hover .stat-icon svg {
-  color: var(--purple);
-}
+.stat-icon{filter:grayscale(1) brightness(0.6);transition:filter 250ms ease,background 250ms ease,transform 250ms ease}.stat-card:hover .stat-icon{filter:grayscale(0) brightness(1);transform:scale(1.09)}.stat-card:nth-child(1):hover .stat-icon{background:rgba(14,127,224,0.15);color:#0E7FE0}.stat-card:nth-child(2):hover .stat-icon{background:rgba(0,200,117,0.12);color:#00C875}.stat-card:nth-child(3):hover .stat-icon{background:rgba(255,59,59,0.12);color:#FF3B3B}.stat-card:nth-child(4):hover .stat-icon{background:rgba(124,58,237,0.12);color:#7C3AED}.nav-item .nav-icon{filter:grayscale(1);transition:filter 160ms ease}.nav-item:hover .nav-icon,.nav-item.active .nav-icon{filter:grayscale(0)}.
+.stat-card:nth-child(1):hover .stat-icon svg, .stat-card:nth-child(1):hover .stat-icon i { color: #0E7FE0 !important; }
+.stat-card:nth-child(2):hover .stat-icon svg, .stat-card:nth-child(2):hover .stat-icon i { color: #00C875 !important; }
+.stat-card:nth-child(3):hover .stat-icon svg, .stat-card:nth-child(3):hover .stat-icon i { color: #FF3B3B !important; }
+.stat-card:nth-child(4):hover .stat-icon svg, .stat-card:nth-child(4):hover .stat-icon i { color: #7C3AED !important; }
 
 .stat-value {
   font-size: 26px;
@@ -1447,7 +1418,7 @@ tr:last-child td {
     display: none;
   }
   #cam-grid {
-    grid-template-columns: 1fr !important;
+    grid-template-columns: 1fr 1fr !important;
   }
   .evidence-grid {
     grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
@@ -1545,51 +1516,127 @@ tr:last-child td {
 
 <!-- Modal: Evidence Detail -->
 <div class="modal-backdrop" id="modal-evidence">
-  <div class="modal" style="max-width:680px">
-    <div class="modal-header">
-      <div class="modal-title">Evidence Package</div>
+  <div class="modal" style="max-width:860px;border-color:var(--border-bright);box-shadow:0 24px 70px rgba(0,0,0,0.9);max-height:92vh;overflow-y:auto">
+    <div class="modal-header" style="border-bottom:1px solid var(--border-dim);padding-bottom:12px;position:sticky;top:0;background:var(--elevated);z-index:10">
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="color:var(--green);font-size:16px">🛡️</span>
+        <div class="modal-title" id="evidence-modal-title" style="font-family:var(--font-mono);font-size:13px;letter-spacing:0.04em;font-weight:700">FORENSIC EVIDENCE PACKAGE — #CASE-JOURNEY-GJ01AB1234</div>
+        <span class="badge badge-green" style="font-size:9px;padding:2px 6px">SEC 65B COMPLIANT</span>
+      </div>
       <button class="modal-close" onclick="closeModal('modal-evidence')">✕</button>
     </div>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px">
-      <div>
-        <div style="font-size:10px;color:var(--text-3);margin-bottom:6px;font-weight:600;letter-spacing:0.06em">ORIGINAL FRAME</div>
-        <div class="evidence-img" style="height:90px;border-radius:var(--r);border:1px solid var(--border-dim)">
-          <span style="font-size:10px;color:var(--text-2);z-index:1">1920×1080 · H.264</span>
-          <div class="cam-dots" style="opacity:0.3"></div>
+
+    <!-- Top Metadata Bar -->
+    <div style="display:flex;align-items:center;justify-content:space-between;background:var(--surface);padding:10px 14px;border-radius:var(--r);border:1px solid var(--border-dim);margin:14px 0 16px;flex-wrap:wrap;gap:10px">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div class="plate" id="evidence-modal-plate" style="font-size:13px;font-weight:700">GJ01AB1234</div>
+        <div>
+          <div id="evidence-modal-loc" style="font-weight:600;color:var(--text-1);font-size:12px">SG Highway Toll Plaza · Node CAM04</div>
+          <div id="evidence-modal-meta" style="font-size:10px;color:var(--text-3);font-family:var(--font-mono);margin-top:2px">2026-09-14 14:26:17 IST · <span style="color:var(--green);font-weight:600">98.6% AI Confidence</span></div>
         </div>
       </div>
-      <div>
-        <div style="font-size:10px;color:var(--text-3);margin-bottom:6px;font-weight:600;letter-spacing:0.06em">VEHICLE CROP</div>
-        <div class="evidence-img" style="height:90px;border-radius:var(--r);border:1px solid var(--border-dim)">
-          <span style="font-size:10px;color:var(--text-2);z-index:1">456×312 · PNG</span>
-          <div class="cam-dots" style="opacity:0.3"></div>
+      <div style="display:flex;gap:6px">
+        <button class="btn btn-ghost btn-sm" onclick="showToast('Cryptographic seal verified: 100% SHA-256 integrity intact','success')">✓ Verify Seal</button>
+        <button class="btn btn-primary btn-sm" onclick="showToast('Evidence package downloaded successfully','success')">↓ Export ZIP</button>
+      </div>
+    </div>
+
+    <!-- 3-Panel Multi-Resolution Inspection Grid -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:16px">
+      <!-- 1. Raw CCTV Frame -->
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <div style="display:flex;justify-content:space-between;align-items:center;font-size:10px;font-family:var(--font-mono)">
+          <span style="color:var(--text-1);font-weight:700">1. RAW CCTV FRAME</span>
+          <span style="color:var(--text-3)">1920×1080</span>
+        </div>
+        <div style="width:100%;height:100px;background:linear-gradient(135deg,#0D1521 0%,#06080F 100%);border-radius:4px;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:11px;color:#3D5C78;border:1px solid #1A2D40;letter-spacing:0.04em">1920 × 1080 · H.264 · CAM04</div>
+        <div style="font-size:10px;color:var(--text-3);font-family:var(--font-mono);background:var(--surface);padding:6px 8px;border-radius:var(--r);border:1px solid var(--border-dim)">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <span>SHA-256:</span>
+            <span style="color:var(--green);cursor:pointer" onclick="copyHash('f3e6080cc720608a3b5d854700ebc2cec7e6783ab061c2c6088343917cf1d5d1', 'Raw Frame Hash')" title="Click to copy full hash">f3e6080c... 📋</span>
+          </div>
         </div>
       </div>
-      <div>
-        <div style="font-size:10px;color:var(--text-3);margin-bottom:6px;font-weight:600;letter-spacing:0.06em">PLATE CROP</div>
-        <div class="evidence-img" style="height:90px;border-radius:var(--r);border:1px solid var(--border-dim)">
-          <div class="plate" style="font-size:11px;z-index:1">GJ01AB1234</div>
-          <div class="cam-dots" style="opacity:0.3"></div>
+
+      <!-- 2. Vehicle Crop (ROI) -->
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <div style="display:flex;justify-content:space-between;align-items:center;font-size:10px;font-family:var(--font-mono)">
+          <span style="color:var(--text-1);font-weight:700">2. VEHICLE CROP (ROI)</span>
+          <span style="color:var(--accent);font-weight:700">YOLOv8</span>
+        </div>
+        <div style="width:100%;height:100px;background:linear-gradient(135deg,#0D1521 0%,#06080F 100%);border-radius:4px;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:11px;color:#3D5C78;border:1px solid #1A2D40">456 × 312 · YOLOv8 ROI</div>
+        <div style="font-size:10px;color:var(--text-3);font-family:var(--font-mono);background:var(--surface);padding:6px 8px;border-radius:var(--r);border:1px solid var(--border-dim)">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <span>ROI HASH:</span>
+            <span style="color:var(--accent);cursor:pointer" onclick="copyHash('2b25b6224ec7a53e5e6e8e58f2be4c5e39a3f2b48e64c519d0e2e9c1c5b8e90a', 'Vehicle ROI Hash')" title="Click to copy full hash">2b25b622... 📋</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. License Plate Crop (OCR) -->
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <div style="display:flex;justify-content:space-between;align-items:center;font-size:10px;font-family:var(--font-mono)">
+          <span style="color:var(--text-1);font-weight:700">3. PLATE CROP (OCR)</span>
+          <span style="color:var(--amber);font-weight:700">LPRNet</span>
+        </div>
+        <div style="width:100%;height:100px;background:#0D1521;border-radius:4px;display:flex;align-items:center;justify-content:center;border:1px solid #1A2D40"><span style="background:white;color:black;font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:700;padding:4px 14px;border-radius:3px;border:1px solid #ccc;letter-spacing:0.06em">GJ01AB1234</span></div>
+        <div style="font-size:10px;color:var(--text-3);font-family:var(--font-mono);background:var(--surface);padding:6px 8px;border-radius:var(--r);border:1px solid var(--border-dim)">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <span>PLATE HASH:</span>
+            <span style="color:var(--amber);cursor:pointer" onclick="copyHash('ec4a72d0f07c2d1b8e6a5b9e2c4d8e0f1a3b5c7d9e2f4a6b8c0e2d4f6a8b0c2e', 'Plate Hash')" title="Click to copy full hash">ec4a72d0... 📋</span>
+          </div>
         </div>
       </div>
     </div>
-    <table style="margin-bottom:16px">
-      <tr><td class="mono" style="color:var(--text-3);width:140px">Camera</td><td style="color:var(--text-1)">CAM04 — SG Highway Toll</td></tr>
-      <tr><td class="mono" style="color:var(--text-3)">Timestamp</td><td class="mono" style="color:var(--text-1)">2024-03-15 10:32:04 UTC</td></tr>
-      <tr><td class="mono" style="color:var(--text-3)">AI Confidence</td><td><span class="badge badge-green">96.4%</span></td></tr>
-      <tr><td class="mono" style="color:var(--text-3)">Vehicle Type</td><td style="color:var(--text-1)">Car · White Sedan</td></tr>
-      <tr><td class="mono" style="color:var(--text-3)">Frame SHA-256</td><td class="mono" style="font-size:10px;color:var(--text-3)">a3f9e2b1c847d56e...f2a901cd</td></tr>
-      <tr><td class="mono" style="color:var(--text-3)">Integrity</td><td><span class="badge badge-green">✓ VERIFIED</span></td></tr>
+
+    <!-- Forensic Chain & Evidence Metadata Details -->
+    <table style="margin-bottom:14px;font-size:11px">
+      <tr><td class="mono" style="color:var(--text-3);width:160px">Surveillance Node</td><td id="evidence-table-node" style="color:var(--text-1)">CAM04 — SG Highway Toll Plaza, Ahmedabad</td></tr>
+      <tr><td class="mono" style="color:var(--text-3)">Timestamp</td><td id="evidence-table-time" class="mono" style="color:var(--text-1)">2026-09-14 14:26:17 IST (Indian Standard Time)</td></tr>
+      <tr><td class="mono" style="color:var(--text-3)">Model Classification</td><td><span class="badge badge-green">YOLOv8x-ANPR-v4.2 + LPRNet SuperRes</span></td></tr>
+      <tr><td class="mono" style="color:var(--text-3)">Vehicle Identification</td><td id="evidence-table-vehicle" style="color:var(--text-1)">Hyundai Creta / White Sedan · Gujarat RTO Registered</td></tr>
+      <tr><td class="mono" style="color:var(--text-3)">Hardware Device Hash</td><td class="mono" style="font-size:10px;color:var(--green);cursor:pointer" onclick="copyHash('f3e6080cc720608a3b5d854700ebc2cec7e6783ab061c2c6088343917cf1d5d1', 'Device Hash')" title="Click to copy full SHA-256 hash">f3e6080cc720608a3b5d854700ebc2cec7e6783ab061c2c6088343917cf1d5d1 📋</td></tr>
+      <tr><td class="mono" style="color:var(--text-3)">Legal Certification</td><td><span class="badge badge-green">✓ SEC 65B INDIAN EVIDENCE ACT / SEC 63 BSA 2023 VALIDATED</span></td></tr>
     </table>
-    <div style="font-size:10px;font-weight:600;color:var(--text-3);letter-spacing:0.08em;margin-bottom:8px">CHAIN OF CUSTODY</div>
-    <div style="font-size:11px;color:var(--text-2);line-height:2;margin-bottom:16px">
-      <div>2024-03-15 10:32:06 · Evidence preserved by system</div>
-      <div>2024-03-15 11:14:22 · Viewed by <span style="color:var(--text-1)">admin</span></div>
-      <div>2024-03-15 11:15:01 · Integrity verified by <span style="color:var(--text-1)">admin</span></div>
+
+    <div style="font-size:10px;font-weight:700;color:var(--text-3);letter-spacing:0.08em;margin-bottom:6px">FORENSIC CHAIN OF CUSTODY AUDIT LOG</div>
+    <div style="font-size:11px;color:var(--text-2);line-height:1.8;margin-bottom:16px;background:var(--surface);padding:8px 12px;border-radius:var(--r);border:1px solid var(--border-dim)">
+      <div>• 2026-09-14 14:26:17 · <span style="color:var(--text-1)">Surveillance Node CAM04</span> — Raw frame ingested at 25 FPS 1080p</div>
+      <div>• 2026-09-14 14:26:18 · <span style="color:var(--text-1)">YOLOv8 Edge Engine</span> — Extracted vehicle ROI & optical plate character sequence</div>
+      <div>• 2026-09-14 14:26:20 · <span style="color:var(--text-1)">Duty Officer</span> — Cryptographically preserved and digital seal generated</div>
     </div>
+
     <div style="display:flex;gap:8px;justify-content:flex-end">
-      <button class="btn btn-ghost" onclick="showToast('Hash verification passed — evidence is intact','success')">Verify Integrity</button>
-      <button class="btn btn-primary" onclick="showToast('Evidence package downloaded','info');closeModal('modal-evidence')">↓ Export Package</button>
+      <button class="btn btn-ghost" onclick="closeModal('modal-evidence')">Close</button>
+      <button class="btn btn-primary" onclick="showToast('Section 65B Forensic Evidence Package Downloaded','success');closeModal('modal-evidence')">↓ Export Forensic Archive (ZIP)</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Evidence Lightbox / Zoom -->
+<div class="modal-backdrop" id="modal-evidence-lightbox" onclick="closeModal('modal-evidence-lightbox')">
+  <div class="modal" style="max-width:920px;background:rgba(5,8,15,0.96);border-color:var(--accent);box-shadow:0 0 60px rgba(0,111,214,0.35);padding:18px;position:relative" onclick="event.stopPropagation()">
+    <div class="modal-header" style="border-bottom:1px solid var(--border);padding-bottom:10px;margin-bottom:12px">
+      <div>
+        <div class="modal-title" id="lightbox-title" style="font-family:var(--font-mono);font-size:14px;color:var(--text-1)">FORENSIC INSPECTION · RAW CCTV FRAME</div>
+        <div style="font-size:11px;color:var(--text-3);font-family:var(--font-mono);margin-top:2px" id="lightbox-sub">Node CAM04 · 1920×1080 Native Frame</div>
+      </div>
+      <button class="modal-close" onclick="closeModal('modal-evidence-lightbox')">✕</button>
+    </div>
+    <div style="position:relative;background:#000;border-radius:var(--r);overflow:hidden;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;min-height:360px;max-height:560px">
+      <div style="position:absolute;top:10px;left:10px;width:24px;height:24px;border-top:2px solid var(--accent);border-left:2px solid var(--accent);pointer-events:none"></div>
+      <div style="position:absolute;top:10px;right:10px;width:24px;height:24px;border-top:2px solid var(--accent);border-right:2px solid var(--accent);pointer-events:none"></div>
+      <div style="position:absolute;bottom:10px;left:10px;width:24px;height:24px;border-bottom:2px solid var(--accent);border-left:2px solid var(--accent);pointer-events:none"></div>
+      <div style="position:absolute;bottom:10px;right:10px;width:24px;height:24px;border-bottom:2px solid var(--accent);border-right:2px solid var(--accent);pointer-events:none"></div>
+
+      <div style="width:100%;height:100px;background:#0D1521;border-radius:4px;display:flex;align-items:center;justify-content:center;border:1px solid #1A2D40"><span style="background:white;color:black;font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:700;padding:4px 14px;border-radius:3px;border:1px solid #ccc;letter-spacing:0.06em">GJ01AB1234</span></div>
+      <div style="position:absolute;bottom:12px;left:12px;background:rgba(5,8,15,0.85);border:1px solid rgba(255,255,255,0.15);padding:3px 8px;border-radius:3px;font-size:10px;font-family:var(--font-mono);color:var(--green)">
+        SEC 65B TAMPER-EVIDENT FORENSIC ZOOM
+      </div>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px">
+      <span style="font-size:11px;color:var(--text-3);font-family:var(--font-mono)">Press ESC or click outside to close preview</span>
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('modal-evidence-lightbox')">Close Preview</button>
     </div>
   </div>
 </div>
@@ -1654,6 +1701,12 @@ tr:last-child td {
       <span>Analytics</span>
     </div>
 
+    <div class="nav-section">Tools</div>
+    <a class="nav-item" href="../../extractor/" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+      <i data-lucide="layers" class="nav-icon"></i>
+      <span>Media Extractor</span>
+    </a>
+
     <div class="sidebar-footer">
       <div class="user-card">
         <div class="avatar">AD</div>
@@ -1703,7 +1756,7 @@ tr:last-child td {
           </div>
           <div style="display:flex;gap:8px;align-items:center">
             <div class="live-chip"><div class="dot"></div>LIVE</div>
-            <button class="btn btn-demo" onclick="showToast('Demo mode active: simulated feeds running','info')">Demo Mode</button>
+            <button class="btn btn-demo" onclick="startDemoMode()">Demo Mode</button>
             <button class="btn btn-ghost btn-sm" onclick="showToast('Dashboard refreshed','info')">Refresh</button>
           </div>
         </div>
@@ -1901,12 +1954,7 @@ tr:last-child td {
               <div class="card-title"><i data-lucide="map-pin"></i>Sighting Map</div>
             </div>
             <div class="card-body" style="padding:8px">
-              <div class="map-box" id="investigation-map" style="height:380px">
-                <div class="map-grid"></div>
-                <div style="z-index:1;text-align:center;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)">
-                  <div style="font-size:12px;color:var(--text-2)">Run a search to see camera locations</div>
-                </div>
-              </div>
+              <div class="map-box" id="map-investigation" style="height:380px;border-radius:6px;overflow:hidden;border:1px solid #1C2E42;"></div>
             </div>
           </div>
         </div>
@@ -1919,7 +1967,7 @@ tr:last-child td {
             <div class="page-title">Vehicle Journey</div>
             <div class="page-sub">Full movement reconstruction · <span class="plate" style="font-size:12px">GJ01AB1234</span></div>
           </div>
-          <button class="btn btn-primary btn-sm" onclick="showToast('Evidence report generated','success')">Generate Evidence Report</button>
+          <button class="btn btn-primary btn-sm" onclick="openEvidenceModal('GJ01AB1234', 'CAM04 — SG Highway Toll Plaza, Ahmedabad', '2026-09-14 14:26:17 IST', '98.6%')"><i data-lucide="shield-check" style="width:13px;height:13px"></i> Generate Evidence Report</button>
         </div>
         <div class="grid-2">
           <!-- Timeline -->
@@ -1938,7 +1986,7 @@ tr:last-child td {
               <div class="card-title"><i data-lucide="map"></i>Journey Map</div>
             </div>
             <div class="card-body" style="padding:8px">
-              <div class="map-box" id="map-journey" style="height:400px"></div>
+              <div class="map-box" id="map-journey" style="height:380px;border-radius:6px;overflow:hidden;border:1px solid #1C2E42;"></div>
               <div class="journey-controls" style="display:flex;gap:8px;margin-top:10px;align-items:center">
                 <button class="btn btn-primary btn-sm" id="btn-play-journey" onclick="playJourney()"><i data-lucide="play" style="width:12px;height:12px"></i> Play Journey</button>
                 <button class="btn btn-ghost btn-sm" id="btn-pause-journey" onclick="pauseJourney()"><i data-lucide="pause" style="width:12px;height:12px"></i> Pause</button>
@@ -1990,7 +2038,7 @@ tr:last-child td {
         <div class="card">
           <div class="table-wrap">
             <table>
-              <thead><tr><th>Plate</th><th>Priority</th><th>Reason</th><th>Added By</th><th>Added At</th><th>Status</th><th>Actions</th></tr></thead>
+              <thead><tr><th>Plate</th><th>Priority</th><th>Reason</th><th>Added By</th><th>Alerts</th><th>Status</th><th>Actions</th></tr></thead>
               <tbody id="watchlist-table"></tbody>
             </table>
           </div>
@@ -2039,7 +2087,7 @@ tr:last-child td {
           <div class="card">
             <div class="card-header"><div class="card-title"><i data-lucide="map"></i>Camera Map</div></div>
             <div class="card-body" style="padding:8px">
-              <div class="map-box" id="map-cameras" style="height:340px"></div>
+              <div class="map-box" id="map-cameras" style="height:380px;border-radius:6px;overflow:hidden;border:1px solid #1C2E42;"></div>
             </div>
           </div>
         </div>
@@ -2186,13 +2234,47 @@ function navigate(page, el) {
   const names={dashboard:'Dashboard',monitor:'Live Monitor',investigation:'Investigation',
     journey:'Vehicle Journey',alerts:'Alerts',watchlist:'Watchlist',
     evidence:'Evidence Vault',cameras:'Camera Registry',analytics:'Analytics'};
-  document.getElementById('breadcrumb').innerHTML=`<span>${names[page]||page}</span>`;
+  const bc = document.getElementById('breadcrumb');
+  if(bc) bc.innerHTML=`<span>${names[page]||page}</span>`;
+
   // Page-specific init
   if(page==='monitor') initMonitor();
   if(page==='analytics') initAnalytics();
-  if(page==='journey') initJourney();
-  // Close sidebar on mobile
-  closeSidebar();
+  if(page==='journey') {
+    initJourney();
+    setTimeout(function() {
+      initLeafletMap('map-journey', 23.09, 72.62, 11);
+    }, 80);
+  }
+  if(page==='evidence') {
+    var eg = document.getElementById('evidence-grid');
+    if(eg && !eg.innerHTML.trim()) renderEvidence();
+  }
+  if(page==='alerts') {
+    var at = document.getElementById('alerts-table');
+    if(at && !at.innerHTML.trim()) renderAlerts();
+  }
+  if(page==='watchlist') {
+    var wt = document.getElementById('watchlist-table');
+    if(wt && !wt.innerHTML.trim()) renderWatchlist();
+  }
+  if(page==='cameras') {
+    var ct = document.getElementById('cameras-table');
+    if(ct && !ct.innerHTML.trim()) renderCameras();
+    setTimeout(function() {
+      initLeafletMap('map-cameras', 23.12, 72.60, 10);
+    }, 80);
+  }
+  if(page==='investigation') {
+    setTimeout(function() {
+      initLeafletMap('map-investigation', 23.09, 72.58, 11);
+    }, 80);
+  }
+
+  // Close sidebar on mobile (Problem 7)
+  document.getElementById('sidebar').classList.remove('mobile-open');
+  var ov = document.getElementById('sidebar-overlay');
+  if (ov) ov.classList.remove('visible');
 }
 
 // ═══════════════════════════════════════
@@ -2226,6 +2308,109 @@ function showToast(msg, type='info'){
 function openModal(id){document.getElementById(id).classList.add('open')}
 function closeModal(id){document.getElementById(id).classList.remove('open')}
 
+function copyHash(text, label='Hash') {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(() => {
+      showToast(`${label} copied: ${text.slice(0, 16)}...`, 'success');
+    }).catch(() => {
+      showToast(`${label}: ${text.slice(0, 16)}...`, 'info');
+    });
+  } else {
+    showToast(`${label}: ${text.slice(0, 16)}...`, 'info');
+  }
+}
+
+function zoomEvidenceImage(title, src, sub) {
+  const t = document.getElementById('lightbox-title');
+  const s = document.getElementById('lightbox-sub');
+  const img = document.getElementById('lightbox-img');
+  if (t) t.textContent = title;
+  if (s) s.textContent = sub;
+  if (img) img.src = src;
+  openModal('modal-evidence-lightbox');
+}
+
+function openEvidenceModal(plate = 'GJ01AB1234', cam = 'CAM04 — SG Highway Toll Plaza', time = '2026-09-14 14:26:17 IST', conf = '98.6%') {
+  plate = (plate || 'GJ01AB1234').toUpperCase();
+  const cleanPlate = plate.toLowerCase().replace(/[^a-z0-9]/g, '');
+  
+  const titleEl = document.getElementById('evidence-modal-title');
+  if (titleEl) titleEl.textContent = `FORENSIC EVIDENCE PACKAGE — #CASE-JOURNEY-${plate}`;
+  
+  const plateEl = document.getElementById('evidence-modal-plate');
+  if (plateEl) plateEl.textContent = plate;
+  
+  const locEl = document.getElementById('evidence-modal-loc');
+  if (locEl) locEl.textContent = cam;
+  
+  const metaEl = document.getElementById('evidence-modal-meta');
+  if (metaEl) metaEl.innerHTML = `${time} · <span style="color:var(--green);font-weight:600">${conf} AI Confidence</span>`;
+  
+  const plateMap = {
+    'gj01ab1234': { plate: 'images/plate_gj01ab1234.png', crop: 'images/crop_gj01ab1234.jpg', type: 'Hyundai Creta / White Sedan · Gujarat RTO', camThumb: 'images/cam_sg_highway_thumb.jpg' },
+    'up32pq6677': { plate: 'images/plate_up32pq6677.png', crop: 'images/vehicle_scorpio_crop.jpg', type: 'Mahindra Scorpio / Black SUV · UP RTO', camThumb: 'images/cam_sardar_bridge_thumb.jpg' },
+    'gj05cd5678': { plate: 'images/plate_gj05cd5678.png', crop: 'images/crop_gj05cd5678.jpg', type: 'Maruti Suzuki Swift / Silver · Surat RTO', camThumb: 'images/cam_vastrapur_thumb.jpg' },
+    'dl10xy9090': { plate: 'images/plate_dl10xy9090.png', crop: 'images/crop_dl10xy9090.jpg', type: 'Toyota Fortuner / White SUV · Delhi RTO', camThumb: 'images/cam_mg_road_thumb.jpg' },
+    'rj14gh3456': { plate: 'images/plate_rj14gh3456.png', crop: 'images/crop_rj14gh3456.jpg', type: 'Honda City / Silver Sedan · Jaipur RTO', camThumb: 'images/cam_gift_city_thumb.jpg' }
+  };
+  
+  const asset = plateMap[cleanPlate] || {
+    plate: 'images/plate_gj01ab1234.png',
+    crop: 'images/crop_gj01ab1234.jpg',
+    type: 'Sedan / Commercial Vehicle · RTO Registered',
+    camThumb: 'images/cam_sg_highway_thumb.jpg'
+  };
+  
+  const imgRaw = document.getElementById('evidence-img-raw');
+  if (imgRaw) {
+    imgRaw.src = asset.camThumb;
+    imgRaw.onerror = () => { imgRaw.src = 'images/feed_cam04.jpg'; };
+  }
+  
+  const camBadge = document.getElementById('evidence-cam-badge');
+  if (camBadge) {
+    const camMatch = cam.match(/CAM\d+/i);
+    camBadge.textContent = camMatch ? camMatch[0].toUpperCase() : 'CAM04';
+  }
+  
+  const imgVehicle = document.getElementById('evidence-img-vehicle');
+  if (imgVehicle) {
+    imgVehicle.src = asset.crop;
+    imgVehicle.onerror = () => { imgVehicle.src = 'images/vehicle_scorpio_crop.jpg'; };
+  }
+  
+  const vehConf = document.getElementById('evidence-vehicle-conf');
+  if (vehConf) vehConf.textContent = `ROI: ${conf}`;
+  
+  const imgPlate = document.getElementById('evidence-img-plate');
+  if (imgPlate) {
+    imgPlate.src = asset.plate;
+    imgPlate.onerror = () => { imgPlate.src = 'images/plate_gj01ab1234.png'; };
+  }
+  
+  const ocrText = document.getElementById('evidence-plate-ocr');
+  if (ocrText) ocrText.textContent = plate;
+  
+  const nodeRow = document.getElementById('evidence-table-node');
+  if (nodeRow) nodeRow.textContent = cam;
+  
+  const timeRow = document.getElementById('evidence-table-time');
+  if (timeRow) timeRow.textContent = time;
+  
+  const vehRow = document.getElementById('evidence-table-vehicle');
+  if (vehRow) vehRow.textContent = asset.type;
+  
+  openModal('modal-evidence');
+}
+
+window.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    closeModal('modal-evidence-lightbox');
+    closeModal('modal-evidence');
+    closeModal('modal-watchlist');
+  }
+});
+
 // ═══════════════════════════════════════
 // HELPERS
 // ═══════════════════════════════════════
@@ -2247,15 +2432,85 @@ function randomCam(){return CAMERAS.filter(c=>c.status==='online')[Math.floor(Ma
 function timeNow(){const n=new Date();return`${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}:${String(n.getSeconds()).padStart(2,'0')}`}
 function randomConf(){return(Math.random()*18+80).toFixed(1)}
 
+function animCount(id, to, dur) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  var t0 = null;
+  function step(ts) {
+    if (!t0) t0 = ts;
+    var p = Math.min((ts - t0) / dur, 1), e = 1 - Math.pow(1 - p, 3);
+    el.textContent = Math.round(e * to).toLocaleString();
+    if (p < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+var isDemoRunning = false;
+function startDemoMode() {
+  if (isDemoRunning) return;
+  isDemoRunning = true;
+
+  var topbar = document.getElementById('topbar');
+  var topbarRight = document.querySelector('.topbar-actions') || topbar;
+  var badge = document.getElementById('demo-active-badge');
+  if (!badge) {
+    badge = document.createElement('div');
+    badge.id = 'demo-active-badge';
+    badge.style.cssText = 'background:var(--red);color:#fff;font-family:var(--mono);font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;letter-spacing:0.06em;animation:pulse-dot 0.8s infinite;display:inline-flex;align-items:center;gap:4px;box-shadow:0 0 12px rgba(232,64,64,0.6);margin-right:8px;';
+    badge.innerHTML = '● DEMO ACTIVE';
+    if (topbarRight) topbarRight.prepend(badge);
+  } else {
+    badge.style.display = 'inline-flex';
+  }
+  showToast('Demo Mode Activated — Scanning critical alerts...', 'info');
+
+  setTimeout(function() {
+    if (badge) badge.remove();
+  }, 3000);
+
+  navigate('dashboard', null);
+
+  setTimeout(function() {
+    var alertCards = document.querySelectorAll('#live-alerts-list .alert-card, .alert-card');
+    var step = 0;
+    var interval = setInterval(function() {
+      alertCards.forEach(function(c, idx) {
+        if (idx === step) {
+          c.style.borderColor = 'var(--red)';
+          c.style.boxShadow = '0 0 16px rgba(232, 64, 64, 0.7)';
+          c.style.transform = 'scale(1.02)';
+          c.style.transition = 'all 200ms ease';
+        } else {
+          c.style.borderColor = '';
+          c.style.boxShadow = '';
+          c.style.transform = '';
+        }
+      });
+      step++;
+      if (step >= Math.min(alertCards.length, 4) || step >= 4) {
+        clearInterval(interval);
+        setTimeout(function() {
+          alertCards.forEach(function(c) {
+            c.style.borderColor = '';
+            c.style.boxShadow = '';
+            c.style.transform = '';
+          });
+          navigate('monitor', null);
+          showToast('Demo Mode: Live Monitor camera grid activated', 'success');
+          isDemoRunning = false;
+        }, 1500);
+      }
+    }, 1500);
+  }, 500);
+}
+
 // ═══════════════════════════════════════
 // DASHBOARD INIT
 // ═══════════════════════════════════════
 function initDashboard(){
-  // Stat counter animation
-  ['stat-cameras','stat-vehicles','stat-alerts','stat-plates'].forEach(id=>{
-    const el=document.getElementById(id);
-    if(!el)return;
-  });
+  // Stat counter animation (Problem 5)
+  animCount('stat-vehicles', 2847, 1400);
+  animCount('stat-plates', 1924, 1400);
 
   // Activity chart
   const actCtx=document.getElementById('activity-chart');
@@ -2298,12 +2553,13 @@ function initDashboard(){
   renderAlerts();
   renderEvidence();
   renderCameras();
+  renderTopPlates();
 }
 
 function renderLiveAlerts(){
   const c=document.getElementById('live-alerts-list');
   if(!c)return;
-  c.innerHTML=ALERT_DATA.slice(0,3).map(a=>`
+  c.innerHTML=ALERT_DATA.slice(0,4).map(a=>`
     <div class="alert-card" onclick="navigate('alerts',null)">
       <div>
         <div style="font-size:10px;font-family:var(--font-mono);color:var(--text-muted);margin-bottom:3px">${a.cam} · ${a.time}</div>
@@ -2452,17 +2708,16 @@ function runSearch(){
   const tl=document.getElementById('investigation-timeline');
   const cnt=document.getElementById('sighting-count');
   const jbar=document.getElementById('journey-bar');
-  const map=document.getElementById('investigation-map');
 
   // Show loading
-  tl.innerHTML='<div style="text-align:center;padding:30px;color:var(--text-muted)">Scanning cameras...</div>';
+  if(tl) tl.innerHTML='<div style="text-align:center;padding:30px;color:var(--text-muted)">Scanning cameras...</div>';
 
   setTimeout(()=>{
     const isKnown=PLATES.find(p=>p.plate===plate);
     const stops=isKnown?JOURNEY_STOPS:[JOURNEY_STOPS[0],JOURNEY_STOPS[2]];
-    cnt.textContent=`${stops.length} sightings`;
+    if(cnt) cnt.textContent=`${stops.length} sightings`;
 
-    tl.innerHTML='<div class="timeline">'+stops.map((s,i)=>`
+    if(tl) tl.innerHTML='<div class="timeline">'+stops.map((s,i)=>`
       <div class="timeline-item">
         <div class="timeline-dot"></div>
         <div class="timeline-card">
@@ -2473,28 +2728,53 @@ function runSearch(){
             ${confBadge(s.conf)}
           </div>
           <div style="margin-top:8px;display:flex;gap:6px">
-            <button class="btn btn-ghost btn-sm" onclick="openModal('modal-evidence')">View Evidence</button>
+            <button class="btn btn-ghost btn-sm" onclick="openEvidenceModal('${plate}', '${s.cam} — ${s.loc}', '2026-09-14 ${s.time} IST', '${s.conf}%')">View Evidence</button>
             <button class="btn btn-ghost btn-sm" onclick="showToast('Preserving evidence...','info');setTimeout(()=>showToast('Evidence preserved with SHA-256','success'),1200)">Preserve</button>
           </div>
         </div>
       </div>
     `).join('')+'</div>';
 
-    if(stops.length>=2){
+    if(jbar && stops.length>=2){
       jbar.style.display='block';
     }
 
-    // Map with pins
-    map.innerHTML=`
-      <div class="map-grid"></div>
-      ${stops.map((s,i)=>`<div class="map-pin${i===stops.length-1?'-active':''}" style="left:${20+i*18}%;top:${60-i*12}%;z-index:2" title="${s.cam}">
-        <div style="position:absolute;top:-18px;left:50%;transform:translateX(-50%);font-size:9px;font-family:var(--font-mono);color:var(--text-primary);white-space:nowrap;background:rgba(8,12,18,0.8);padding:1px 4px;border-radius:2px">${i+1}</div>
-      </div>`).join('')}
-      ${stops.length>=2?`<svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none" viewBox="0 0 100 100" preserveAspectRatio="none">
-        <polyline points="${stops.map((s,i)=>`${20+i*18},${60-i*12}`).join(' ')}" fill="none" stroke="#0E7FE0" stroke-width="0.5" stroke-dasharray="2,1.5" opacity="0.7"/>
-      </svg>`:''}
-      <div style="z-index:1;position:absolute;bottom:12px;left:12px;font-size:10px;color:var(--text-muted);font-family:var(--font-mono)">${stops.length} sighting${stops.length!==1?'s':''} · ${plate}</div>
-    `;
+    // Update Leaflet investigation map
+    const invMap = initLeafletMap('map-investigation', 23.09, 72.58, 11);
+    if (invMap) {
+      if (window.investigationMarkers) {
+        window.investigationMarkers.forEach(m => invMap.removeLayer(m));
+      }
+      window.investigationMarkers = [];
+      if (window.investigationPolyline) {
+        invMap.removeLayer(window.investigationPolyline);
+        window.investigationPolyline = null;
+      }
+      
+      const invCoords = stops.map((s, idx) => {
+        const c = idx === 0 ? [23.013, 72.576] : idx === 1 ? [23.027, 72.585] : idx === 2 ? [23.116, 72.538] : [23.160, 72.684];
+        const m = L.circleMarker(c, {
+          radius: 6,
+          fillColor: idx === stops.length - 1 ? '#0A84FF' : '#00B87A',
+          color: '#ffffff',
+          weight: 1.5,
+          opacity: 1,
+          fillOpacity: 0.9
+        }).addTo(invMap);
+        m.bindPopup(`<b>${idx+1}. ${s.cam} — ${s.loc}</b><br/>Plate: ${plate}<br/>Time: ${s.time}<br/>Confidence: ${s.conf}%`);
+        window.investigationMarkers.push(m);
+        return c;
+      });
+      if (invCoords.length >= 2) {
+        window.investigationPolyline = L.polyline(invCoords, {
+          color: '#0A84FF',
+          weight: 3,
+          dashArray: '5, 5',
+          opacity: 0.85
+        }).addTo(invMap);
+      }
+      setTimeout(() => invMap.invalidateSize(), 80);
+    }
 
     showToast(`Found ${stops.length} sightings for ${plate}`,'success');
   },800);
@@ -2520,8 +2800,11 @@ function initJourney(){
     ${JOURNEY_STOPS.map((s,i)=>`
       <div class="timeline-item">
         <div class="timeline-dot" style="background:${i===0?'var(--green)':i===JOURNEY_STOPS.length-1?'var(--orange)':'var(--accent)'}"></div>
-        <div class="timeline-card">
-          <div class="timeline-time">${s.time}</div>
+        <div class="timeline-card" style="cursor:pointer" onclick="openEvidenceModal('GJ01AB1234', '${s.cam} — ${s.loc}', '2026-09-14 ${s.time} IST', '${s.conf}%')" title="Click to inspect forensic evidence">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div class="timeline-time">${s.time}</div>
+            <button class="btn btn-ghost btn-sm" style="font-size:10px;padding:2px 6px;height:22px" onclick="event.stopPropagation();openEvidenceModal('GJ01AB1234', '${s.cam} — ${s.loc}', '2026-09-14 ${s.time} IST', '${s.conf}%')">🛡️ Evidence</button>
+          </div>
           <div class="timeline-cam">${i+1}. ${s.cam} — ${s.loc}</div>
           <div style="margin-top:6px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
             ${confBadge(s.conf)}
@@ -2541,22 +2824,24 @@ function renderWatchlist(){
   const tb=document.getElementById('watchlist-table');
   if(!tb)return;
   const wl=PLATES.filter(p=>p.watchlist);
-  tb.innerHTML=wl.map(p=>`
+  tb.innerHTML=wl.map(p=>{
+    const alertCount = (typeof ALERT_DATA !== 'undefined') ? ALERT_DATA.filter(a=>a.plate===p.plate).length : 0;
+    return `
     <tr>
       <td><span class="plate" style="font-size:11px">${p.plate}</span></td>
       <td>${priorityBadge(p.priority)}</td>
       <td style="color:var(--text-secondary);max-width:200px">${p.reason}</td>
       <td class="mono">admin</td>
-      <td class="mono">2024-03-15</td>
+      <td class="mono" style="color:var(--red);font-weight:600">${alertCount} hits</td>
       <td><span class="badge badge-green">ACTIVE</span></td>
       <td>
         <div style="display:flex;gap:4px">
-          <button class="btn btn-ghost btn-sm" onclick="navigate('alerts',null)">Alerts</button>
+          <button class="btn btn-ghost btn-sm" onclick="navigate('alerts',null)">Alerts (${alertCount})</button>
           <button class="btn btn-danger btn-sm" onclick="showToast('${p.plate} removed from watchlist','info')">Remove</button>
         </div>
       </td>
     </tr>
-  `).join('');
+  `;}).join('');
 }
 
 function addToWatchlist(){
@@ -2583,7 +2868,7 @@ function renderAlerts(){
       <td><span class="badge ${a.status==='active'?'badge-red':'badge-muted'}">${a.status.toUpperCase()}</span></td>
       <td>
         <div style="display:flex;gap:4px">
-          <button class="btn btn-ghost btn-sm" onclick="openModal('modal-evidence')">Evidence</button>
+          <button class="btn btn-ghost btn-sm" onclick="openEvidenceModal('${a.plate}', '${a.cam} Surveillance Feed', '2026-09-14 ${a.time} IST', '98.5%')">Evidence</button>
           <button class="btn btn-primary btn-sm" onclick="showToast('Alert acknowledged','success');this.closest('tr').querySelector('.badge').className='badge badge-muted';this.closest('tr').querySelector('.badge').textContent='ACKNOWLEDGED'">Ack</button>
         </div>
       </td>
@@ -2604,7 +2889,7 @@ function renderEvidence(){
     const hash='a3f9e2b1c847...'+Math.random().toString(16).slice(2,10);
     const hrs=i*2;
     return `
-      <div class="evidence-card" onclick="openModal('modal-evidence')">
+      <div class="evidence-card" onclick="openEvidenceModal('${p.plate}', '${cam.id} — ${cam.name}', '2026-09-14 10:${String(30-i).padStart(2,'0')}:04 UTC', '${conf.toFixed(1)}%')">
         <div class="evidence-img">
           <div class="cam-dots" style="opacity:0.4"></div>
           <div style="z-index:1;text-align:center">
@@ -2622,7 +2907,7 @@ function renderEvidence(){
           <div class="mono" style="color:var(--text-muted);font-size:10px">10:${String(30-i).padStart(2,'0')}:04 UTC</div>
           <div class="evidence-hash">SHA-256: ${hash}</div>
           <div style="display:flex;gap:6px;margin-top:8px">
-            <button class="btn btn-ghost btn-sm" style="flex:1" onclick="event.stopPropagation();openModal('modal-evidence')">View</button>
+            <button class="btn btn-ghost btn-sm" style="flex:1" onclick="event.stopPropagation();openEvidenceModal('${p.plate}', '${cam.id} — ${cam.name}', '2026-09-14 10:${String(30-i).padStart(2,'0')}:04 UTC', '${conf.toFixed(1)}%')">View</button>
             <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();showToast('Evidence exported','success')">↓</button>
           </div>
         </div>
@@ -2651,6 +2936,29 @@ function renderCameras(){
           ${c.status!=='offline'?`<button class="btn btn-ghost btn-sm" onclick="navigate('monitor',null)">Feed</button>`:''}
         </div>
       </td>
+    </tr>
+  `).join('');
+}
+
+// ═══════════════════════════════════════
+// TOP PLATES TABLE (Problem 1)
+// ═══════════════════════════════════════
+function renderTopPlates(){
+  const tp=document.getElementById('top-plates-table');
+  if(!tp)return;
+  const rows = [
+    { plate: 'GJ01AB1234', sightings: 142, lastSeen: '10:32', watchlist: true },
+    { plate: 'MH12DE3456', sightings: 98, lastSeen: '10:28', watchlist: false },
+    { plate: 'DL10XY9090', sightings: 76, lastSeen: '10:15', watchlist: false },
+    { plate: 'RJ14GH3456', sightings: 64, lastSeen: '09:17', watchlist: true },
+    { plate: 'KA03MN7890', sightings: 53, lastSeen: '09:05', watchlist: false }
+  ];
+  tp.innerHTML=rows.map(r=>`
+    <tr>
+      <td>${r.watchlist?`<span style="color:var(--red)">⚠</span> `:''}<span class="plate" style="font-size:11px">${r.plate}</span></td>
+      <td class="mono" style="color:var(--accent);font-weight:600">${r.sightings}</td>
+      <td class="mono">${r.lastSeen}</td>
+      <td>${r.watchlist?`<span class="badge badge-red">WATCHLIST</span>`:`<span class="badge badge-muted">CLEAN</span>`}</td>
     </tr>
   `).join('');
 }
@@ -2729,18 +3037,9 @@ function initAnalytics(){
       }
     });
   }
+
   // Top plates
-  const tp=document.getElementById('top-plates-table');
-  if(tp){
-    tp.innerHTML=PLATES.slice(0,6).map((p,i)=>`
-      <tr>
-        <td><span class="plate" style="font-size:11px">${p.plate}</span></td>
-        <td class="mono" style="color:var(--accent)">${Math.floor(Math.random()*200+50)}</td>
-        <td class="mono">${timeNow()}</td>
-        <td>${p.watchlist?`<span class="badge badge-red">WATCH</span>`:'<span class="badge badge-muted">CLEAN</span>'}</td>
-      </tr>
-    `).join('');
-  }
+  renderTopPlates();
 }
 
 // ═══════════════════════════════════════
@@ -2812,103 +3111,156 @@ if (typeof Chart !== 'undefined') {
   }
 }
 
-// Leaflet Map instances
-let journeyMapInstance = null;
-let cameraMapInstance = null;
-let journeyMarker = null;
-let journeyAnimTimer = null;
-let journeyCurrentStop = 0;
+// ═══════════════════════════════════════
+// PROBLEM 4: LEAFLET MAPS IMPLEMENTATION
+// ═══════════════════════════════════════
+var mapInstances = {};
 
-function initLeafletMaps() {
-  if (typeof L === 'undefined') return;
+function initLeafletMap(id, lat, lng, zoom) {
+  if (typeof L === 'undefined') return null;
+  var el = document.getElementById(id);
+  if (!el) return null;
+  if (mapInstances[id]) {
+    setTimeout(function() {
+      mapInstances[id].invalidateSize();
+    }, 80);
+    return mapInstances[id];
+  }
+  if (el._leaflet_id) return null;
 
-  // Journey Map
-  const jMapEl = document.getElementById('map-journey');
-  if (jMapEl && !journeyMapInstance) {
-    const coords = [
-      [23.013, 72.576], // Sardar Bridge Entry
-      [23.027, 72.585], // MG Road Junction
-      [23.116, 72.538], // SG Highway Toll
-      [23.160, 72.684]  // GIFT City Entry
-    ];
-    journeyMapInstance = L.map('map-journey', { attributionControl: false }).setView([23.08, 72.60], 11);
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-      subdomains: 'abcd',
-      maxZoom: 19
-    }).addTo(journeyMapInstance);
+  var map = L.map(id, { attributionControl: false }).setView([lat, lng], zoom);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    subdomains: 'abcd',
+    maxZoom: 19,
+    attribution: ''
+  }).addTo(map);
 
-    L.polyline(coords, {
-      color: '#006FD6',
-      weight: 3,
-      dashArray: '6, 6',
-      opacity: 0.85
-    }).addTo(journeyMapInstance);
+  mapInstances[id] = map;
+  setTimeout(function() {
+    map.invalidateSize();
+  }, 80);
 
-    coords.forEach((c, idx) => {
-      const stop = (typeof JOURNEY_STOPS !== 'undefined' && JOURNEY_STOPS[idx]) ? JOURNEY_STOPS[idx] : {};
-      const marker = L.circleMarker(c, {
-        radius: idx === coords.length - 1 ? 7 : 5,
-        fillColor: idx === 0 ? '#00B87A' : idx === coords.length - 1 ? '#E84040' : '#0A84FF',
+  if (id === 'map-journey') {
+    setupJourneyMap(map);
+  } else if (id === 'map-cameras') {
+    setupCamerasMap(map);
+  } else if (id === 'map-investigation') {
+    setupInvestigationMap(map);
+  }
+
+  return map;
+}
+
+var journeyMapInstance = null;
+var cameraMapInstance = null;
+var journeyMarker = null;
+var journeyAnimTimer = null;
+var journeyCurrentStop = 0;
+var investigationMarkers = [];
+var investigationPolyline = null;
+
+function setupJourneyMap(map) {
+  journeyMapInstance = map;
+  const coords = [
+    [23.013, 72.576], // Sardar Bridge Entry
+    [23.027, 72.585], // MG Road Junction
+    [23.116, 72.538], // SG Highway Toll
+    [23.160, 72.684]  // GIFT City Entry
+  ];
+
+  L.polyline(coords, {
+    color: '#006FD6',
+    weight: 3,
+    dashArray: '6, 6',
+    opacity: 0.85
+  }).addTo(map);
+
+  coords.forEach((c, idx) => {
+    const stop = (typeof JOURNEY_STOPS !== 'undefined' && JOURNEY_STOPS[idx]) ? JOURNEY_STOPS[idx] : {};
+    const marker = L.circleMarker(c, {
+      radius: idx === coords.length - 1 ? 7 : 5,
+      fillColor: idx === 0 ? '#00B87A' : idx === coords.length - 1 ? '#E84040' : '#0A84FF',
+      color: '#ffffff',
+      weight: 1.5,
+      opacity: 1,
+      fillOpacity: 0.9
+    }).addTo(map);
+    marker.bindPopup(`<b>${idx+1}. ${stop.cam || 'Cam'}</b><br/>${stop.loc || ''}<br/>${stop.time || ''}`);
+  });
+
+  journeyMarker = L.circleMarker(coords[0], {
+    radius: 9,
+    fillColor: '#0A84FF',
+    color: '#ffffff',
+    weight: 2,
+    opacity: 1,
+    fillOpacity: 1
+  }).addTo(map);
+}
+
+function setupCamerasMap(map) {
+  cameraMapInstance = map;
+  const CAM_COORDS = {
+    CAM01: [23.027, 72.585],
+    CAM02: [23.013, 72.576],
+    CAM03: [23.036, 72.528],
+    CAM04: [23.116, 72.538],
+    CAM05: [23.215, 72.636],
+    CAM06: [23.160, 72.684],
+    CAM07: [23.048, 72.570],
+    CAM08: [23.075, 72.526],
+    CAM09: [23.018, 72.508],
+    CAM10: [23.072, 72.601],
+    CAM11: [23.004, 72.602],
+    CAM12: [23.064, 72.624]
+  };
+
+  if (typeof CAMERAS !== 'undefined') {
+    CAMERAS.forEach(c => {
+      const coord = CAM_COORDS[c.id] || [23.03 + (Math.random() - 0.5) * 0.1, 72.58 + (Math.random() - 0.5) * 0.1];
+      const isOnline = c.status === 'online';
+      const isWarn = c.status === 'warning';
+      const color = isOnline ? '#00B87A' : isWarn ? '#D97706' : '#7B9DBE';
+      const m = L.circleMarker(coord, {
+        radius: 6,
+        fillColor: color,
         color: '#ffffff',
         weight: 1.5,
-        opacity: 1,
-        fillOpacity: 0.9
-      }).addTo(journeyMapInstance);
-      marker.bindPopup(`<b>${idx+1}. ${stop.cam || 'Cam'}</b><br/>${stop.loc || ''}<br/>${stop.time || ''}`);
+        opacity: 0.9,
+        fillOpacity: 0.85
+      }).addTo(map);
+      m.bindPopup(`<b>${c.id} — ${c.name}</b><br/>Location: ${c.loc}<br/>Protocol: ${c.protocol}<br/>Status: ${c.status.toUpperCase()}`);
     });
+  }
+}
 
-    journeyMarker = L.circleMarker(coords[0], {
-      radius: 9,
-      fillColor: '#0A84FF',
+function setupInvestigationMap(map) {
+  const coords = [
+    [23.013, 72.576],
+    [23.027, 72.585],
+    [23.116, 72.538],
+    [23.160, 72.684]
+  ];
+  investigationPolyline = L.polyline(coords, {
+    color: '#006FD6',
+    weight: 2.5,
+    dashArray: '5, 5',
+    opacity: 0.8
+  }).addTo(map);
+
+  coords.forEach((c, i) => {
+    const stop = (typeof JOURNEY_STOPS !== 'undefined' && JOURNEY_STOPS[i]) ? JOURNEY_STOPS[i] : {};
+    const m = L.circleMarker(c, {
+      radius: 6,
+      fillColor: i === coords.length - 1 ? '#0A84FF' : '#00B87A',
       color: '#ffffff',
-      weight: 2,
+      weight: 1.5,
       opacity: 1,
-      fillOpacity: 1
-    }).addTo(journeyMapInstance);
-  }
-
-  // Camera Map
-  const cMapEl = document.getElementById('map-cameras');
-  if (cMapEl && !cameraMapInstance) {
-    cameraMapInstance = L.map('map-cameras', { attributionControl: false }).setView([23.06, 72.58], 11);
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-      subdomains: 'abcd',
-      maxZoom: 19
-    }).addTo(cameraMapInstance);
-
-    const CAM_COORDS = {
-      CAM01: [23.027, 72.585],
-      CAM02: [23.013, 72.576],
-      CAM03: [23.036, 72.528],
-      CAM04: [23.116, 72.538],
-      CAM05: [23.215, 72.636],
-      CAM06: [23.160, 72.684],
-      CAM07: [23.048, 72.570],
-      CAM08: [23.075, 72.526],
-      CAM09: [23.018, 72.508],
-      CAM10: [23.072, 72.601],
-      CAM11: [23.004, 72.602],
-      CAM12: [23.064, 72.624]
-    };
-
-    if (typeof CAMERAS !== 'undefined') {
-      CAMERAS.forEach(c => {
-        const coord = CAM_COORDS[c.id] || [23.03 + (Math.random() - 0.5) * 0.1, 72.58 + (Math.random() - 0.5) * 0.1];
-        const isOnline = c.status === 'online';
-        const isWarn = c.status === 'warning';
-        const color = isOnline ? '#00B87A' : isWarn ? '#D97706' : '#7B9DBE';
-        const m = L.circleMarker(coord, {
-          radius: 6,
-          fillColor: color,
-          color: '#ffffff',
-          weight: 1.5,
-          opacity: 0.9,
-          fillOpacity: 0.85
-        }).addTo(cameraMapInstance);
-        m.bindPopup(`<b>${c.id} — ${c.name}</b><br/>Location: ${c.loc}<br/>Protocol: ${c.protocol}<br/>Status: ${c.status.toUpperCase()}`);
-      });
-    }
-  }
+      fillOpacity: 0.9
+    }).addTo(map);
+    m.bindPopup(`<b>${stop.cam || 'Cam'} — ${stop.loc || ''}</b><br/>Plate: GJ01AB1234<br/>Time: ${stop.time || ''}`);
+    investigationMarkers.push(m);
+  });
 }
 
 function playJourney() {
@@ -2971,21 +3323,6 @@ function resetJourney() {
   showToast('Journey reset to Start', 'info');
 }
 
-// Hook page navigation to invalidate Leaflet map sizes and initialize
-const _origNav = window.navigate;
-window.navigate = function(page, el) {
-  _origNav(page, el);
-  setTimeout(() => {
-    if (page === 'journey' && journeyMapInstance) {
-      journeyMapInstance.invalidateSize();
-    }
-    if (page === 'cameras' && cameraMapInstance) {
-      cameraMapInstance.invalidateSize();
-    }
-    initLeafletMaps();
-  }, 100);
-};
-
 // Micro-interaction: input-active on typing 6+ characters
 document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('input').forEach(inp => {
@@ -3001,9 +3338,8 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   });
-  initLeafletMaps();
 });
-
 </script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </body>
 </html>

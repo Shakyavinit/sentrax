@@ -913,7 +913,12 @@ export const VehicleDetailsPage: React.FC = () => {
                     attributionControl={false}
                     className="w-full h-full"
                   >
-                    <TileLayer url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" />
+                    <TileLayer
+                      url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+                      subdomains="abcd"
+                      maxZoom={19}
+                      attribution=""
+                    />
 
                     {/* Route Trajectory */}
                     <Polyline

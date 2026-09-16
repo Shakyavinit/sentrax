@@ -453,14 +453,14 @@ export const Analytics: React.FC = () => {
             </span>
           </div>
 
-          <div className="overflow-x-auto flex-1">
+          <div className="overflow-x-auto flex-1 w-full max-w-full">
             <table className="w-full text-left text-xs">
               <thead className="text-[10px] font-mono text-[#8FA8C0] border-b border-[#1C2E42] uppercase">
                 <tr>
-                  <th className="pb-2">Registration</th>
-                  <th className="pb-2">Scans</th>
-                  <th className="pb-2">Status</th>
-                  <th className="pb-2 text-right">Actions</th>
+                  <th className="pb-2 pr-1.5">Registration</th>
+                  <th className="pb-2 px-1.5">Scans</th>
+                  <th className="pb-2 px-1.5">Status</th>
+                  <th className="pb-2 pl-1.5 text-right">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#162436] font-mono">
@@ -472,9 +472,9 @@ export const Analytics: React.FC = () => {
                   { plate_text: 'RJ14GH3456', count: 5, last_seen: '2026-09-14 13:58:10', is_watchlist: false, last_camera: 'Ring Road' },
                 ]).map((tp) => (
                   <tr key={tp.plate_text} className="hover:bg-[#111A26] transition-colors">
-                    <td className="py-2.5">
+                    <td className="py-2 pr-1.5">
                       {/* Authentic Indian HSRP Plate Graphic */}
-                      <span className="inline-flex items-center bg-white text-black font-mono font-extrabold text-[11px] px-2 py-0.5 rounded border border-gray-300 shadow-sm tracking-wider">
+                      <span className="inline-flex items-center bg-white text-black font-mono font-extrabold text-[10.5px] px-1.5 py-0.5 rounded border border-gray-300 shadow-sm tracking-wider">
                         <span className="text-[7px] mr-1 text-blue-800 font-black border-r border-gray-300 pr-1 flex items-center gap-0.5">
                           <span>IND</span>
                         </span>
@@ -484,10 +484,10 @@ export const Analytics: React.FC = () => {
                         {tp.last_seen ? formatTimestamp(tp.last_seen) : 'Recent'}
                       </div>
                     </td>
-                    <td className="py-2.5">
-                      <div className="flex items-center gap-2">
+                    <td className="py-2 px-1.5">
+                      <div className="flex items-center gap-1.5">
                         <span className="text-white font-bold text-xs">{tp.count}</span>
-                        <div className="w-12 h-1.5 bg-[#162436] rounded-full overflow-hidden border border-[#1E364F]">
+                        <div className="w-8 h-1.5 bg-[#162436] rounded-full overflow-hidden border border-[#1E364F]">
                           <div
                             className="h-full bg-[#0E7FE0] rounded-full"
                             style={{ width: `${Math.min(100, tp.count * 20)}%` }}
@@ -495,34 +495,34 @@ export const Analytics: React.FC = () => {
                         </div>
                       </div>
                     </td>
-                    <td className="py-2.5">
+                    <td className="py-2 px-1.5">
                       {tp.is_watchlist ? (
-                        <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-red-500/15 text-red-400 border border-red-500/30 flex items-center gap-1 w-fit">
+                        <span className="px-1.5 py-0.5 rounded text-[8.5px] font-bold bg-red-500/15 text-red-400 border border-red-500/30 flex items-center gap-1 w-fit">
                           <span className="w-1 h-1 rounded-full bg-red-400 animate-ping" />
-                          <span>WATCHLIST</span>
+                          <span>ALERT</span>
                         </span>
                       ) : (
-                        <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/25 w-fit">
-                          CLEARED
+                        <span className="px-1.5 py-0.5 rounded text-[8.5px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/25 w-fit">
+                          CLEAR
                         </span>
                       )}
                     </td>
-                    <td className="py-2.5 text-right">
+                    <td className="py-2 pl-1.5 text-right whitespace-nowrap">
                       <div className="flex items-center justify-end gap-1">
                         <Link
                           to={`/investigation?plate=${tp.plate_text}`}
-                          className="px-2 py-1 bg-[#131F30] hover:bg-[#0E7FE0] text-[#8FA8C0] hover:text-white rounded text-[10px] font-mono font-bold transition-colors inline-flex items-center gap-1"
+                          className="px-1.5 py-0.5 bg-[#131F30] hover:bg-[#0E7FE0] text-[#8FA8C0] hover:text-white rounded text-[9.5px] font-mono font-bold transition-colors inline-flex items-center gap-0.5"
                           title="Trace Journey across Cameras"
                         >
                           <span>Trace</span>
                         </Link>
                         <Link
                           to={`/vehicles/details/${tp.plate_text}`}
-                          className="px-2 py-1 bg-[#15273C] hover:bg-[#1A9FFF] text-[#0E7FE0] hover:text-white rounded text-[10px] font-mono font-bold transition-colors inline-flex items-center gap-0.5"
+                          className="px-1.5 py-0.5 bg-[#15273C] hover:bg-[#1A9FFF] text-[#0E7FE0] hover:text-white rounded text-[9.5px] font-mono font-bold transition-colors inline-flex items-center gap-0.5"
                           title="View Full Vehicle Dossier"
                         >
                           <span>Dossier</span>
-                          <ChevronRight size={11} />
+                          <ChevronRight size={10} />
                         </Link>
                       </div>
                     </td>

@@ -8,6 +8,7 @@ import { Button } from '../components/ui/Button';
 import { Badge } from '../components/ui/Badge';
 import { LicensePlate } from '../components/ui/LicensePlate';
 import { watchlistApi } from '../api/watchlist';
+import { alertsApi } from '../api/alerts';
 import { WatchlistEntry, WatchlistPriority } from '../types';
 import { formatTimestamp } from '../utils/format';
 import { Eye, Plus, ShieldAlert, Trash2, ExternalLink } from 'lucide-react';
@@ -26,6 +27,11 @@ export const WatchlistPage: React.FC = () => {
   const { data: watchlist = [], isLoading } = useQuery({
     queryKey: ['watchlist'],
     queryFn: () => watchlistApi.list(false),
+  });
+
+  const { data: alerts = [] } = useQuery({
+    queryKey: ['alerts'],
+    queryFn: () => alertsApi.list(),
   });
 
   const createMutation = useMutation({
@@ -137,7 +143,7 @@ export const WatchlistPage: React.FC = () => {
                         </span>
                       </td>
                       <td className="py-3 px-3 font-mono text-[11px] text-[#FF3B3B]">
-                        {item.alert_count || 0} hits
+                        {(alerts.filter((a) => a.plate_text === item.plate_text).length || item.alert_count || 0)} hits
                       </td>
                       <td className="py-3 px-3 text-right space-x-1">
                         <button

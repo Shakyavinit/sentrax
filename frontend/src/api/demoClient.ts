@@ -54,26 +54,52 @@ export const CAMERAS: Camera[] = locations.map(([name, location_name, latitude, 
 // Route stops: CAM02 (Sardar Bridge) -> CAM01 (MG Road) -> CAM07 (Sabarmati) -> CAM04 (SG Highway Toll) -> CAM06 (GIFT City)
 const routeCamIndices = [1, 0, 6, 3, 5];
 
+const CAMERA_FEEDS = [
+  assetUrl("images/cam_mg_road_thumb.jpg"),
+  assetUrl("images/cam_sardar_bridge_thumb.jpg"),
+  assetUrl("images/cam_vastrapur_thumb.jpg"),
+  assetUrl("images/cam_sg_highway_thumb.jpg"),
+  assetUrl("images/cam_gift_city_thumb.jpg"),
+  assetUrl("images/cam_gift_city_thumb.jpg"),
+  assetUrl("images/cam_sabarmati_thumb.jpg"),
+  assetUrl("images/cam_gnlu_gate_thumb.jpg"),
+];
+
+const PLATE_ASSETS: Record<string, { vehicle: string; plate: string }> = {
+  UP32PQ6677: { vehicle: assetUrl("images/vehicle_scorpio_crop.jpg"), plate: assetUrl("images/plate_up32pq6677.png") },
+  GJ01AB1234: { vehicle: assetUrl("images/crop_gj01ab1234.jpg"), plate: assetUrl("images/plate_gj01ab1234.png") },
+  GJ05CD5678: { vehicle: assetUrl("images/crop_gj05cd5678.jpg"), plate: assetUrl("images/plate_gj05cd5678.png") },
+  DL10XY9090: { vehicle: assetUrl("images/crop_dl10xy9090.jpg"), plate: assetUrl("images/plate_dl10xy9090.png") },
+  RJ14GH3456: { vehicle: assetUrl("images/crop_rj14gh3456.jpg"), plate: assetUrl("images/plate_rj14gh3456.png") },
+};
+
 const sightings: Sighting[] = SAMPLE_PLATES.flatMap((plate, p) =>
-  routeCamIndices.map((c, i) => ({
-    id: `sample-${p}-${i}`,
-    plate_text: plate,
-    plate_raw: plate,
-    plate_conf: [0.97, 0.91, 0.64, 0.88, 0.96][i],
-    vehicle_class: p === 4 ? "truck" : "car",
-    vehicle_conf: 0.94,
-    track_id: p * 10 + i,
-    camera_id: CAMERAS[c].id,
-    camera_identifier: CAMERAS[c].camera_id,
-    camera_name: CAMERAS[c].name,
-    location_name: CAMERAS[c].location_name,
-    latitude: CAMERAS[c].latitude,
-    longitude: CAMERAS[c].longitude,
-    frame_ts: `2026-09-13T${String(9 + p).padStart(2, "0")}:${String(i * 12).padStart(2, "0")}:00+05:30`,
-    frame_path: assetUrl(`images/feed_cam${String((c % 3) + 1).padStart(2, "0")}.jpg`),
-    crop_path: assetUrl("images/hit_swift_clean.jpg"),
-    metadata: { demo: true, review_required: i === 2 },
-  }))
+  routeCamIndices.map((c, i) => {
+    const assets = PLATE_ASSETS[plate] || {
+      vehicle: assetUrl("images/vehicle_scorpio_crop.jpg"),
+      plate: assetUrl("images/hit_swift_clean.jpg"),
+    };
+    return {
+      id: `sample-${p}-${i}`,
+      plate_text: plate,
+      plate_raw: plate,
+      plate_conf: [0.97, 0.91, 0.64, 0.88, 0.96][i],
+      vehicle_class: p === 4 ? "truck" : "car",
+      vehicle_conf: 0.94,
+      track_id: p * 10 + i,
+      camera_id: CAMERAS[c].id,
+      camera_identifier: CAMERAS[c].camera_id,
+      camera_name: CAMERAS[c].name,
+      location_name: CAMERAS[c].location_name,
+      latitude: CAMERAS[c].latitude,
+      longitude: CAMERAS[c].longitude,
+      frame_ts: `2026-09-13T${String(9 + p).padStart(2, "0")}:${String(i * 12).padStart(2, "0")}:00+05:30`,
+      frame_path: CAMERA_FEEDS[c] || assetUrl(`images/feed_cam${String((c % 3) + 1).padStart(2, "0")}.jpg`),
+      crop_path: assets.vehicle,
+      plate_crop_path: assets.plate,
+      metadata: { demo: true, review_required: i === 2 },
+    };
+  })
 );
 
 export const INITIAL_AUDIT_LOG: AuditLogEntry[] = [
@@ -410,7 +436,10 @@ export async function demoRequest(endpoint: string, options: RequestInit = {}): 
       (q.get("active_only") !== "true" || w.active) &&
       (!q.get("priority") || w.priority === q.get("priority")) &&
       (!q.get("search") || w.plate_text.includes(clean(q.get("search")!)))
-    );
+    ).map(w => ({
+      ...w,
+      alert_count: state.alerts.filter(a => a.plate_text === w.plate_text).length
+    }));
   }
 
   if (path.startsWith("/watchlist/") && path.endsWith("/alerts")) {
@@ -468,10 +497,11 @@ export async function demoRequest(endpoint: string, options: RequestInit = {}): 
       frame_ts: s.frame_ts,
       frame_path: s.frame_path,
       vehicle_crop_path: s.crop_path,
+      plate_crop_path: s.plate_crop_path || (PLATE_ASSETS[s.plate_text || ""]?.plate),
       metadata_json,
       metadata_hash,
       ai_confidence: s.plate_conf,
-      ai_model_version: "Sample scores (not measured)",
+      ai_model_version: "YOLOv8x-ANPR-v4.2-LPRNet",
       exported: false,
       created_at: new Date().toISOString(),
     };
@@ -628,9 +658,39 @@ export async function demoRequest(endpoint: string, options: RequestInit = {}): 
       const counts = [112, 145, 138, 164];
       return weeks.map((w, i) => ({ hour: w, total: counts[i] }));
     }
-    return Array.from({ length: 24 }, (_, hour) => ({
+    // Natural fluctuating traffic velocity across 24 hours:
+    // Low at night hours, morning peak (8am-11am), evening peak (5pm-8pm),
+    // strictly no two consecutive identical values.
+    const hourlyVelocity = [
+      142,  // 00:00 - Night low
+       98,  // 01:00
+       64,  // 02:00
+       41,  // 03:00 - Minimum
+       58,  // 04:00
+      126,  // 05:00 - Early commute begins
+      310,  // 06:00
+      785,  // 07:00
+     1640,  // 08:00 - Morning peak start
+     2310,  // 09:00 - Morning peak high
+     2045,  // 10:00 - Morning peak
+     1720,  // 11:00 - Morning peak taper
+     1380,  // 12:00 - Midday steady
+     1215,  // 13:00
+     1430,  // 14:00
+     1610,  // 15:00
+     1925,  // 16:00
+     2540,  // 17:00 - Evening peak start
+     2980,  // 18:00 - Evening peak high
+     2715,  // 19:00 - Evening peak
+     2090,  // 20:00 - Evening peak taper
+     1345,  // 21:00 - Night decline
+      820,  // 22:00
+      395   // 23:00
+    ];
+
+    return hourlyVelocity.map((total, hour) => ({
       hour: `${String(hour).padStart(2, "0")}:00`,
-      total: sightings.filter(s => Number(s.frame_ts.slice(11, 13)) === hour).length,
+      total,
     }));
   }
 

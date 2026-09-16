@@ -1,0 +1,4 @@
+node_modules/
+sentrax-*/
+*.png
+*.zip
