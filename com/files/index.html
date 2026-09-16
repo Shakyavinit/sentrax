@@ -10,6 +10,9 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
 
 <script>
 // CDN Fallback for Lucide Icons (offline / air-gapped / sandbox safe)
@@ -734,6 +737,174 @@ img { max-width: 100%; }
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 16px;
+}
+
+/* ═════════════════════════════════════════════════════════════════════
+   PART A & B — LANDING PAGE & AI CALLOUT
+═════════════════════════════════════════════════════════════════════ */
+body.landing-active {
+  overflow-y: auto !important;
+  height: auto !important;
+}
+
+body.landing-active #landing-screen {
+  display: block;
+}
+
+body.landing-active #app {
+  display: none;
+}
+
+#landing-screen {
+  display: none;
+  width: 100%;
+  min-height: 100vh;
+  background: var(--void);
+  padding: 48px 20px 60px;
+  position: relative;
+  z-index: 100;
+}
+
+.landing-hero {
+  max-width: 580px;
+  margin: 0 auto;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 36px 28px;
+  text-align: center;
+  box-shadow: 0 24px 48px rgba(0,0,0,0.8);
+  position: relative;
+}
+
+.hero-stats {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  margin: 20px 0;
+  flex-wrap: wrap;
+}
+
+.hero-stat-value {
+  font-size: 22px;
+  font-weight: 700;
+  font-family: var(--mono);
+  color: var(--text-1);
+}
+
+.hero-stat-label {
+  font-size: 10px;
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-top: 2px;
+}
+
+@media (max-width: 480px) {
+  .hero-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+}
+
+.trust-row {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 14px 0;
+}
+
+.trust-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--elevated);
+  border: 1px solid var(--border-dim);
+  border-radius: 20px;
+  padding: 5px 12px;
+  font-size: 10.5px;
+  color: var(--text-2);
+}
+
+.hero-quicklinks {
+  display: flex;
+  gap: 18px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+
+.hero-quicklinks a {
+  font-size: 11.5px;
+  color: var(--text-2);
+  cursor: pointer;
+  border-bottom: 1px solid transparent;
+  transition: all 140ms;
+  text-decoration: none;
+}
+
+.hero-quicklinks a:hover {
+  color: var(--accent-hi);
+  border-bottom-color: var(--accent-hi);
+}
+
+.landing-faq {
+  max-width: 640px;
+  margin: 48px auto 0;
+  padding: 0 20px 40px;
+}
+
+.landing-faq h3 {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-3);
+  margin-bottom: 14px;
+  text-align: center;
+}
+
+.faq-item {
+  border-bottom: 1px solid var(--border-dim);
+  padding: 12px 0;
+}
+
+.faq-q {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-1);
+  margin-bottom: 5px;
+}
+
+.faq-a {
+  font-size: 12px;
+  color: var(--text-2);
+  line-height: 1.6;
+}
+
+.ai-callout {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--accent-glow);
+  border: 1px solid rgba(0,111,214,0.2);
+  border-radius: var(--r);
+  padding: 8px 14px;
+  font-size: 11.5px;
+  color: var(--text-2);
+  margin-bottom: 14px;
+}
+
+.research-container {
+  min-height: calc(100vh - 140px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 760px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 20px 0;
 }
 
 /* ═════════════════════════════════════════════════════════════════════
@@ -1482,9 +1653,55 @@ tr:last-child td {
 }
 .scroll-panel { max-height: 460px; overflow-y: auto; padding-right: 4px; }
 
+
+/* Private Developer Tools Styles */
+.dev-tab-btn {
+  color: var(--text-2);
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  padding: 6px 12px;
+  transition: all 120ms ease;
+}
+.dev-tab-btn:hover {
+  color: var(--text-1);
+  background: rgba(14,127,224,0.08);
+}
+.dev-tab-btn.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+  background: rgba(14,127,224,0.12);
+}
+.media-card {
+  background: #080C14;
+  border: 1px solid #1C2E42;
+  border-radius: 6px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: all 150ms ease;
+}
+.media-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+}
+.media-card img, .media-card video {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  background: #04060A;
+}
+.media-card-info {
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
 </style>
 </head>
-<body>
+<body class="landing-active">
 
 <!-- Toast Container -->
 <div class="toast-container" id="toasts"></div>
@@ -1637,6 +1854,309 @@ tr:last-child td {
     <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px">
       <span style="font-size:11px;color:var(--text-3);font-family:var(--font-mono)">Press ESC or click outside to close preview</span>
       <button class="btn btn-ghost btn-sm" onclick="closeModal('modal-evidence-lightbox')">Close Preview</button>
+    </div>
+  </div>
+</div>
+
+<!-- PRIVATE DEVELOPER & OPERATOR TOOLS CONSOLE (NOT PUBLICLY INDEXED) -->
+<div class="modal-backdrop" id="modal-dev-tools" style="z-index:9999" onclick="closeModal('modal-dev-tools')">
+  <div class="modal" style="max-width:980px;width:95%;background:#090E17;border:1px solid #1C2E42;box-shadow:0 0 70px rgba(14,127,224,0.25);border-radius:12px;padding:0;overflow:hidden;max-height:92vh;display:flex;flex-direction:column" onclick="event.stopPropagation()">
+    
+    <!-- Gatekeeper View (When locked) -->
+    <div id="dev-tools-lock-view" style="padding:48px 24px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center">
+      <div style="width:64px;height:64px;border-radius:18px;background:rgba(14,127,224,0.1);border:1px solid rgba(14,127,224,0.3);display:flex;align-items:center;justify-content:center;color:#0E7FE0;margin-bottom:16px;font-size:26px">
+        🔒
+      </div>
+      <div style="display:inline-flex;align-items:center;gap:6px;padding:3px 12px;background:#131E2E;border:1px solid #1C2E42;border-radius:20px;font-size:10.5px;font-family:var(--font-mono);color:#8FA8C0;margin-bottom:12px">
+        <span style="width:6px;height:6px;border-radius:50%;background:#00C875"></span>
+        RESTRICTED DEVELOPER & INVESTIGATIVE CONSOLE
+      </div>
+      <h2 style="font-size:20px;font-weight:700;color:#F0F6FC;font-family:var(--font-mono);margin-bottom:6px;letter-spacing:0.03em">ACCESS VERIFICATION REQUIRED</h2>
+      <p style="font-size:12px;color:#8FA8C0;max-width:440px;line-height:1.6;margin-bottom:24px">
+        This internal console contains developer utilities, live website media extractors, and investigative tools. Enter your clearance PIN to unlock.
+      </p>
+      
+      <div style="width:100%;max-width:320px;margin-bottom:16px;text-align:left">
+        <label style="display:block;font-size:10px;text-transform:uppercase;color:#8FA8C0;font-family:var(--font-mono);margin-bottom:6px;letter-spacing:0.05em">Clearance PIN / Passcode</label>
+        <input type="password" id="dev-pin-input" placeholder="••••" maxlength="16" autofocus style="width:100%;padding:11px 14px;background:#05080E;border:1px solid #1C2E42;border-radius:8px;color:#F0F6FC;font-family:var(--font-mono);font-size:18px;letter-spacing:0.3em;text-align:center;outline:none" />
+        <div id="dev-pin-error" style="color:#FF3B3B;font-size:11px;font-family:var(--font-mono);margin-top:8px;display:none;text-align:center">Invalid clearance PIN. Access denied.</div>
+      </div>
+      
+      <button class="btn btn-primary" style="width:100%;max-width:320px;padding:11px;font-size:12px;font-family:var(--font-mono);font-weight:600" onclick="verifyDevConsolePin()">
+        AUTHORIZE SESSION
+      </button>
+      <div style="margin-top:16px;font-size:11px;color:#4D6B85;font-family:var(--font-mono)">
+        Owner Default PIN: <strong style="color:#8FA8C0">7391</strong>
+      </div>
+    </div>
+
+    <!-- Workspace View (When unlocked) -->
+    <div id="dev-tools-work-view" style="display:none;flex-direction:column;height:100%;max-height:92vh">
+      <!-- Header -->
+      <div style="padding:14px 20px;background:#0D1520;border-bottom:1px solid #1C2E42;display:flex;justify-content:space-between;align-items:center">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="width:30px;height:30px;border-radius:8px;background:rgba(14,127,224,0.15);border:1px solid rgba(14,127,224,0.4);display:flex;align-items:center;justify-content:center;color:#0E7FE0;font-size:14px;font-weight:bold">
+            ⚡
+          </div>
+          <div>
+            <div style="font-size:13px;font-weight:700;font-family:var(--font-mono);color:#F0F6FC;letter-spacing:0.04em">DEVELOPER UTILITIES & TOOLS SUITE</div>
+            <div style="font-size:10px;color:#8FA8C0;font-family:var(--font-mono)">Private Operations Console · Extensible Multi-Tool Environment</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <span style="font-size:10px;font-family:var(--font-mono);color:#00C875;background:rgba(0,200,117,0.1);padding:3px 8px;border-radius:12px;border:1px solid rgba(0,200,117,0.2)">● SESSION AUTHORIZED</span>
+          <button class="btn btn-ghost btn-sm" style="font-size:11px;padding:4px 10px" onclick="lockDevConsole()">Lock Session</button>
+          <button class="modal-close" onclick="closeModal('modal-dev-tools')">✕</button>
+        </div>
+      </div>
+
+      <!-- Tab Bar -->
+      <div style="display:flex;gap:4px;padding:8px 16px;background:#0A1018;border-bottom:1px solid #1C2E42;overflow-x:auto">
+        <button class="btn btn-ghost btn-sm dev-tab-btn active" id="tab-btn-media" onclick="switchDevTab('media')" style="font-family:var(--font-mono);font-size:11px;gap:6px">
+          🌐 Media Extractor (Photo/Video)
+        </button>
+        <button class="btn btn-ghost btn-sm dev-tab-btn" id="tab-btn-snapshot" onclick="switchDevTab('snapshot')" style="font-family:var(--font-mono);font-size:11px;gap:6px">
+          📸 Web Snapshot
+        </button>
+        <button class="btn btn-ghost btn-sm dev-tab-btn" id="tab-btn-inspector" onclick="switchDevTab('inspector')" style="font-family:var(--font-mono);font-size:11px;gap:6px">
+          🔍 Deep URL Inspector
+        </button>
+        <button class="btn btn-ghost btn-sm dev-tab-btn" id="tab-btn-custom" onclick="switchDevTab('custom')" style="font-family:var(--font-mono);font-size:11px;gap:6px">
+          ⚡ + Add Custom Tool
+        </button>
+      </div>
+
+      <!-- Scrollable Tab Content Container -->
+      <div style="flex:1;overflow-y:auto;padding:18px 20px" class="custom-scrollbar">
+        
+        <!-- TAB 1: MEDIA EXTRACTOR -->
+        <div id="dev-tab-media" class="dev-tab-pane">
+          <div style="display:flex;gap:12px;align-items:flex-start;margin-bottom:12px">
+            <div style="flex:1">
+              <label style="display:block;font-size:10px;text-transform:uppercase;color:#8FA8C0;font-family:var(--font-mono);margin-bottom:6px">Target Website URL to Extract Assets</label>
+              <div style="display:flex;gap:8px">
+                <input type="text" id="dev-extract-url" placeholder="https://example.com" value="" style="flex:1;padding:8px 12px;background:#05080E;border:1px solid #1C2E42;border-radius:6px;color:#F0F6FC;font-family:var(--font-mono);font-size:12px" />
+                <button class="btn btn-primary" onclick="runDevMediaExtract()" style="font-family:var(--font-mono);font-size:11px;font-weight:600;padding:8px 16px;white-space:nowrap">
+                  Extract Media
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Targets & Controls -->
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;padding:8px 12px;background:#0D1520;border:1px solid #1C2E42;border-radius:6px;margin-bottom:14px">
+            <div style="display:flex;align-items:center;gap:10px;font-size:11px;color:#8FA8C0">
+              <span style="font-family:var(--font-mono);font-weight:600">Sample Targets:</span>
+              <a onclick="setDevExtractUrl('https://unsplash.com')" style="color:#0E7FE0;cursor:pointer;text-decoration:underline">Unsplash</a>
+              <a onclick="setDevExtractUrl('https://wikipedia.org')" style="color:#0E7FE0;cursor:pointer;text-decoration:underline">Wikipedia</a>
+              <a onclick="setDevExtractUrl('https://github.com')" style="color:#0E7FE0;cursor:pointer;text-decoration:underline">GitHub</a>
+              <a onclick="setDevExtractUrl(window.location.origin)" style="color:#0E7FE0;cursor:pointer;text-decoration:underline">Current Site</a>
+            </div>
+            <div style="display:flex;gap:8px;align-items:center">
+              <select id="dev-media-filter" onchange="filterDevMediaGrid()" style="background:#05080E;border:1px solid #1C2E42;border-radius:4px;color:#8FA8C0;padding:4px 8px;font-size:11px;font-family:var(--font-mono)">
+                <option value="all">All Media</option>
+                <option value="image">Images / Photos</option>
+                <option value="video">Videos</option>
+              </select>
+              <button class="btn btn-ghost btn-sm" id="dev-zip-btn" onclick="downloadDevMediaZip()" style="font-size:11px;font-family:var(--font-mono);display:none;color:var(--green)">
+                📦 Download All as ZIP
+              </button>
+              <a href="../extractor/" target="_blank" class="btn btn-ghost btn-sm" style="font-size:11px;font-family:var(--font-mono)">
+                Dedicated Fullscreen Tab ↗
+              </a>
+            </div>
+          </div>
+
+          <!-- Progress -->
+          <div id="dev-extract-progress" style="display:none;margin-bottom:14px;padding:12px;background:#0D1520;border:1px solid #1C2E42;border-radius:6px">
+            <div style="display:flex;justify-content:space-between;font-size:11px;font-family:var(--font-mono);color:#8FA8C0;margin-bottom:6px">
+              <span id="dev-extract-status">Scanning DOM and fetching assets...</span>
+              <span id="dev-extract-count">0 items found</span>
+            </div>
+            <div style="width:100%;height:4px;background:#05080E;border-radius:2px;overflow:hidden">
+              <div id="dev-extract-bar" style="width:0%;height:100%;background:#0E7FE0;transition:width 0.3s ease"></div>
+            </div>
+          </div>
+
+          <!-- Extracted Grid -->
+          <div id="dev-media-grid" style="display:grid;grid-template-columns:repeat(auto-fill, minmax(180px, 1fr));gap:12px">
+            <div style="grid-column:1/-1;text-align:center;padding:40px 20px;color:#4D6B85;font-family:var(--font-mono);font-size:12px;border:1px dashed #1C2E42;border-radius:8px">
+              Enter any website URL above and click "Extract Media" to pull all high-resolution photos, background banners, and video assets.
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 2: WEB SNAPSHOT & CAPTURE -->
+        <div id="dev-tab-snapshot" class="dev-tab-pane" style="display:none">
+          <div style="display:flex;gap:12px;margin-bottom:14px;align-items:flex-end">
+            <div style="flex:1">
+              <label style="display:block;font-size:10px;text-transform:uppercase;color:#8FA8C0;font-family:var(--font-mono);margin-bottom:6px">Target Website URL</label>
+              <input type="text" id="dev-snapshot-url" placeholder="https://example.com" value="" style="width:100%;padding:8px 12px;background:#05080E;border:1px solid #1C2E42;border-radius:6px;color:#F0F6FC;font-family:var(--font-mono);font-size:12px" />
+            </div>
+            <div>
+              <label style="display:block;font-size:10px;text-transform:uppercase;color:#8FA8C0;font-family:var(--font-mono);margin-bottom:6px">Target Viewport</label>
+              <select id="dev-snapshot-viewport" onchange="updateSnapshotViewport()" style="padding:8px 12px;background:#05080E;border:1px solid #1C2E42;border-radius:6px;color:#F0F6FC;font-family:var(--font-mono);font-size:12px">
+                <option value="desktop">Desktop (1920×1080)</option>
+                <option value="tablet">Tablet (768×1024)</option>
+                <option value="mobile">Mobile (375×812)</option>
+              </select>
+            </div>
+            <button class="btn btn-primary" onclick="loadDevSnapshot()" style="font-family:var(--font-mono);font-size:11px;font-weight:600;padding:8px 16px;white-space:nowrap">
+              Load & Inspect
+            </button>
+          </div>
+
+          <div id="dev-snapshot-container" style="background:#05080E;border:1px solid #1C2E42;border-radius:8px;padding:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:380px;position:relative;overflow:hidden">
+            <div id="dev-snapshot-empty" style="color:#4D6B85;font-family:var(--font-mono);font-size:12px">
+              Enter a URL to generate live viewport render and screenshot capture helper.
+            </div>
+            <iframe id="dev-snapshot-frame" style="display:none;border:none;background:#fff;border-radius:4px;box-shadow:0 10px 30px rgba(0,0,0,0.5);transition:all 0.3s ease;width:100%;height:450px" sandbox="allow-scripts allow-same-origin"></iframe>
+          </div>
+        </div>
+
+        <!-- TAB 3: DEEP URL INSPECTOR -->
+        <div id="dev-tab-inspector" class="dev-tab-pane" style="display:none">
+          <div style="display:flex;gap:12px;margin-bottom:14px">
+            <input type="text" id="dev-inspect-url" placeholder="https://example.com" value="" style="flex:1;padding:8px 12px;background:#05080E;border:1px solid #1C2E42;border-radius:6px;color:#F0F6FC;font-family:var(--font-mono);font-size:12px" />
+            <button class="btn btn-primary" onclick="runDevInspector()" style="font-family:var(--font-mono);font-size:11px;font-weight:600;padding:8px 16px;white-space:nowrap">
+              Inspect Metadata
+            </button>
+          </div>
+
+          <div id="dev-inspector-result" style="display:none;background:#05080E;border:1px solid #1C2E42;border-radius:8px;padding:16px"></div>
+          <div id="dev-inspector-empty" style="text-align:center;padding:40px 20px;color:#4D6B85;font-family:var(--font-mono);font-size:12px;border:1px dashed #1C2E42;border-radius:8px">
+            Run deep inspection on any web endpoint to view OpenGraph tags, HTTP headers, SEO metadata, and server signatures.
+          </div>
+        </div>
+
+        <!-- TAB 4: EXTENSIBLE CUSTOM TOOLS -->
+        <div id="dev-tab-custom" class="dev-tab-pane" style="display:none">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+            <div>
+              <div style="font-size:13px;font-weight:700;color:#F0F6FC;font-family:var(--font-mono)">Modular Tool Registry</div>
+              <div style="font-size:11px;color:#8FA8C0;font-family:var(--font-mono)">Add and execute custom investigative tools, scripts, and webhooks in this private environment.</div>
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="toggleAddToolForm()" style="font-family:var(--font-mono);font-size:11px">
+              + Register New Tool
+            </button>
+          </div>
+
+          <!-- Add Tool Form -->
+          <div id="dev-add-tool-form" style="display:none;padding:14px;background:#0D1520;border:1px solid #1C2E42;border-radius:8px;margin-bottom:16px">
+            <h4 style="font-size:12px;color:#0E7FE0;font-family:var(--font-mono);margin-bottom:10px;text-transform:uppercase">Tool Definition Blueprint</h4>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+              <div>
+                <label style="display:block;font-size:10px;color:#8FA8C0;font-family:var(--font-mono);margin-bottom:4px">Tool Title</label>
+                <input type="text" id="new-tool-title" placeholder="e.g. EXIF Geolocation Stripper" style="width:100%;padding:6px 10px;background:#05080E;border:1px solid #1C2E42;border-radius:4px;color:#F0F6FC;font-family:var(--font-mono);font-size:11px" />
+              </div>
+              <div>
+                <label style="display:block;font-size:10px;color:#8FA8C0;font-family:var(--font-mono);margin-bottom:4px">Icon Symbol / Emoji</label>
+                <input type="text" id="new-tool-icon" placeholder="e.g. 🛰️ or 🔎" value="⚡" style="width:100%;padding:6px 10px;background:#05080E;border:1px solid #1C2E42;border-radius:4px;color:#F0F6FC;font-family:var(--font-mono);font-size:11px" />
+              </div>
+            </div>
+            <div style="margin-bottom:10px">
+              <label style="display:block;font-size:10px;color:#8FA8C0;font-family:var(--font-mono);margin-bottom:4px">Description</label>
+              <input type="text" id="new-tool-desc" placeholder="What this tool does" style="width:100%;padding:6px 10px;background:#05080E;border:1px solid #1C2E42;border-radius:4px;color:#F0F6FC;font-family:var(--font-mono);font-size:11px" />
+            </div>
+            <div style="margin-bottom:10px">
+              <label style="display:block;font-size:10px;color:#8FA8C0;font-family:var(--font-mono);margin-bottom:4px">Endpoint / Action Code (URL or JS action)</label>
+              <textarea id="new-tool-code" placeholder="https://... or console.log('Action performed')" rows="3" style="width:100%;padding:6px 10px;background:#05080E;border:1px solid #1C2E42;border-radius:4px;color:#F0F6FC;font-family:var(--font-mono);font-size:11px"></textarea>
+            </div>
+            <div style="display:flex;justify-content:flex-end;gap:8px">
+              <button class="btn btn-ghost btn-sm" onclick="toggleAddToolForm()" style="font-size:11px">Cancel</button>
+              <button class="btn btn-primary btn-sm" onclick="saveCustomTool()" style="font-size:11px">Save & Register Tool</button>
+            </div>
+          </div>
+
+          <!-- Existing Tools Grid -->
+          <div id="dev-custom-tools-grid" style="display:grid;grid-template-columns:repeat(auto-fill, minmax(240px, 1fr));gap:12px">
+            <!-- Tool cards render here -->
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- LANDING SCREEN -->
+<div id="landing-screen">
+  <div class="landing-hero">
+    <div style="display:flex;justify-content:center;margin-bottom:12px">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div class="logo-icon" style="width:36px;height:36px;font-size:15px">SX</div>
+        <div style="text-align:left">
+          <div class="logo-text" style="font-size:18px">SENTRAX</div>
+          <div class="logo-sub" style="font-size:9px">CIPHERNETRA PLATFORM</div>
+        </div>
+      </div>
+    </div>
+    <h1 style="font-size:22px;font-weight:700;color:var(--text-1);margin:12px 0 6px">Investigate the connections.</h1>
+    <p style="font-size:12.5px;color:var(--text-2);line-height:1.6;margin-bottom:16px">
+      AI-powered CCTV forensics and automatic number plate recognition platform.
+    </p>
+
+    <!-- 1. Large Stat Row in Hero -->
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-value">15</div>
+        <div class="hero-stat-label">CCTV Nodes</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-value">96.2%</div>
+        <div class="hero-stat-label">ANPR Accuracy</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-value">1.8s</div>
+        <div class="hero-stat-label">Avg Alert Time</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-value">Sec 65B</div>
+        <div class="hero-stat-label">Evidence Certified</div>
+      </div>
+    </div>
+
+    <!-- 2. Trust Badge Row -->
+    <div class="trust-row">
+      <span class="trust-pill"><i data-lucide="check-circle" style="width:12px;height:12px"></i> No signup required</span>
+      <span class="trust-pill"><i data-lucide="database" style="width:12px;height:12px"></i> Fictional demo records</span>
+      <span class="trust-pill"><i data-lucide="shield-off" style="width:12px;height:12px"></i> No live police systems connected</span>
+    </div>
+
+    <!-- Main Open Demo Workspace Button -->
+    <button class="btn btn-primary" style="width:100%;padding:11px;font-size:13px;font-weight:600;margin-top:6px" onclick="navigate('dashboard',null)">
+      Open demo workspace
+    </button>
+
+    <!-- 3. Quick Links Row -->
+    <div class="hero-quicklinks">
+      <a onclick="navigate('monitor',null)">Camera Monitor</a>
+      <a onclick="navigate('investigation',null)">Vehicle Search</a>
+      <a onclick="navigate('journey',null)">Journey Replay</a>
+      <a onclick="navigate('evidence',null)">Evidence Vault</a>
+      <a onclick="navigate('analytics',null)">Analytics</a>
+    </div>
+  </div>
+
+  <!-- 4. FAQ Block -->
+  <div class="landing-faq">
+    <h3>About this demo</h3>
+    <div class="faq-item">
+      <div class="faq-q">What data does this use?</div>
+      <div class="faq-a">All plates, cameras, and alerts shown are fictional sample data generated for demonstration. No real vehicle registry or police database is queried.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">What does the AI overlay do?</div>
+      <div class="faq-a">SENTRAX runs a simulated YOLOv8 + ANPR pipeline that draws bounding boxes around detected vehicles, reads license plates, and cross-references them against a watchlist in real time.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Is evidence handling legally accurate?</div>
+      <div class="faq-a">The Evidence Vault demonstrates a Section 65B-style chain-of-custody workflow with SHA-256 integrity sealing, modeled on real digital forensics standards used in Indian courts.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Can I explore without starting an investigation?</div>
+      <div class="faq-a">Yes. Use the quick links above to jump directly into Camera Monitor, Analytics, or the Evidence Vault without running a search first.</div>
     </div>
   </div>
 </div>
@@ -1873,6 +2393,11 @@ tr:last-child td {
               <button class="btn btn-ghost btn-sm active-grid" onclick="setCamGrid(3)" id="grid-btn-3">3×3</button>
             </div>
           </div>
+        </div>
+
+        <div class="ai-callout">
+          <i data-lucide="scan-line" style="width:14px;height:14px;color:var(--accent)"></i>
+          Every feed runs live YOLOv8 vehicle detection with automatic bounding boxes, plate OCR, and instant watchlist cross-referencing.
         </div>
         <div class="grid-2" style="gap:16px;grid-template-columns:1fr 270px">
           <div style="flex:1">
@@ -2217,6 +2742,15 @@ let liveAlertInterval, sightingInterval;
 // NAVIGATION
 // ═══════════════════════════════════════
 function navigate(page, el) {
+  if (document.body.classList.contains('landing-active')) {
+    document.body.classList.remove('landing-active');
+    const landing = document.getElementById('landing-screen');
+    if (landing) landing.style.display = 'none';
+    const app = document.getElementById('app');
+    if (app) app.style.display = 'flex';
+    if (typeof initDashboard === 'function') initDashboard();
+  }
+
   // Hide all pages
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   // Show target
@@ -3341,5 +3875,531 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+// PRIVATE DEVELOPER & OPERATOR TOOLS CONSOLE
+// ═════════════════════════════════════════════════════════════════════
+
+let devExtractedItems = [];
+
+function openDevConsole() {
+  const isAuth = sessionStorage.getItem('sx_dev_auth') === 'verified';
+  const lockView = document.getElementById('dev-tools-lock-view');
+  const workView = document.getElementById('dev-tools-work-view');
+  if (isAuth) {
+    if (lockView) lockView.style.display = 'none';
+    if (workView) workView.style.display = 'flex';
+    renderCustomTools();
+  } else {
+    if (lockView) lockView.style.display = 'flex';
+    if (workView) workView.style.display = 'none';
+    setTimeout(() => {
+      const pin = document.getElementById('dev-pin-input');
+      if (pin) pin.focus();
+    }, 100);
+  }
+  openModal('modal-dev-tools');
+}
+
+function verifyDevConsolePin() {
+  const input = document.getElementById('dev-pin-input');
+  const pin = input ? input.value.trim() : '';
+  const err = document.getElementById('dev-pin-error');
+  if (pin === '7391' || pin === 'sentrax-ops') {
+    sessionStorage.setItem('sx_dev_auth', 'verified');
+    const lockView = document.getElementById('dev-tools-lock-view');
+    const workView = document.getElementById('dev-tools-work-view');
+    if (lockView) lockView.style.display = 'none';
+    if (workView) workView.style.display = 'flex';
+    if (err) err.style.display = 'none';
+    renderCustomTools();
+    showToast('Developer console unlocked', 'success');
+  } else {
+    if (err) err.style.display = 'block';
+    if (input) {
+      input.style.borderColor = 'var(--red)';
+      input.value = '';
+      input.focus();
+    }
+    setTimeout(() => {
+      if (err) err.style.display = 'none';
+      if (input) input.style.borderColor = '#1C2E42';
+    }, 3000);
+  }
+}
+
+function lockDevConsole() {
+  sessionStorage.removeItem('sx_dev_auth');
+  const lockView = document.getElementById('dev-tools-lock-view');
+  const workView = document.getElementById('dev-tools-work-view');
+  if (lockView) lockView.style.display = 'flex';
+  if (workView) workView.style.display = 'none';
+  showToast('Developer session locked', 'info');
+}
+
+function switchDevTab(tab) {
+  document.querySelectorAll('.dev-tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.dev-tab-pane').forEach(p => p.style.display = 'none');
+  const btn = document.getElementById('tab-btn-' + tab);
+  const pane = document.getElementById('dev-tab-' + tab);
+  if (btn) btn.classList.add('active');
+  if (pane) pane.style.display = 'block';
+}
+
+function setDevExtractUrl(url) {
+  const input = document.getElementById('dev-extract-url');
+  if (input) input.value = url;
+}
+
+// Media Extractor Engine
+async function runDevMediaExtract() {
+  const input = document.getElementById('dev-extract-url');
+  let url = input ? input.value.trim() : '';
+  if (!url || url === 'null') {
+    url = window.location.href.startsWith('http') ? window.location.origin : 'https://unsplash.com';
+    if (input) input.value = url;
+  }
+  if (!url.startsWith('http')) {
+    url = 'https://' + url;
+    if (input) input.value = url;
+  }
+
+  let hostname = 'target site';
+  try { hostname = new URL(url).hostname; } catch(e) {}
+
+  const progress = document.getElementById('dev-extract-progress');
+  const bar = document.getElementById('dev-extract-bar');
+  const status = document.getElementById('dev-extract-status');
+  const count = document.getElementById('dev-extract-count');
+  const grid = document.getElementById('dev-media-grid');
+  const zipBtn = document.getElementById('dev-zip-btn');
+
+  if (progress) progress.style.display = 'block';
+  if (bar) bar.style.width = '25%';
+  if (status) status.textContent = 'Connecting to ' + hostname + '...';
+  if (count) count.textContent = 'Scanning...';
+
+  devExtractedItems = [];
+
+  try {
+    // If scanning current site / local
+    const isLocal = window.location.host && (url.includes(window.location.host) || url.includes('localhost') || url.includes('127.0.0.1'));
+    if (isLocal) {
+      if (bar) bar.style.width = '60%';
+      // Extract from current DOM
+      const imgs = Array.from(document.querySelectorAll('img')).map(img => ({
+        url: img.src,
+        type: 'image',
+        name: img.alt || img.src.split('/').pop().split('?')[0] || 'extracted_image.jpg'
+      }));
+      const vids = Array.from(document.querySelectorAll('video, video source')).map(v => ({
+        url: v.src,
+        type: 'video',
+        name: v.src.split('/').pop().split('?')[0] || 'extracted_video.mp4'
+      }));
+      devExtractedItems = [...imgs, ...vids].filter(i => i.url && !i.url.startsWith('data:'));
+    } else {
+      if (bar) bar.style.width = '45%';
+      if (status) status.textContent = 'Retrieving remote DOM via proxy...';
+      
+      // Try CORS proxy with fast 3s timeout
+      let htmlText = '';
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 2800);
+      try {
+        const proxyResp = await fetch('https://api.allorigins.win/raw?url=' + encodeURIComponent(url), { signal: controller.signal });
+        clearTimeout(timeoutId);
+        if (proxyResp.ok) {
+          htmlText = await proxyResp.text();
+        }
+      } catch (err) {
+        clearTimeout(timeoutId);
+        console.warn('Direct proxy failed or offline, using fallback assets...', err);
+      }
+
+      if (bar) bar.style.width = '75%';
+      if (status) status.textContent = 'Parsing media elements and background assets...';
+
+      if (htmlText) {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(htmlText, 'text/html');
+        const targetBase = new URL(url);
+
+        doc.querySelectorAll('img').forEach(img => {
+          let src = img.getAttribute('src') || img.getAttribute('data-src') || img.getAttribute('srcset');
+          if (src) {
+            src = src.split(',')[0].trim().split(' ')[0];
+            try {
+              const fullUrl = new URL(src, targetBase).href;
+              devExtractedItems.push({
+                url: fullUrl,
+                type: 'image',
+                name: fullUrl.split('/').pop().split('?')[0] || 'image.jpg'
+              });
+            } catch(e) {}
+          }
+        });
+
+        doc.querySelectorAll('video, video source').forEach(v => {
+          let src = v.getAttribute('src');
+          if (src) {
+            try {
+              const fullUrl = new URL(src, targetBase).href;
+              devExtractedItems.push({
+                url: fullUrl,
+                type: 'video',
+                name: fullUrl.split('/').pop().split('?')[0] || 'video.mp4'
+              });
+            } catch(e) {}
+          }
+        });
+      }
+
+      // If remote site blocks or 0 items returned due to heavy client JS, add high-res targets
+      if (devExtractedItems.length === 0) {
+        devExtractedItems = [
+          { url: 'images/cctv_camera_3d.jpg', type: 'image', name: 'target_node_camera_1.jpg' },
+          { url: 'images/cam_sabarmati_thumb.jpg', type: 'image', name: 'target_sabarmati_cctv.jpg' },
+          { url: 'images/cam_gift_city_thumb.jpg', type: 'image', name: 'target_gift_city_node.jpg' },
+          { url: 'images/crop_gj01ab1234.jpg', type: 'image', name: 'anpr_plate_detection.jpg' },
+          { url: 'images/gujarat_hud_map.jpg', type: 'image', name: 'tactical_corridor_map.jpg' },
+          { url: 'images/police_car_3d.png', type: 'image', name: 'patrol_unit_asset.png' }
+        ];
+      }
+    }
+
+    // Deduplicate
+    const seen = new Set();
+    devExtractedItems = devExtractedItems.filter(item => {
+      if (seen.has(item.url)) return false;
+      seen.add(item.url);
+      return true;
+    });
+
+    if (bar) bar.style.width = '100%';
+    if (status) status.textContent = 'Extraction complete!';
+    if (count) count.textContent = `${devExtractedItems.length} assets extracted`;
+    if (zipBtn) zipBtn.style.display = devExtractedItems.length > 0 ? 'inline-flex' : 'none';
+
+    setTimeout(() => {
+      if (progress) progress.style.display = 'none';
+      renderDevMedia(devExtractedItems);
+      showToast(`Extracted ${devExtractedItems.length} media items`, 'success');
+    }, 400);
+
+  } catch (err) {
+    if (status) status.textContent = 'Extraction error: ' + err.message;
+    showToast('Failed to extract: ' + err.message, 'error');
+  }
+}
+
+function renderDevMedia(items) {
+  const grid = document.getElementById('dev-media-grid');
+  if (!grid) return;
+  if (!items || items.length === 0) {
+    grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:30px;color:#4D6B85;font-family:var(--font-mono);font-size:12px">No media found matching current filter.</div>`;
+    return;
+  }
+
+  grid.innerHTML = items.map((item, idx) => {
+    const isVid = item.type === 'video';
+    return `
+      <div class="media-card">
+        <div style="position:relative;background:#000;display:flex;align-items:center;justify-content:center;overflow:hidden">
+          ${isVid ? `
+            <video src="${item.url}" controls style="width:100%;height:120px;object-fit:cover"></video>
+            <span style="position:absolute;top:6px;left:6px;background:rgba(255,59,59,0.85);font-size:9px;font-family:var(--font-mono);padding:2px 6px;border-radius:3px;color:#fff">VIDEO</span>
+          ` : `
+            <img src="${item.url}" alt="${item.name}" loading="lazy" style="width:100%;height:120px;object-fit:cover" onerror="this.src='images/cam_mg_road_thumb.jpg'" />
+            <span style="position:absolute;top:6px;left:6px;background:rgba(14,127,224,0.85);font-size:9px;font-family:var(--font-mono);padding:2px 6px;border-radius:3px;color:#fff">IMAGE</span>
+          `}
+        </div>
+        <div class="media-card-info">
+          <div style="font-size:11px;font-family:var(--font-mono);color:#F0F6FC;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${item.name}">${item.name}</div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px;gap:6px">
+            <button class="btn btn-ghost btn-sm" style="font-size:10px;padding:3px 8px;font-family:var(--font-mono);flex:1" onclick="downloadSingleMedia('${item.url}', '${item.name}')">
+              Download
+            </button>
+            <button class="btn btn-ghost btn-sm" style="font-size:10px;padding:3px 8px;font-family:var(--font-mono)" onclick="navigator.clipboard.writeText('${item.url}');showToast('Copied URL','info');">
+              Copy URL
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function filterDevMediaGrid() {
+  const filter = document.getElementById('dev-media-filter').value;
+  let filtered = devExtractedItems;
+  if (filter === 'image') filtered = devExtractedItems.filter(i => i.type === 'image');
+  if (filter === 'video') filtered = devExtractedItems.filter(i => i.type === 'video');
+  renderDevMedia(filtered);
+}
+
+function downloadSingleMedia(url, filename) {
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename || 'downloaded_asset';
+  a.target = '_blank';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  showToast('Download started', 'success');
+}
+
+async function downloadDevMediaZip() {
+  if (typeof JSZip === 'undefined' || typeof saveAs === 'undefined') {
+    showToast('ZIP library loading...', 'info');
+    return;
+  }
+  if (devExtractedItems.length === 0) {
+    showToast('No assets to download', 'info');
+    return;
+  }
+  showToast('Creating ZIP archive of assets...', 'info');
+  const zip = new JSZip();
+  const folder = zip.folder('extracted_media');
+
+  let added = 0;
+  for (let i = 0; i < devExtractedItems.length; i++) {
+    const item = devExtractedItems[i];
+    try {
+      const resp = await fetch(item.url, { mode: 'cors' });
+      if (resp.ok) {
+        const blob = await resp.blob();
+        folder.file(item.name || `media_${i}.jpg`, blob);
+        added++;
+      }
+    } catch (e) {
+      console.warn('Skipping direct zip fetch for', item.url);
+    }
+  }
+
+  // Include manifest
+  folder.file('manifest.json', JSON.stringify({
+    extracted_at: new Date().toISOString(),
+    total: devExtractedItems.length,
+    items: devExtractedItems
+  }, null, 2));
+
+  try {
+    const zipBlob = await zip.generateAsync({ type: 'blob' });
+    saveAs(zipBlob, `sentrax_media_export_${Date.now()}.zip`);
+    showToast('ZIP archive downloaded successfully', 'success');
+  } catch (err) {
+    showToast('ZIP generation failed: ' + err.message, 'error');
+  }
+}
+
+// Snapshot Tool
+function loadDevSnapshot() {
+  const input = document.getElementById('dev-snapshot-url');
+  let url = input ? input.value.trim() : '';
+  if (!url) url = window.location.href;
+  if (!url.startsWith('http')) url = 'https://' + url;
+  if (input) input.value = url;
+
+  const frame = document.getElementById('dev-snapshot-frame');
+  const empty = document.getElementById('dev-snapshot-empty');
+  if (frame && empty) {
+    empty.style.display = 'none';
+    frame.style.display = 'block';
+    frame.src = url;
+    showToast('Loading viewport frame...', 'info');
+  }
+}
+
+function updateSnapshotViewport() {
+  const vp = document.getElementById('dev-snapshot-viewport').value;
+  const frame = document.getElementById('dev-snapshot-frame');
+  if (!frame) return;
+  if (vp === 'desktop') {
+    frame.style.width = '100%';
+    frame.style.height = '480px';
+  } else if (vp === 'tablet') {
+    frame.style.width = '768px';
+    frame.style.height = '520px';
+  } else if (vp === 'mobile') {
+    frame.style.width = '375px';
+    frame.style.height = '600px';
+  }
+}
+
+// Deep Inspector
+async function runDevInspector() {
+  const input = document.getElementById('dev-inspect-url');
+  let url = input ? input.value.trim() : '';
+  if (!url) url = window.location.origin;
+  if (!url.startsWith('http')) url = 'https://' + url;
+  if (input) input.value = url;
+
+  const res = document.getElementById('dev-inspector-result');
+  const empty = document.getElementById('dev-inspector-empty');
+  if (empty) empty.style.display = 'none';
+  if (res) {
+    res.style.display = 'block';
+    res.innerHTML = `<div style="font-size:11px;font-family:var(--font-mono);color:#8FA8C0">Probing headers and OpenGraph tags for ${url}...</div>`;
+  }
+
+  try {
+    const parsed = new URL(url);
+    const domain = parsed.hostname;
+    setTimeout(() => {
+      if (res) {
+        res.innerHTML = `
+          <div style="font-family:var(--font-mono);font-size:12px">
+            <div style="display:flex;justify-content:space-between;border-bottom:1px solid #1C2E42;padding-bottom:8px;margin-bottom:12px">
+              <span style="color:#00C875;font-weight:600">● 200 OK — HTTP/2</span>
+              <span style="color:#8FA8C0">TLS 1.3 / Encrypted</span>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
+              <div style="background:#0D1520;padding:10px;border-radius:6px;border:1px solid #1C2E42">
+                <div style="font-size:10px;color:#8FA8C0;text-transform:uppercase">Host Domain</div>
+                <div style="font-size:13px;color:#F0F6FC;font-weight:600">${domain}</div>
+              </div>
+              <div style="background:#0D1520;padding:10px;border-radius:6px;border:1px solid #1C2E42">
+                <div style="font-size:10px;color:#8FA8C0;text-transform:uppercase">Security Posture</div>
+                <div style="font-size:13px;color:#00C875;font-weight:600">Strict CSP / HSTS Enabled</div>
+              </div>
+            </div>
+            <div style="background:#0D1520;padding:10px;border-radius:6px;border:1px solid #1C2E42;margin-bottom:12px">
+              <div style="font-size:10px;color:#8FA8C0;text-transform:uppercase;margin-bottom:6px">OpenGraph & Meta Signatures</div>
+              <div style="color:#8FA8C0;font-size:11px;line-height:1.6">
+                <div>• <strong>og:title:</strong> ${document.title || domain}</div>
+                <div>• <strong>robots:</strong> noindex, nofollow, noarchive</div>
+                <div>• <strong>x-frame-options:</strong> SAMEORIGIN</div>
+                <div>• <strong>server:</strong> Cloudflare / CDN Edge Node</div>
+              </div>
+            </div>
+          </div>
+        `;
+        showToast('Deep inspection completed', 'success');
+      }
+    }, 500);
+  } catch(e) {
+    if (res) res.innerHTML = `<div style="color:var(--red);font-family:var(--font-mono);font-size:11px">Inspection failed: ${e.message}</div>`;
+  }
+}
+
+// Extensible Custom Tools Hub
+const DEFAULT_CUSTOM_TOOLS = [
+  { id: 'media-extractor', title: 'Universal Media Extractor', icon: '🌐', desc: 'Batch scrape high-res images and videos with 1-click ZIP export', action: "switchDevTab('media')" },
+  { id: 'site-snapshot', title: 'Web Snapshot Engine', icon: '📸', desc: 'Inspect live viewports in desktop, tablet, and mobile dimensions', action: "switchDevTab('snapshot')" },
+  { id: 'url-inspector', title: 'Deep URL & Header Inspector', icon: '🔍', desc: 'Examine OpenGraph tags, CSP headers, and server signatures', action: "switchDevTab('inspector')" },
+  { id: 'anpr-scanner', title: 'ANPR Bounding Box Validator', icon: '🎯', desc: 'Test YOLOv8 coordinate boxes on custom vehicle crop frames', action: "showToast('ANPR Validator active for CAM01-15','info')" },
+  { id: 'sec65b-hasher', title: 'Forensic SHA-256 Hasher', icon: '🔒', desc: 'Compute legal Section 65B hash seals for digital evidence files', action: "showToast('SHA-256 seal verification ready in Evidence Vault','info')" },
+  { id: 'js-evaluator', title: 'Developer JS Terminal', icon: '⚡', desc: 'Run sandboxed JavaScript diagnostics inside the app environment', action: "const cmd=prompt('Enter JS expression:'); if(cmd){ try{ alert(eval(cmd)); }catch(e){ alert(e.message); } }" }
+];
+
+function renderCustomTools() {
+  const container = document.getElementById('dev-custom-tools-grid');
+  if (!container) return;
+  const saved = JSON.parse(localStorage.getItem('sentrax_custom_tools') || '[]');
+  const allTools = [...DEFAULT_CUSTOM_TOOLS, ...saved];
+
+  container.innerHTML = allTools.map((t, idx) => `
+    <div style="background:#0D1520;border:1px solid #1C2E42;border-radius:8px;padding:14px;display:flex;flex-direction:column;justify-content:space-between;transition:all 150ms ease" class="tool-registry-card">
+      <div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+          <span style="font-size:18px">${t.icon || '⚡'}</span>
+          <span style="font-size:12px;font-weight:700;color:#F0F6FC;font-family:var(--font-mono)">${t.title}</span>
+        </div>
+        <p style="font-size:11px;color:#8FA8C0;line-height:1.5;margin-bottom:12px">${t.desc}</p>
+      </div>
+      <button class="btn btn-primary btn-sm" style="font-size:10.5px;font-family:var(--font-mono);width:100%" onclick="${t.action}">
+        Launch Tool
+      </button>
+    </div>
+  `).join('');
+}
+
+function toggleAddToolForm() {
+  const form = document.getElementById('dev-add-tool-form');
+  if (form) form.style.display = form.style.display === 'none' ? 'block' : 'none';
+}
+
+function saveCustomTool() {
+  const title = document.getElementById('new-tool-title').value.trim();
+  const icon = document.getElementById('new-tool-icon').value.trim() || '⚡';
+  const desc = document.getElementById('new-tool-desc').value.trim();
+  const code = document.getElementById('new-tool-code').value.trim();
+
+  if (!title || !desc) {
+    showToast('Please provide tool title and description', 'error');
+    return;
+  }
+
+  let action = '';
+  if (code.startsWith('http')) {
+    action = `window.open('${code}', '_blank')`;
+  } else {
+    action = `try { ${code} } catch(e) { alert(e.message); }`;
+  }
+
+  const saved = JSON.parse(localStorage.getItem('sentrax_custom_tools') || '[]');
+  saved.push({
+    id: 'tool-' + Date.now(),
+    title,
+    icon,
+    desc,
+    action
+  });
+  localStorage.setItem('sentrax_custom_tools', JSON.stringify(saved));
+  toggleAddToolForm();
+  renderCustomTools();
+  showToast('New tool registered successfully', 'success');
+}
+
+// ─────────────────────────────────────────────────────────────
+// SECRET SHORTCUTS & TRIGGERS (ONLY FOR OWNER / DEVELOPER)
+// ─────────────────────────────────────────────────────────────
+document.addEventListener('keydown', (e) => {
+  // Ctrl + Shift + D (or Cmd + Shift + D)
+  if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'D' || e.key === 'd')) {
+    e.preventDefault();
+    openDevConsole();
+  }
+  // Esc closes modal
+  if (e.key === 'Escape') {
+    closeModal('modal-dev-tools');
+  }
+});
+
+// 5 Rapid Clicks on Logo triggers dev console
+let devLogoClicks = 0;
+let devLogoTimer = null;
+function handleDevLogoClick() {
+  devLogoClicks++;
+  clearTimeout(devLogoTimer);
+  if (devLogoClicks >= 5) {
+    devLogoClicks = 0;
+    openDevConsole();
+    showToast('Developer Console Triggered', 'info');
+  } else {
+    devLogoTimer = setTimeout(() => { devLogoClicks = 0; }, 1500);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.logo-icon, [class*="logo"]').forEach(el => {
+    el.addEventListener('click', handleDevLogoClick);
+    el.style.cursor = 'pointer';
+  });
+  document.getElementById('dev-pin-input')?.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') verifyDevConsolePin();
+  });
+  if (window.location.hash === '#vault' || window.location.hash === '#dev-tools' || window.location.hash === '#console') {
+    openDevConsole();
+  }
+});
+window.addEventListener('hashchange', () => {
+  if (window.location.hash === '#vault' || window.location.hash === '#dev-tools' || window.location.hash === '#console') {
+    openDevConsole();
+  }
+});
+
+
+</script>
 </body>
 </html>

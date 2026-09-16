@@ -49,6 +49,18 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode; requiredRole?: strin
 const basename = typeof window !== 'undefined' && window.location.pathname.startsWith('/sentrax') ? '/sentrax' : '';
 
 export const App: React.FC = () => {
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'D' || e.key === 'd')) {
+        e.preventDefault();
+        const extHref = typeof window !== 'undefined' && window.location.pathname.startsWith('/sentrax') ? '/sentrax/extractor/' : '/extractor/';
+        window.open(extHref, '_blank');
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter basename={basename}>
