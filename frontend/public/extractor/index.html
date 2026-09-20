@@ -182,6 +182,133 @@
       </div>
     </section>
 
+    <!-- 🏆 Official Hackathon Evaluation & Submission Suite -->
+    <section class="bg-gradient-to-b from-[#0D1829] to-[#0A101C] border border-blue-500/30 rounded-2xl p-5 sm:p-6 shadow-2xl relative overflow-hidden">
+      <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 pb-4 border-b border-[#1C2E42]">
+        <div>
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-900/60 border border-blue-500/50 text-blue-300 text-xs font-mono font-bold mb-2">
+            <i data-lucide="award" class="w-4 h-4 text-amber-400"></i>
+            <span>OFFICIAL HACKATHON EVALUATION & SUBMISSION PACK</span>
+          </div>
+          <h2 class="text-xl sm:text-2xl font-bold font-mono text-white">
+            Ready-to-Submit Video Demo, Screenshots & Project Dossier
+          </h2>
+          <p class="text-xs text-slate-300 max-w-3xl mt-1">
+            Hackathon competition evaluation aur judges ke liye official 1080p demo video, sabhi modules ke original pixel-perfect HD screenshots, aur complete submission text ready hai.
+          </p>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-3">
+          <!-- 1-Click Master Hackathon Kit ZIP -->
+          <a 
+            href="../hackathon_kit/SENTRAX_Hackathon_Submission_Kit.zip" 
+            download="SENTRAX_Hackathon_Submission_Kit.zip"
+            class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-mono text-xs font-bold transition-all shadow-lg shadow-emerald-600/30 flex items-center gap-2 active:scale-95 border border-emerald-400/40"
+          >
+            <i data-lucide="package" class="w-4 h-4"></i>
+            <span>DOWNLOAD SUBMISSION KIT (.ZIP - 13 MB)</span>
+          </a>
+
+          <!-- Direct MP4 Video Download -->
+          <a 
+            href="../hackathon_kit/sentrax_hackathon_demo.mp4" 
+            download="SENTRAX_Official_Hackathon_Demo.mp4"
+            class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-mono text-xs font-bold transition-all shadow-lg shadow-blue-600/30 flex items-center gap-2 active:scale-95 border border-blue-400/40"
+          >
+            <i data-lucide="video" class="w-4 h-4"></i>
+            <span>DOWNLOAD 1080p DEMO VIDEO (.MP4)</span>
+          </a>
+
+          <!-- Copy Hackathon Text -->
+          <button 
+            type="button" 
+            onclick="copyHackathonDossier()"
+            id="copy-dossier-btn"
+            class="px-3.5 py-2.5 rounded-xl bg-[#131F30] hover:bg-[#1A2D42] text-slate-200 font-mono text-xs font-bold transition-all border border-[#1C2E42] flex items-center gap-2 active:scale-95"
+          >
+            <i data-lucide="copy" class="w-4 h-4 text-[#0E7FE0]"></i>
+            <span id="copy-dossier-label">COPY SUBMISSION TEXT</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Embedded Video Player Grid -->
+      <div class="mt-5 grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+        <!-- Left 2 Cols: 1080p Video Player -->
+        <div class="lg:col-span-2 space-y-3">
+          <div class="flex items-center justify-between text-xs font-mono text-slate-400">
+            <span class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-red-500 animate-ping"></span>
+              <strong class="text-white">OFFICIAL HACKATHON DEMO VIDEO</strong> (1080p • 73s • With Audio)
+            </span>
+            <span class="text-blue-400 font-bold">1920 × 1080 FULL HD</span>
+          </div>
+
+          <div class="relative bg-black rounded-xl overflow-hidden border border-[#1C2E42] shadow-2xl aspect-video">
+            <video 
+              id="featured-demo-video"
+              src="../hackathon_kit/sentrax_hackathon_demo.mp4" 
+              controls 
+              playsinline
+              preload="metadata"
+              poster="../hackathon_kit/screenshots/01_Command_Dashboard.png"
+              class="w-full h-full object-contain"
+            ></video>
+          </div>
+          <div class="flex items-center justify-between text-[11px] font-mono text-slate-400 px-1">
+            <span>Covers: Executive Command Dashboard, Tactical 2x3 Grid, Live CCTV Feeds, Suspect Replay, Route Builder, Evidence Vault</span>
+            <a href="../hackathon_kit/sentrax_hackathon_demo.mp4" download="SENTRAX_Hackathon_Demo.mp4" class="text-[#0E7FE0] hover:underline flex items-center gap-1 font-bold">
+              <i data-lucide="download" class="w-3 h-3"></i> Direct MP4 Download (8 MB)
+            </a>
+          </div>
+        </div>
+
+        <!-- Right 1 Col: Quick Submission Summary Card -->
+        <div class="bg-[#080D16] border border-[#1C2E42] rounded-xl p-4 space-y-3 font-mono">
+          <div class="flex items-center justify-between border-b border-[#1C2E42] pb-2">
+            <span class="text-xs font-bold text-white uppercase">Submission Checklist</span>
+            <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800">100% READY</span>
+          </div>
+
+          <div class="space-y-2 text-xs">
+            <div class="flex items-start gap-2 text-slate-300">
+              <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400 shrink-0 mt-0.5"></i>
+              <span><strong>Working Platform:</strong> Live hosted prototype on GitHub Pages</span>
+            </div>
+            <div class="flex items-start gap-2 text-slate-300">
+              <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400 shrink-0 mt-0.5"></i>
+              <span><strong>Demo Video:</strong> 73s comprehensive 1080p MP4 with telemetry HUD & sound</span>
+            </div>
+            <div class="flex items-start gap-2 text-slate-300">
+              <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400 shrink-0 mt-0.5"></i>
+              <span><strong>10 Screenshots:</strong> Original pixel-perfect 1920x1080 PNG captures</span>
+            </div>
+            <div class="flex items-start gap-2 text-slate-300">
+              <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400 shrink-0 mt-0.5"></i>
+              <span><strong>Section 65B:</strong> Chain of Custody tamper-evident evidence logs</span>
+            </div>
+          </div>
+
+          <div class="pt-3 border-t border-[#1C2E42] space-y-2">
+            <a 
+              href="../hackathon_kit/SENTRAX_Hackathon_Submission_Kit.zip" 
+              download 
+              class="w-full py-2.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold text-center block transition shadow-md shadow-emerald-600/20"
+            >
+              📥 Download Complete Kit (.ZIP)
+            </a>
+            <a 
+              href="../hackathon_kit/sentrax_hackathon_demo.mp4" 
+              download="SENTRAX_Demo.mp4" 
+              class="w-full py-2 rounded-lg bg-[#131F30] hover:bg-[#1A2638] text-slate-300 text-xs font-bold text-center block transition border border-[#1C2E42]"
+            >
+              🎬 Download Demo MP4 (8 MB)
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Interactive "How to Use" Step-by-Step Platform Guide -->
     <section class="bg-[#0C121D] border border-[#1A2638] rounded-2xl p-5 flex flex-col gap-4">
       <div class="flex flex-wrap items-center justify-between gap-3">
@@ -485,129 +612,194 @@
 
   <!-- Javascript -->
   <script>
-    // Official Screens of https://shakyavinit.github.io/sentrax/
+    // Official Real Screens of https://shakyavinit.github.io/sentrax/
     const PLATFORM_SCREENS = [
       {
-        id: 'screen_overview',
+        id: '01_Command_Dashboard',
         route: '/',
-        title: 'Command Center Overview & Statewide Topology',
-        category: 'OVERVIEW',
-        desc: 'Yahan officer Gujarat Police municipal CCTV cameras ka statewide health status, active Sentinel nodes, live ANPR detection rate, aur recent vehicle sightings feed ek single command dashboard me monitor karta hai.',
+        title: 'Executive Command Dashboard & Worker Health',
+        category: 'COMMAND SOC',
+        desc: 'Central law enforcement operations overview: 15 active CCTV cameras, ANPR accuracy telemetry (96.2%), asynchronous Redis/Celery worker nodes, and live vehicle sightings ticker.',
         bullets: [
-          'Live statistics: 15 Cameras Online, 98.4% OCR Confidence',
-          'Interactive Gujarat GIS topology map with camera nodes',
-          'Recent vehicle sightings ticker with timestamp & speed'
+          'Statewide telemetry: 15 Cameras Online, 96.2% ANPR accuracy',
+          'Live status of Redis Task Broker & Celery Prefork Workers',
+          'Immediate access to vehicle search, alerts, and live video feeds'
         ],
-        image: '../images/gujarat_map_tactical.jpg',
+        image: '../hackathon_kit/screenshots/01_Command_Dashboard.png',
         video: '../videos/traffic_city_junction.mp4',
         isVideo: false
       },
       {
-        id: 'screen_live',
+        id: '02_Live_CCTV_GIS_Map',
         route: '/live',
-        title: 'Live CCTV Surveillance Matrix (Multi-Camera Feeds)',
+        title: 'Live CCTV Surveillance Matrix & Smart ANPR',
         category: 'LIVE MONITOR',
-        desc: 'Simultaneous 4-camera video streaming matrix. Officers can inspect live CCTV streams, watch bounding box tracking, and check camera telemetry in real-time.',
+        desc: 'Simultaneous CCTV video streams with real-time AI bounding boxes, license plate classifications (UP32PQ6677, GJ01AB1234, GJ05CD5678), and speed telemetry.',
         bullets: [
-          '4-split simultaneous HLS/MP4 video streams from key junctions',
-          'Live YOLO bounding boxes and license plate crops on video',
-          'Individual camera stream diagnostics and fullscreen inspection'
+          'Simultaneous HD CCTV video streams across major city junctions',
+          'Real-time YOLO vehicle detection bounding boxes & confidence scores',
+          'Instant optical flow vehicle speed measurement and classification'
         ],
-        image: '../images/feed_cam01.jpg',
+        image: '../hackathon_kit/screenshots/02_Live_CCTV_GIS_Map.png',
         video: '../videos/cam_mg_road.mp4',
         isVideo: true
       },
       {
-        id: 'screen_grid',
+        id: '03_Tactical_Camera_Grid',
         route: '/grid',
-        title: 'Tactical Multi-Camera Matrix (2×2, 2×3, 3×3 Grid)',
-        category: 'TACTICAL GRID',
-        desc: 'Advanced multi-camera surveillance matrix inspired by TrafficVision.live with 2×2, 2×3, and 3×3 switchable layouts, per-cell stream switcher, and overspeed alerts.',
+        title: 'Tactical Multi-Camera Matrix (2x2, 2x3, 3x3 Grid)',
+        category: 'TACTICAL MATRIX',
+        desc: 'Situational multi-sensor surveillance matrix inspired by TrafficVision. Displays up to 9 synchronized CCTV feeds with vehicle count counters, speed pill badges, and overspeed alerts.',
         bullets: [
-          'Up to 9 simultaneous CCTV feeds across Ahmedabad & Gandhinagar',
-          'Real-time vehicle count ticker per camera (e.g. 🚗 14)',
-          'Speed estimation pill with [OVERSPEED] alert tags'
+          'Synchronous multi-node video grid across Ahmedabad & Gandhinagar',
+          'Live per-camera vehicle count and average speed monitoring',
+          'Traffic density heatmap and overspeed trigger flags'
         ],
-        image: '../images/feed_cam04.jpg',
+        image: '../hackathon_kit/screenshots/03_Tactical_Camera_Grid.png',
         video: '../videos/cam_sg_highway_toll.mp4',
         isVideo: true
       },
       {
-        id: 'screen_journey',
+        id: '04_Vehicle_Journey_Replay',
         route: '/journey',
-        title: 'Vehicle Journey & Trajectory Replay (Sabarmati → GIFT City)',
+        title: 'Vehicle Journey Reconstruction & Radar Lock',
         category: 'JOURNEY REPLAY',
-        desc: 'Reconstructs suspect vehicle path across multiple cameras. Plots chronological sightings on CartoDB Dark map with animated trajectory replay and speed graph.',
+        desc: 'Chronological suspect trajectory replay across multiple city junctions. Reconstructs suspect path from Sardar Bridge to GIFT City with speed telemetry and GIS radar lock.',
         bullets: [
-          'Interactive chronological timeline from Sardar Bridge to GIFT City',
-          'Vehicle Re-ID visual matching across sequential camera nodes',
-          'One-click evidence snapshot capture for court dossier'
+          'Chronological timeline across 5 sequential surveillance nodes',
+          'Interactive dark radar grid with animated trajectory path replay',
+          'Direct Section 65B evidence dossier export button'
         ],
-        image: '../images/crop_dl10xy9090.jpg',
+        image: '../hackathon_kit/screenshots/04_Vehicle_Journey_Replay.png',
         video: '../videos/cam_vastrapur.mp4',
         isVideo: false
       },
       {
-        id: 'screen_routes',
+        id: '05_Corridor_Route_Planner',
         route: '/routes',
-        title: 'Patrol Route & Corridor Surveillance Tracker',
-        category: 'PATROL ROUTE',
-        desc: 'Corridor planner inspired by TrafficVision. Select origin and destination to find all Sentinel CCTV cameras within 2km corridor with live stream previews.',
+        title: 'Patrol Route & Corridor Intercept Planner',
+        category: 'ROUTE PLANNER',
+        desc: 'Automated transit corridor analyzer. Calculates origin-to-destination distance (18.8 km), transit time (~25 min), and automatically identifies all CCTV cameras covering the corridor.',
         bullets: [
-          'Haversine corridor math finds all cameras along patrol transit',
-          'Sequential camera list with distance from origin (+km)',
-          'Instant video stream preview for checkpoints'
+          'Haversine corridor distance and transit time calculations',
+          'Automated checkpoint camera intercept identification',
+          'Sequential camera list with distance offsets from origin'
         ],
-        image: '../images/gujarat_hud_map.jpg',
+        image: '../hackathon_kit/screenshots/05_Corridor_Route_Planner.png',
         video: '../videos/cam_gift_city.mp4',
         isVideo: false
       },
       {
-        id: 'screen_alerts',
+        id: '06_Threat_Alerts_Engine',
         route: '/alerts',
-        title: 'Watchlist Intercept Review & Emergency Alert Sirens',
-        category: 'INTERCEPT ALERTS',
-        desc: 'Instant priority alarm notifications when a blacklisted plate (e.g. UP32PQ6677 Armed Robbery Warrant) passes an active surveillance camera.',
+        title: 'Active Threat Alerts & Warrant Intercepts',
+        category: 'THREAT ALERTS',
+        desc: 'Emergency security alerting engine. Instantly triggers visual and acoustic sirens when a wanted vehicle (Armed Robbery, Kidnapping, Stolen) is spotted on municipal feeds.',
         bullets: [
-          'High-priority audio/visual siren strobe',
-          'Automated police dispatch recommendation with GPS coordinates',
-          'Full warrant details, vehicle description, and sighting timestamp'
+          'Real-time warrant correlation and APB broadcast dispatch',
+          'High-priority audio siren alerts for suspect interceptions',
+          'Complete suspect metadata: plate, owner, warrant offense'
         ],
-        image: '../images/alert_beacon_3d.png',
+        image: '../hackathon_kit/screenshots/06_Threat_Alerts_Engine.png',
         video: '../videos/cam_sg_highway_toll.mp4',
         isVideo: false
       },
       {
-        id: 'screen_evidence',
+        id: '07_Digital_Evidence_Vault',
         route: '/evidence',
-        title: 'Digital Evidence Vault (Section 65B & SHA-256 Seal)',
+        title: 'Section 65B Digital Evidence Vault',
         category: 'EVIDENCE VAULT',
-        desc: 'Tamper-evident legal evidence repository. Sighting frames and video snippets sealed with cryptographic SHA-256 hashes for chain of custody compliance.',
+        desc: 'Court-admissible digital evidence vault compliant with Section 65B of the Indian Evidence Act. Every video frame and audit log is sealed with cryptographic SHA-256 hashes.',
         bullets: [
-          'Cryptographic SHA-256 verification badge (Tamper-evident)',
-          'Section 65B Indian Evidence Act certified export package',
-          'Batch ZIP export with metadata manifest for court trial'
+          'Immutable SHA-256 cryptographic seal on every forensic artifact',
+          'Section 65B compliance certificate for legal court admissibility',
+          'Tamper-evident chain of custody logging with audit tracking'
         ],
-        image: '../images/evidence_gnlu_large.jpg',
+        image: '../hackathon_kit/screenshots/07_Digital_Evidence_Vault.png',
         video: '../videos/cam_gnlu_gate.mp4',
         isVideo: false
       },
       {
-        id: 'screen_cameras',
+        id: '08_ANPR_Camera_Registry',
         route: '/cameras',
-        title: 'Municipal Camera Registry & Telemetry Diagnostics',
+        title: 'Distributed ANPR Camera Hardware Registry',
         category: 'CAMERA REGISTRY',
-        desc: 'Complete inventory of 15 Sentinel cameras deployed across Ahmedabad and Gandhinagar with status, latency, RTSP streams, and congestion levels.',
+        desc: 'Complete inventory and telemetry of all 15 municipal cameras across Ahmedabad and Gandhinagar with status, latency, RTSP streams, and hardware health.',
         bullets: [
-          'Camera hardware specifications, IP, RTSP/HLS stream URLs',
-          'Real-time congestion classification: LOW / MEDIUM / HIGH',
-          'Live stream ping and packet loss diagnostic monitoring'
+          'Hardware specifications, RTSP streaming URLs, and IP telemetry',
+          'Real-time congestion classification (LOW, MEDIUM, HIGH)',
+          'Live stream ping latency and packet health metrics'
         ],
-        image: '../images/cctv_camera_3d.png',
+        image: '../hackathon_kit/screenshots/08_ANPR_Camera_Registry.png',
         video: '../videos/cam_chiloda_circle.mp4',
+        isVideo: false
+      },
+      {
+        id: '09_Suspect_Watchlist',
+        route: '/watchlist',
+        title: 'Suspect & Stolen Vehicle Watchlist Database',
+        category: 'WATCHLIST',
+        desc: 'Central police hotlist database storing wanted registration plates, vehicle descriptions, FIR numbers, and automatic cross-camera alert triggers.',
+        bullets: [
+          'Active wanted vehicle database with critical warrant flags',
+          'Instant cross-camera correlation upon license plate match',
+          'One-click add/remove suspect with FIR dossier link'
+        ],
+        image: '../hackathon_kit/screenshots/09_Suspect_Watchlist.png',
+        video: '../videos/cam_sardar_bridge.mp4',
+        isVideo: false
+      },
+      {
+        id: '10_Forensic_Analytics',
+        route: '/analytics',
+        title: 'Urban Traffic & Crime Forensic Analytics',
+        category: 'ANALYTICS',
+        desc: 'Longitudinal spatial intelligence analyzing city-wide traffic volume, speed distributions, peak congestion hours, and multi-camera ANPR performance curves.',
+        bullets: [
+          'Interactive Recharts graphs for hourly vehicle throughput',
+          'Speed distribution histograms and overspeed violation trends',
+          'Cross-junction congestion analytics for traffic law enforcement'
+        ],
+        image: '../hackathon_kit/screenshots/10_Forensic_Analytics.png',
+        video: '../videos/cam_sector15.mp4',
         isVideo: false
       }
     ];
+
+    function copyHackathonDossier() {
+      const text = `PROJECT NAME: SENTRAX — CCTV Intelligence & Urban Traffic Forensics Platform
+LIVE DEMO: https://shakyavinit.github.io/sentrax/
+MEDIA & SUBMISSION HUB: https://shakyavinit.github.io/sentrax/extractor/
+VIDEO DEMO: 1080p HD Walkthrough (sentrax_hackathon_demo.mp4)
+
+PROBLEM STATEMENT:
+Manual monitoring of thousands of traffic CCTV feeds causes cognitive fatigue and delayed emergency response. Tracing suspect vehicles after crimes or hit-and-runs currently takes hours of manual video scrubbing across isolated stations. Furthermore, digital video evidence is often dismissed in court without tamper-evident cryptographic compliance.
+
+OUR SOLUTION:
+SENTRAX is an end-to-end AI-powered law enforcement surveillance and forensic intelligence suite:
+1. Tactical Multi-Cam Matrix: Synchronous 2x2, 2x3, and 3x3 surveillance grid with real-time AI vehicle speed and congestion analytics.
+2. Real-Time ANPR: Multi-frame consensus plate recognition delivering 96.2% confidence.
+3. Suspect Journey Replay: Reconstructs chronological trajectory across municipal camera nodes with GPS radar lock.
+4. Corridor Route Planner: Haversine distance and transit estimation with auto-detection of all intercept cameras along patrol routes.
+5. Threat Alerts: Automated APB and audible sirens for warrant-listed vehicles.
+6. Section 65B Evidence Vault: SHA-256 cryptographic hashing guaranteeing tamper-evident chain of custody for legal court trials.
+
+TECH STACK:
+React 18, TypeScript, TailwindCSS, Vite, Python/FastAPI, PostGIS, YOLOv8, Redis, Celery, Leaflet GIS.`;
+
+      navigator.clipboard.writeText(text).then(() => {
+        const btn = document.getElementById('copy-dossier-btn');
+        const label = document.getElementById('copy-dossier-label');
+        if (label) label.innerText = 'COPIED TO CLIPBOARD!';
+        if (btn) btn.classList.add('bg-emerald-700', 'text-white');
+        setTimeout(() => {
+          if (label) label.innerText = 'COPY SUBMISSION TEXT';
+          if (btn) btn.classList.remove('bg-emerald-700', 'text-white');
+        }, 2500);
+      }).catch(() => {
+        alert('Copied details to clipboard!');
+      });
+    }
 
     let currentScreenIdx = 0;
     let selectedScreenIds = new Set(PLATFORM_SCREENS.map(s => s.id));
