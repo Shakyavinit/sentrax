@@ -93,7 +93,7 @@ export const TopBar: React.FC = () => {
           <kbd>⌘ K</kbd>
         </form>
 
-        <div className="topbar-actions flex items-center gap-1">
+        <div className="topbar-actions flex items-center gap-2">
           <button
             className="icon-button"
             aria-label="Open alert review"
@@ -103,12 +103,14 @@ export const TopBar: React.FC = () => {
             <Bell size={18} />
           </button>
           <button
-            className="icon-button"
-            aria-label="Open investigation assistant"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gradient-to-r from-sky-600 to-blue-600 hover:from-sky-500 hover:to-blue-500 text-white shadow-[0_0_15px_rgba(14,165,233,0.4)] border border-sky-400/60 transition-all font-mono text-xs font-bold cursor-pointer"
+            aria-label="Open Forensic AI Copilot"
             onClick={() => setCopilot(true)}
-            title="Forensic AI Copilot"
+            title="SENTRAX Forensic AI Copilot"
           >
-            <Bot size={18} />
+            <Bot size={15} className="text-white animate-pulse" />
+            <span className="hidden sm:inline">AI COPILOT</span>
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
           </button>
         </div>
       </div>

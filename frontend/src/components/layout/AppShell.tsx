@@ -32,12 +32,12 @@ export const AppShell: React.FC = () => {
     {/* Global Floating AI Copilot Trigger */}
     <button
       onClick={() => setGlobalCopilotOpen(true)}
-      className="fixed bottom-5 right-40 z-40 flex items-center gap-1.5 px-3 py-2 rounded-full shadow-[0_0_20px_rgba(14,127,224,0.4)] transition text-xs font-mono font-bold bg-[#0E7FE0] hover:bg-[#1A9FFF] text-white hover:scale-105 border border-white/20 cursor-pointer"
+      className="fixed bottom-16 right-5 z-40 flex items-center gap-2 px-3.5 py-2 rounded-full shadow-[0_0_20px_rgba(14,127,224,0.45)] transition-all text-xs font-mono font-bold bg-gradient-to-r from-sky-600 to-blue-600 hover:from-sky-500 hover:to-blue-500 text-white hover:scale-105 border border-sky-400/60 cursor-pointer"
       title="Open Forensic AI Copilot"
     >
-      <Bot size={15} className="animate-pulse" />
-      <span className="hidden sm:inline">AI COPILOT</span>
-      <span className="w-1.5 h-1.5 rounded-full bg-[#00C875] animate-ping" />
+      <Bot size={15} className="animate-pulse text-white" />
+      <span>AI COPILOT</span>
+      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
     </button>
 
     <IncidentNotepad />

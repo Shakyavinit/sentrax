@@ -177,21 +177,21 @@ I am connected to the 15-node Ahmedabad-Gandhinagar CCTV matrix and Section 65B 
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="SENTRAX FORENSIC AI COPILOT" maxWidth="3xl">
-      <div className="flex flex-col h-[70vh] space-y-3 font-sans">
+    <Modal isOpen={isOpen} onClose={onClose} title="SENTRAX FORENSIC AI COPILOT" maxWidth="4xl">
+      <div className="flex flex-col h-[74vh] space-y-3 font-sans">
         {/* Top Intelligence Status Banner */}
-        <div className="flex items-center justify-between bg-[#121E2E] border border-[#233A52] px-3.5 py-2 rounded-lg text-xs shrink-0">
-          <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-[#00C875] animate-pulse" />
-            <span className="font-mono text-[#E8EFF7] font-semibold">
-              TARGET: <span className="text-[#0E7FE0]">{targetPlate}</span>
+        <div className="flex items-center justify-between bg-[#121E2E] border-2 border-[#233A52] px-4 py-2.5 rounded-xl text-xs sm:text-sm shrink-0 shadow-sm">
+          <div className="flex items-center gap-2.5">
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_#34d399]" />
+            <span className="font-mono text-white font-bold">
+              TARGET: <span className="text-cyan-300 bg-cyan-500/15 border border-cyan-500/30 px-2 py-0.5 rounded tracking-wider">{targetPlate}</span>
             </span>
-            <span className="text-[#4D6B85] font-mono">|</span>
-            <span className="text-[#8FA8C0] font-mono text-[11px]">15 Nodes Synchronized</span>
+            <span className="text-slate-500 font-mono hidden sm:inline">|</span>
+            <span className="text-slate-300 font-mono text-xs hidden sm:inline font-semibold">15 Nodes Synchronized</span>
           </div>
 
-          <div className="flex items-center gap-2">
-            <span className="text-[10px] font-mono text-[#00C875] bg-[#00C875]/10 px-2 py-0.5 rounded border border-[#00C875]/30">
+          <div className="flex items-center gap-2.5">
+            <span className="text-xs font-mono text-emerald-300 bg-emerald-500/15 px-2.5 py-1 rounded-md border border-emerald-500/30 font-bold">
               LEVEL-4 TACTICAL
             </span>
             <button
@@ -199,16 +199,16 @@ I am connected to the 15-node Ahmedabad-Gandhinagar CCTV matrix and Section 65B 
                 const lastAi = [...messages].reverse().find((m) => m.role === 'assistant');
                 if (lastAi) handleSpeak(lastAi.content);
               }}
-              className="text-[#8FA8C0] hover:text-[#0E7FE0] p-1 rounded hover:bg-[#1A2A3D] transition-colors"
+              className="text-slate-200 hover:text-cyan-400 p-1.5 rounded-lg hover:bg-[#1A2A3D] border border-transparent hover:border-[#233A52] transition-colors cursor-pointer"
               title={isSpeaking ? 'Mute Radio Dispatch' : 'Listen to Police Radio Dispatch'}
             >
-              {isSpeaking ? <VolumeX size={15} className="text-[#FF3B3B] animate-pulse" /> : <Volume2 size={15} />}
+              {isSpeaking ? <VolumeX size={17} className="text-rose-400 animate-pulse" /> : <Volume2 size={17} />}
             </button>
           </div>
         </div>
 
         {/* Intelligence Mode Tabs */}
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 shrink-0">
+        <div className="flex items-center gap-2 overflow-x-auto pb-1 shrink-0">
           {TACTICAL_MODES.map((mode) => {
             const Icon = mode.icon;
             const isSel = selectedMode === mode.id;
@@ -216,13 +216,13 @@ I am connected to the 15-node Ahmedabad-Gandhinagar CCTV matrix and Section 65B 
               <button
                 key={mode.id}
                 onClick={() => setSelectedMode(mode.id)}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-mono transition-all whitespace-nowrap ${
+                className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-mono font-bold transition-all whitespace-nowrap cursor-pointer ${
                   isSel
-                    ? 'bg-[#0E7FE0] text-white font-semibold shadow-md'
-                    : 'bg-[#121E2E] text-[#8FA8C0] hover:text-white border border-[#233A52]'
+                    ? 'bg-gradient-to-r from-sky-600 to-blue-600 text-white shadow-[0_0_12px_rgba(14,165,233,0.4)] border border-sky-400'
+                    : 'bg-[#121E2E] text-slate-300 hover:text-white border border-[#233A52] hover:border-slate-400'
                 }`}
               >
-                <Icon size={13} />
+                <Icon size={14} className={isSel ? 'text-white' : 'text-cyan-400'} />
                 <span>{mode.label}</span>
               </button>
             );
@@ -230,24 +230,24 @@ I am connected to the 15-node Ahmedabad-Gandhinagar CCTV matrix and Section 65B 
         </div>
 
         {/* Chat History Scroll Area */}
-        <div className="flex-1 overflow-y-auto space-y-4 pr-1 scrollbar-thin">
+        <div className="flex-1 overflow-y-auto space-y-4 pr-1.5 scrollbar-thin">
           {messages.map((m) => (
             <div
               key={m.id}
               className={`flex flex-col ${m.role === 'user' ? 'items-end' : 'items-start'}`}
             >
-              <div className="flex items-center gap-1.5 mb-1 px-1">
+              <div className="flex items-center gap-2 mb-1.5 px-1">
                 {m.role === 'assistant' ? (
                   <>
-                    <Bot size={13} className="text-[#0E7FE0]" />
-                    <span className="text-[10px] font-mono text-[#8FA8C0]">
+                    <Bot size={15} className="text-cyan-400" />
+                    <span className="text-xs font-mono font-bold text-slate-300">
                       SENTRAX AI COPILOT ({m.timestamp})
                     </span>
                   </>
                 ) : (
                   <>
-                    <User size={13} className="text-[#10B981]" />
-                    <span className="text-[10px] font-mono text-[#8FA8C0]">
+                    <User size={15} className="text-emerald-400" />
+                    <span className="text-xs font-mono font-bold text-slate-300">
                       COMMAND OFFICER ({m.timestamp})
                     </span>
                   </>
@@ -255,10 +255,10 @@ I am connected to the 15-node Ahmedabad-Gandhinagar CCTV matrix and Section 65B 
               </div>
 
               <div
-                className={`rounded-xl p-4 text-xs font-mono leading-relaxed max-w-[92%] shadow-lg ${
+                className={`rounded-2xl p-4.5 text-xs sm:text-sm font-mono leading-relaxed max-w-[95%] shadow-xl transition-all ${
                   m.role === 'user'
-                    ? 'bg-[#0E7FE0]/20 border border-[#0E7FE0]/40 text-[#E8EFF7]'
-                    : 'bg-[#0D1520] border border-[#233A52] text-[#E8EFF7]'
+                    ? 'bg-[#0E7FE0]/25 border-2 border-[#0E7FE0]/60 text-white shadow-[0_0_15px_rgba(14,127,224,0.2)]'
+                    : 'bg-[#0D1520] border-2 border-[#233A52] hover:border-cyan-500/40 text-slate-100'
                 }`}
               >
                 {m.role === 'assistant' ? (
@@ -268,31 +268,31 @@ I am connected to the 15-node Ahmedabad-Gandhinagar CCTV matrix and Section 65B 
                     model={m.model}
                   />
                 ) : (
-                  <p className="whitespace-pre-wrap">{m.content}</p>
+                  <p className="whitespace-pre-wrap text-white font-medium">{m.content}</p>
                 )}
 
                 {/* Card Actions */}
                 {m.role === 'assistant' && (
-                  <div className="mt-3 pt-2 border-t border-[#1C2E42] flex items-center justify-between text-[10px] text-[#8FA8C0]">
-                    <span className="flex items-center gap-1 text-[#00C875]">
-                      <CheckCircle2 size={11} /> Section 65B Hash Sealed
+                  <div className="mt-3.5 pt-2.5 border-t border-[#233A52] flex items-center justify-between text-xs text-slate-300">
+                    <span className="flex items-center gap-1.5 text-emerald-400 font-semibold">
+                      <CheckCircle2 size={13} /> Section 65B Hash Sealed
                     </span>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-3 font-semibold">
                       <button
                         onClick={() => handleSpeak(m.content)}
-                        className="hover:text-white flex items-center gap-1"
+                        className="text-cyan-300 hover:text-white flex items-center gap-1 cursor-pointer transition-colors"
                         title="Radio Voice Dispatch"
                       >
-                        <Volume2 size={11} /> Radio Readout
+                        <Volume2 size={13} /> Radio Readout
                       </button>
                       <button
                         onClick={() => {
                           navigator.clipboard.writeText(m.content);
                           toast.success('Report copied to clipboard');
                         }}
-                        className="hover:text-white flex items-center gap-1"
+                        className="text-slate-200 hover:text-white flex items-center gap-1 cursor-pointer transition-colors"
                       >
-                        <Copy size={11} /> Copy Report
+                        <Copy size={13} /> Copy Report
                       </button>
                     </div>
                   </div>
@@ -302,8 +302,8 @@ I am connected to the 15-node Ahmedabad-Gandhinagar CCTV matrix and Section 65B 
           ))}
 
           {isLoading && (
-            <div className="flex items-center gap-3 bg-[#0D1520] border border-[#233A52] rounded-xl p-4 text-xs font-mono text-[#8FA8C0] animate-pulse">
-              <RefreshCw size={16} className="text-[#0E7FE0] animate-spin" />
+            <div className="flex items-center gap-3 bg-[#0D1520] border-2 border-[#233A52] rounded-2xl p-4.5 text-xs sm:text-sm font-mono text-slate-200 animate-pulse shadow-md">
+              <RefreshCw size={18} className="text-cyan-400 animate-spin" />
               <span>Correlating cross-camera optical flow and drafting forensic brief...</span>
             </div>
           )}
@@ -312,35 +312,35 @@ I am connected to the 15-node Ahmedabad-Gandhinagar CCTV matrix and Section 65B 
         </div>
 
         {/* Quick Suggestion Chips */}
-        <div className="flex items-center gap-1.5 overflow-x-auto pt-1 shrink-0">
+        <div className="flex items-center gap-2 overflow-x-auto pt-1 shrink-0">
           <button
             onClick={() => handleSendMessage(`Predict next 3 junction arrivals and interception ETA for target ${targetPlate}`)}
-            className="text-[11px] font-mono bg-[#1A2A3D] hover:bg-[#233A52] text-[#8FA8C0] hover:text-white px-2.5 py-1 rounded border border-[#233A52] whitespace-nowrap transition-colors"
+            className="text-xs font-mono bg-[#121E2E] hover:bg-[#1A2A3D] text-slate-200 hover:text-white px-3 py-1.5 rounded-lg border border-[#233A52] hover:border-cyan-400/50 whitespace-nowrap transition-all shadow-sm font-semibold cursor-pointer"
           >
             ⏱️ Intercept ETA & Route Detour
           </button>
           <button
             onClick={() => handleSendMessage(`Draft Section 65B legal affidavit certificate for target ${targetPlate}`)}
-            className="text-[11px] font-mono bg-[#1A2A3D] hover:bg-[#233A52] text-[#8FA8C0] hover:text-white px-2.5 py-1 rounded border border-[#233A52] whitespace-nowrap transition-colors"
+            className="text-xs font-mono bg-[#121E2E] hover:bg-[#1A2A3D] text-slate-200 hover:text-white px-3 py-1.5 rounded-lg border border-[#233A52] hover:border-cyan-400/50 whitespace-nowrap transition-all shadow-sm font-semibold cursor-pointer"
           >
             📜 Draft Court 65B Certificate
           </button>
           <button
             onClick={() => handleSendMessage(`Analyze vehicle damage, window tint, and visual marks for ${targetPlate}`)}
-            className="text-[11px] font-mono bg-[#1A2A3D] hover:bg-[#233A52] text-[#8FA8C0] hover:text-white px-2.5 py-1 rounded border border-[#233A52] whitespace-nowrap transition-colors"
+            className="text-xs font-mono bg-[#121E2E] hover:bg-[#1A2A3D] text-slate-200 hover:text-white px-3 py-1.5 rounded-lg border border-[#233A52] hover:border-cyan-400/50 whitespace-nowrap transition-all shadow-sm font-semibold cursor-pointer"
           >
             🔍 Visual Vehicle DNA Profiling
           </button>
           <button
             onClick={() => handleSendMessage(`Broadcast tactical APB hotlist alert to nearby patrol vehicles for ${targetPlate}`)}
-            className="text-[11px] font-mono bg-[#1A2A3D] hover:bg-[#233A52] text-[#8FA8C0] hover:text-white px-2.5 py-1 rounded border border-[#233A52] whitespace-nowrap transition-colors"
+            className="text-xs font-mono bg-[#121E2E] hover:bg-[#1A2A3D] text-slate-200 hover:text-white px-3 py-1.5 rounded-lg border border-[#233A52] hover:border-cyan-400/50 whitespace-nowrap transition-all shadow-sm font-semibold cursor-pointer"
           >
             🚨 Police APB Dispatch
           </button>
         </div>
 
         {/* Input Bar */}
-        <div className="flex gap-2 pt-1 shrink-0">
+        <div className="flex gap-2.5 pt-1.5 shrink-0">
           <input
             type="text"
             value={inputQuery}
@@ -349,12 +349,12 @@ I am connected to the 15-node Ahmedabad-Gandhinagar CCTV matrix and Section 65B 
               if (e.key === 'Enter') handleSendMessage();
             }}
             placeholder="Ask Copilot: 'Predict next junction arrival', 'Draft Section 65B affidavit', 'Check vehicle tint'..."
-            className="flex-1 bg-[#121E2E] border border-[#233A52] rounded-lg px-3.5 py-2.5 text-xs text-[#E8EFF7] placeholder-[#4D6B85] focus:outline-none focus:border-[#0E7FE0] font-mono"
+            className="flex-1 bg-[#0D1520] border-2 border-[#233A52] focus:border-cyan-400 rounded-xl px-4 py-3 text-xs sm:text-sm text-white placeholder-slate-400 focus:outline-none font-mono shadow-inner transition-colors"
           />
           <Button
             variant="primary"
-            size="md"
-            icon={<Send className="w-3.5 h-3.5" />}
+            size="lg"
+            icon={<Send className="w-4 h-4" />}
             isLoading={isLoading}
             onClick={() => handleSendMessage()}
           >
