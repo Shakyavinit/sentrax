@@ -15,11 +15,12 @@ const titles: Record<string, string> = {
   '/cameras': 'Surveillance Camera Registry',
   '/analytics': 'Forensic Analytics & Intelligence',
   '/research-agent': 'Forensic Research Assistant',
+  '/plate-reader': 'Plate & Vehicle AI Reader',
 };
 
 export const TopBar: React.FC = () => {
   const { pathname } = useLocation(), navigate = useNavigate();
-  const { mobileMenuOpen, setMobileMenuOpen } = useUiStore();
+  const { mobileMenuOpen, setMobileMenuOpen, setIntroModalOpen } = useUiStore();
   const [query, setQuery] = useState(''), [copilot, setCopilot] = useState(false);
   const input = useRef<HTMLInputElement>(null);
 
@@ -92,7 +93,15 @@ export const TopBar: React.FC = () => {
           <kbd>⌘ K</kbd>
         </form>
 
-        <div className="topbar-actions flex items-center gap-1">
+        <div className="topbar-actions flex items-center gap-1.5">
+          <button
+            className="flex items-center gap-1 px-2 py-1 text-[11px] font-mono font-semibold text-amber-300 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 rounded transition-colors"
+            onClick={() => setIntroModalOpen(true)}
+            title="Replay Namaste Bharat Intro Animation"
+          >
+            <span>🇮🇳</span>
+            <span className="hidden sm:inline">Namaste Intro</span>
+          </button>
           <button
             className="icon-button"
             aria-label="Open alert review"

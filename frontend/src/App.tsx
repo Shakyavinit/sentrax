@@ -24,6 +24,7 @@ import { AuditLogPage } from './pages/AuditLogPage';
 import { CameraStreamPage } from './pages/CameraStreamPage';
 import { TacticalGridPage } from './pages/TacticalGridPage';
 import { RouteBuilderPage } from './pages/RouteBuilderPage';
+import { PlateReaderPage } from './pages/PlateReaderPage';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -97,6 +98,7 @@ export const App: React.FC = () => {
             <Route path="/cameras" element={<CameraRegistry />} />
             <Route path="/grid" element={<TacticalGridPage />} />
             <Route path="/routes" element={<RouteBuilderPage />} />
+            <Route path="/plate-reader" element={<PlateReaderPage />} />
             <Route path="/analytics" element={<Analytics />} />
             <Route
               path="/research-agent"

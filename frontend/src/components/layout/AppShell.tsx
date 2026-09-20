@@ -6,10 +6,20 @@ import { useUiStore } from '../../store/uiStore';
 import { DEMO_MODE } from '../../utils/demo';
 import { Toaster } from 'sonner';
 import { IncidentNotepad } from '../common/IncidentNotepad';
+import { IntroCinematicModal } from '../common/IntroCinematicModal';
 
 export const AppShell: React.FC = () => {
-  const { sidebarCollapsed, mobileMenuOpen, setMobileMenuOpen } = useUiStore();
+  const { sidebarCollapsed, mobileMenuOpen, setMobileMenuOpen, introModalOpen, setIntroModalOpen } = useUiStore();
   const location = useLocation();
+
+  useEffect(() => {
+    // Check if user has already seen the intro in this browser
+    const seen = localStorage.getItem('sentrax_intro_dismissed');
+    if (!seen) {
+      setIntroModalOpen(true);
+    }
+  }, [setIntroModalOpen]);
+
   useEffect(() => { setMobileMenuOpen(false); }, [location.pathname, setMobileMenuOpen]);
   useEffect(() => {
     const close = (e: KeyboardEvent) => { if (e.key === 'Escape') setMobileMenuOpen(false); };
@@ -25,6 +35,7 @@ export const AppShell: React.FC = () => {
       <main id="main-content" className="app-content" tabIndex={-1}><Outlet /></main>
     </div>
     <IncidentNotepad />
+    <IntroCinematicModal isOpen={introModalOpen} onClose={() => setIntroModalOpen(false)} />
     <Toaster theme="dark" position="bottom-right" />
   </div>;
 };

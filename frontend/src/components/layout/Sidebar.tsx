@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, Video, Search, Route, ShieldAlert, Archive, Eye, Camera, BarChart3, Bot, LogOut, PanelLeftClose, PanelLeftOpen, X, ShieldCheck, LayoutGrid, Compass, Download } from 'lucide-react';
+import { LayoutDashboard, Video, Search, Route, ShieldAlert, Archive, Eye, Camera, BarChart3, Bot, LogOut, PanelLeftClose, PanelLeftOpen, X, ShieldCheck, LayoutGrid, Compass, Download, ScanLine } from 'lucide-react';
 import { Logo } from '../ui/Logo';
 import { useAuthStore } from '../../store/authStore';
 import { useUiStore } from '../../store/uiStore';
@@ -21,6 +21,7 @@ const sections: { title: string; items: NavItemDef[] }[] = [
     { path: '/journey', label: 'Vehicle journey', icon: Route },
   ] },
   { title: 'TACTICAL TOOLS', items: [
+    { path: '/plate-reader', label: 'Plate & Vehicle AI Reader', icon: ScanLine },
     { path: '/grid', label: 'Tactical camera grid', icon: LayoutGrid },
     { path: '/routes', label: 'Patrol route planner', icon: Compass },
     { path: '/extractor/', label: 'Media & video extractor', icon: Download, external: true },
