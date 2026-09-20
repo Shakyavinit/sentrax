@@ -1,0 +1,58 @@
+================================================================================
+SENTRAX // OFFICIAL HACKATHON SUBMISSION DOSSIER
+AI-POWERED CCTV INTELLIGENCE & URBAN TRAFFIC FORENSICS PLATFORM
+================================================================================
+
+1. PROJECT SUMMARY & LIVE DEMO LINKS
+--------------------------------------------------------------------------------
+- Project Name: SENTRAX
+- Live Web Application: https://shakyavinit.github.io/sentrax/
+- Media & Submission Hub: https://shakyavinit.github.io/sentrax/extractor/
+- Official Demo Video: sentrax_hackathon_demo.mp4 (73 seconds, 1080p HD)
+- Repository: https://github.com/Shakyavinit/sentrax
+
+2. THE PROBLEM STATEMENT
+--------------------------------------------------------------------------------
+Modern police and traffic control rooms face three fatal bottlenecks:
+a) Cognitive Overload: Operators cannot manually watch hundreds of video feeds simultaneously.
+b) Delayed Suspect Interception: Reconstructing where a suspect vehicle traveled after a crime or hit-and-run currently takes hours or days of manual CCTV review across separate police stations.
+c) Chain of Custody Inadmissibility: Exported video evidence is frequently rejected in courts due to lack of tamper-proofing and non-compliance with Section 65B of the Indian Evidence Act.
+
+3. THE SENTRAX SOLUTION
+--------------------------------------------------------------------------------
+SENTRAX automates surveillance operations into a unified tactical platform:
+- Multi-Camera Tactical Matrix: Real-time synchronous video grid with vehicle speed detection and traffic density heatmap.
+- Real-Time ANPR Engine: Multi-frame consensus plate recognition delivering 96.2% accuracy.
+- Suspect Journey Reconstruction: Reconstructs chronological trajectory across multiple city junctions with radar lock and trajectory replay.
+- Patrol Route Corridor Planner: Calculates checkpoint distance, transit times, and automatically identifies all cameras covering the transit corridor.
+- Active Threat Alerts & APB: Instant sound sirens and alerts for wanted criminal warrants.
+- Section 65B Digital Evidence Vault: SHA-256 cryptographic hashing and tamper-evident audit trails.
+
+4. TECHNOLOGY STACK
+--------------------------------------------------------------------------------
+- Frontend: React 18, TypeScript, TailwindCSS, Vite, Lucide Icons, Leaflet GIS, Recharts.
+- Backend: Python 3.11, FastAPI, PostGIS, Redis Task Broker, Celery Distributed Workers.
+- Computer Vision: YOLOv8 vehicle detection, Optical Flow speed tracking, Multi-frame OCR.
+- Infrastructure: Docker Compose, Nginx, GitHub Pages SPA.
+
+5. SCREENSHOT FILES INCLUDED IN THIS SUBMISSION PACK
+--------------------------------------------------------------------------------
+01_Command_Dashboard.png         - Executive SOC overview, worker health & metrics
+02_Live_CCTV_GIS_Map.png          - Real-time CCTV streams with ANPR bounding boxes
+03_Tactical_Camera_Grid.png       - Multi-camera 2x3 surveillance matrix with live video
+04_Vehicle_Journey_Replay.png     - Chronological suspect trajectory & radar tracking
+05_Corridor_Route_Planner.png     - Patrol corridor analysis & camera intercept finder
+06_Threat_Alerts_Engine.png       - High-priority threat detection & warrant matching
+07_Digital_Evidence_Vault.png     - Chain of custody & Section 65B compliance logs
+08_ANPR_Camera_Registry.png       - Distributed camera hardware registry & telemetry
+09_Suspect_Watchlist.png          - Active stolen/suspect vehicle database
+10_Forensic_Analytics.png         - Urban speed & density trend analysis
+
+6. VIDEO DEMO
+--------------------------------------------------------------------------------
+sentrax_hackathon_demo.mp4        - Full 73s walkthrough demonstrating all modules in action.
+
+================================================================================
+Generated for Hackathon Evaluation & Law Enforcement Deployment Review.
+Team SENTRAX
+================================================================================
