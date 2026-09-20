@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="robots" content="noindex, nofollow, noarchive, nosnippet" />
   <meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet" />
-  <title>SENTRAX // Media Extractor — Extract Photos & Videos from Any Website</title>
+  <title>SENTRAX // Media Hub & Forensic Asset Vault</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -19,7 +19,7 @@
         extend: {
           colors: {
             brand: {
-              bg: '#080C14',
+              bg: '#070B12',
               surface: '#0D1520',
               border: '#1C2E42',
               accent: '#0E7FE0',
@@ -46,7 +46,7 @@
 
   <style>
     body {
-      background-color: #080C14;
+      background-color: #070B12;
       color: #F0F6FC;
       font-family: 'Inter', sans-serif;
     }
@@ -70,1095 +70,768 @@
     .custom-scrollbar::-webkit-scrollbar-thumb:hover {
       background: #0E7FE0;
     }
+    .animate-pulse-slow {
+      animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
   </style>
 </head>
-<body class="min-h-screen flex flex-col grid-bg custom-scrollbar">
-
-  <!-- Internal Security Gatekeeper Overlay -->
-  <div id="auth-gate-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-[#080C14]/98 backdrop-blur-lg p-4">
-    <div class="bg-[#0D1520] border border-[#1C2E42] rounded-2xl p-8 max-w-md w-full shadow-[0_0_60px_rgba(14,127,224,0.15)] text-center relative overflow-hidden">
-      <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#0E7FE0] to-transparent"></div>
-      
-      <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-[#0E7FE0]/10 border border-[#0E7FE0]/30 flex items-center justify-center text-[#0E7FE0] shadow-inner">
-        <i data-lucide="shield-check" class="w-8 h-8"></i>
-      </div>
-      
-      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#1C2E42]/60 border border-[#1C2E42] text-[11px] font-mono text-[#8FA8C0] mb-3">
-        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-        RESTRICTED DEVELOPER CONSOLE
-      </div>
-      
-      <h2 class="text-xl font-bold text-white mb-1 tracking-wider font-mono">ACCESS VERIFICATION</h2>
-      <p class="text-xs text-gray-400 mb-6 font-mono">Private tools are protected against public indexing and unauthenticated access.</p>
-      
-      <div class="mb-5 text-left">
-        <label class="block text-[11px] uppercase tracking-wider text-gray-400 font-mono mb-2">Security PIN / Passcode</label>
-        <div class="relative">
-          <input type="password" id="auth-pin-input" placeholder="••••" maxlength="12" autofocus
-            class="w-full px-4 py-3.5 bg-[#080C14] border border-[#1C2E42] rounded-xl text-white font-mono text-center text-xl tracking-[0.3em] focus:outline-none focus:border-[#0E7FE0] focus:ring-1 focus:ring-[#0E7FE0] transition-all" />
-        </div>
-        <div id="auth-error-msg" class="text-xs text-rose-500 font-mono mt-2.5 hidden text-center flex items-center justify-center gap-1.5">
-          <i data-lucide="alert-triangle" class="w-3.5 h-3.5 inline"></i> Invalid security PIN. Access denied.
-        </div>
-      </div>
-      
-      <button onclick="verifyExtractorPin()" class="w-full py-3.5 bg-[#0E7FE0] hover:bg-[#1A9FFF] text-white font-semibold rounded-xl transition-all font-mono text-sm shadow-lg shadow-[#0E7FE0]/25 flex items-center justify-center gap-2">
-        <i data-lucide="key-round" class="w-4 h-4"></i>
-        <span>AUTHORIZE SESSION</span>
-      </button>
-      
-      <div class="mt-5 pt-4 border-t border-[#1C2E42]/60 flex items-center justify-between text-[11px] text-gray-500 font-mono">
-        <span>Owner Default PIN: <strong class="text-gray-400">7391</strong></span>
-        <a href="../" class="text-[#0E7FE0] hover:underline flex items-center gap-1">
-          <i data-lucide="arrow-left" class="w-3 h-3"></i> Back to main
-        </a>
-      </div>
-    </div>
-  </div>
+<body class="min-h-screen flex flex-col grid-bg custom-scrollbar selection:bg-[#0E7FE0] selection:text-white">
 
   <!-- Top Navigation Bar -->
-  <header class="border-b border-[#1C2E42] bg-[#0D1520]/80 backdrop-blur-md sticky top-0 z-40">
+  <header class="border-b border-[#1C2E42] bg-[#0D1520]/90 backdrop-blur-md sticky top-0 z-40">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
       <div class="flex items-center gap-3">
-        <div class="w-9 h-9 rounded-lg bg-[#0E7FE0]/15 border border-[#0E7FE0]/40 flex items-center justify-center text-[#0E7FE0] shadow-lg shadow-[#0E7FE0]/10">
-          <i data-lucide="layers" class="w-5 h-5"></i>
-        </div>
+        <a href="../" class="w-9 h-9 rounded-lg bg-[#0E7FE0]/15 border border-[#0E7FE0]/40 flex items-center justify-center text-[#0E7FE0] shadow-lg shadow-[#0E7FE0]/10 hover:border-[#0E7FE0] transition-colors">
+          <i data-lucide="shield" class="w-5 h-5"></i>
+        </a>
         <div>
           <div class="flex items-center gap-2">
             <span class="font-mono font-bold tracking-wider text-sm sm:text-base text-white">SENTRAX</span>
-            <span class="text-xs font-mono text-[#0E7FE0] px-1.5 py-0.5 rounded bg-[#0E7FE0]/10 border border-[#0E7FE0]/30 font-semibold">MEDIA EXTRACTOR</span>
+            <span class="text-xs font-mono text-[#0E7FE0] px-2 py-0.5 rounded bg-[#0E7FE0]/10 border border-[#0E7FE0]/30 font-semibold">MEDIA & EVIDENCE VAULT</span>
           </div>
-          <p class="text-[10px] text-[#8FA8C0] hidden sm:block">Universal Web Photo & Video Extraction Engine</p>
+          <p class="text-[10px] text-[#8FA8C0]">Official Surveillance Videos, ANPR Plates & Evidence Assets</p>
         </div>
       </div>
 
       <div class="flex items-center gap-2 sm:gap-3">
-        <a href="../" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-mono font-medium text-[#8FA8C0] hover:text-white bg-[#131F30] hover:bg-[#1A2D42] border border-[#1C2E42] transition-colors">
-          <i data-lucide="shield" class="w-3.5 h-3.5 text-[#0E7FE0]"></i>
-          <span class="hidden sm:inline">Sentrax App</span>
-        </a>
-        <a href="https://github.com/Shakyavinit/sentrax" target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-mono font-medium text-[#8FA8C0] hover:text-white bg-[#131F30] hover:bg-[#1A2D42] border border-[#1C2E42] transition-colors">
-          <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-          <span class="hidden sm:inline">GitHub</span>
+        <!-- Interactive Auto-Demo Button -->
+        <button 
+          type="button" 
+          id="launch-demo-btn"
+          onclick="openDemoPlayer()"
+          class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-mono font-bold text-white bg-gradient-to-r from-red-600 to-amber-600 hover:from-red-500 hover:to-amber-500 shadow-lg shadow-red-600/25 transition-all active:scale-95 border border-red-500/40"
+        >
+          <i data-lucide="play-circle" class="w-4 h-4 animate-pulse"></i>
+          <span>AUTOPILOT DEMO VIDEO</span>
+        </button>
+
+        <a href="../" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono font-medium text-[#8FA8C0] hover:text-white bg-[#131F30] hover:bg-[#1A2D42] border border-[#1C2E42] transition-colors">
+          <i data-lucide="arrow-left" class="w-3.5 h-3.5 text-[#0E7FE0]"></i>
+          <span>Live App</span>
         </a>
       </div>
     </div>
   </header>
 
-  <!-- Main Container -->
-  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col gap-8">
+  <!-- Main Content Container -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col gap-6">
 
-    <!-- Hero / Input Section -->
-    <section class="flex flex-col items-center text-center max-w-3xl mx-auto w-full pt-4">
-      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#0E7FE0]/10 border border-[#0E7FE0]/30 text-[#0E7FE0] text-xs font-mono mb-4">
-        <span class="w-2 h-2 rounded-full bg-[#0E7FE0] animate-pulse"></span>
-        <span>Universal Web Scraper & Batch ZIP Export</span>
+    <!-- Locked Extraction Bar & Mode Banner -->
+    <section class="bg-[#0D1520] border border-[#1C2E42] rounded-2xl p-5 shadow-2xl relative overflow-hidden">
+      <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-600 via-emerald-500 to-blue-600"></div>
+
+      <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div>
+          <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-emerald-950/70 border border-emerald-700/50 text-emerald-400 text-xs font-mono mb-2">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span>INTERNAL ASSET HUB · LOCKED TO SENTRAX WEBSITE</span>
+          </div>
+          <h1 class="text-xl sm:text-2xl font-bold text-white font-mono tracking-tight">
+            SENTRAX Official Photos & Videos Repository
+          </h1>
+          <p class="text-xs text-[#8FA8C0] mt-1">
+            Browse, inspect in full quality, and download every CCTV surveillance stream, license plate crop, vehicle snapshot, and case asset from <span class="text-white font-mono">https://shakyavinit.github.io/sentrax/</span>.
+          </p>
+        </div>
+
+        <!-- Universal Scraper Locked Status Pill -->
+        <div class="flex items-center gap-2 px-3 py-2 rounded-xl bg-[#080C14] border border-[#1C2E42] text-xs font-mono">
+          <div class="p-1.5 rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/20">
+            <i data-lucide="lock" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <div class="text-[10px] text-[#8FA8C0] uppercase">External Scraper</div>
+            <div class="text-amber-300 font-bold text-[11px]">LOCKED (SECURITY POLICY)</div>
+          </div>
+        </div>
       </div>
-      <h1 class="text-2xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight">
-        Extract <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#0E7FE0] to-[#38BDF8]">Photos & Videos</span> from Any Website
-      </h1>
-      <p class="text-sm sm:text-base text-[#8FA8C0] mt-2 max-w-xl">
-        Enter any website link below to extract high-resolution images, videos, SVGs, and social assets directly to your device.
-      </p>
 
-      <!-- URL Input Form -->
-      <form id="extract-form" class="w-full mt-6 flex flex-col gap-3">
-        <div class="relative flex items-center w-full shadow-2xl">
-          <div class="absolute left-4 text-[#4D6B85] flex items-center pointer-events-none">
-            <i data-lucide="globe" class="w-5 h-5"></i>
+      <!-- Domain Selector Bar (Pre-locked to SENTRAX) -->
+      <div class="mt-4 pt-4 border-t border-[#1C2E42]/60 flex flex-col sm:flex-row items-center gap-3">
+        <div class="relative flex-1 w-full">
+          <div class="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#4D6B85] flex items-center pointer-events-none">
+            <i data-lucide="lock" class="w-4 h-4 text-emerald-400"></i>
           </div>
           <input 
             type="text" 
-            id="url-input" 
-            placeholder="Enter website link, e.g. https://en.wikipedia.org/wiki/Earth or any URL..." 
-            class="w-full pl-12 pr-32 py-3.5 bg-[#0D1520] border-2 border-[#1C2E42] focus:border-[#0E7FE0] rounded-xl text-white placeholder-[#4D6B85] text-sm font-mono transition-all outline-none shadow-inner"
-            required 
-            autocomplete="off" 
-            spellcheck="false"
+            id="target-url-field"
+            value="https://shakyavinit.github.io/sentrax/"
+            readonly
+            class="w-full pl-10 pr-28 py-2.5 bg-[#080C14] border border-[#1C2E42] rounded-xl text-emerald-300 font-mono text-xs cursor-not-allowed select-all focus:outline-none"
           />
-          <div class="absolute right-2 flex items-center gap-1">
-            <button 
-              type="button" 
-              id="clear-btn" 
-              class="hidden p-2 text-[#8FA8C0] hover:text-white transition-colors" 
-              title="Clear input"
-            >
-              <i data-lucide="x" class="w-4 h-4"></i>
-            </button>
-            <button 
-              type="submit" 
-              id="submit-btn" 
-              class="inline-flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-lg bg-[#0E7FE0] hover:bg-[#1A9FFF] text-white font-mono font-semibold text-xs sm:text-sm transition-all shadow-lg shadow-[#0E7FE0]/25 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              <i data-lucide="sparkles" class="w-4 h-4"></i>
-              <span>Extract</span>
-            </button>
+          <div class="absolute right-2 top-1/2 -translate-y-1/2">
+            <span class="px-2 py-1 rounded bg-emerald-950/80 border border-emerald-700/50 text-[10px] font-mono text-emerald-400 font-bold">
+              VERIFIED TARGET
+            </span>
           </div>
         </div>
 
-        <!-- Quick Sample Chips -->
-        <div class="flex flex-wrap items-center justify-center gap-2 pt-1 text-xs">
-          <span class="text-[#4D6B85] font-mono text-[11px]">Try samples:</span>
-          <button type="button" class="sample-chip px-2.5 py-1 rounded bg-[#131F30] hover:bg-[#1A2E44] border border-[#1C2E42] text-[#8FA8C0] hover:text-white font-mono text-[11px] transition-colors" data-url="https://en.wikipedia.org/wiki/Earth">
-            Wikipedia (Earth)
-          </button>
-          <button type="button" class="sample-chip px-2.5 py-1 rounded bg-[#131F30] hover:bg-[#1A2E44] border border-[#1C2E42] text-[#8FA8C0] hover:text-white font-mono text-[11px] transition-colors" data-url="https://html5demos.com/video/">
-            HTML5 Video Demo
-          </button>
-          <button type="button" class="sample-chip px-2.5 py-1 rounded bg-[#131F30] hover:bg-[#1A2E44] border border-[#1C2E42] text-[#8FA8C0] hover:text-white font-mono text-[11px] transition-colors" data-url="https://news.ycombinator.com">
-            Hacker News
-          </button>
-          <button type="button" class="sample-chip px-2.5 py-1 rounded bg-[#131F30] hover:bg-[#1A2E44] border border-[#1C2E42] text-[#8FA8C0] hover:text-white font-mono text-[11px] transition-colors" data-url="https://shakyavinit.github.io/sentrax/">
-            SENTRAX Live
-          </button>
-        </div>
-      </form>
-    </section>
-
-    <!-- Loading Indicator -->
-    <section id="loading-state" class="hidden flex-col items-center justify-center py-16 text-center">
-      <div class="relative w-16 h-16">
-        <div class="w-16 h-16 rounded-full border-4 border-[#1C2E42] border-t-[#0E7FE0] animate-spin"></div>
-        <div class="absolute inset-0 flex items-center justify-center text-[#0E7FE0]">
-          <i data-lucide="scan" class="w-6 h-6 animate-pulse"></i>
-        </div>
-      </div>
-      <h3 class="text-base font-mono font-bold text-white mt-4" id="loading-title">Extracting media assets...</h3>
-      <p class="text-xs text-[#8FA8C0] mt-1 max-w-sm" id="loading-subtitle">Scraping photos, videos, icons and metadata</p>
-    </section>
-
-    <!-- Results Section -->
-    <section id="results-section" class="hidden flex-col gap-6">
-
-      <!-- Result Header & Metadata -->
-      <div class="bg-[#0D1520] border border-[#1C2E42] rounded-xl p-4 sm:p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-lg">
-        <div class="flex items-center gap-3">
-          <img id="res-favicon" src="" alt="" class="w-8 h-8 rounded p-1 bg-[#131F30] border border-[#1C2E42] object-contain hidden" />
-          <div class="overflow-hidden">
-            <h2 id="res-title" class="text-base sm:text-lg font-bold text-white truncate">Website Title</h2>
-            <p id="res-url" class="text-xs font-mono text-[#0E7FE0] truncate mt-0.5">https://example.com</p>
-          </div>
-        </div>
-
-        <!-- Global Action Buttons -->
-        <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
+        <div class="flex items-center gap-2 w-full sm:w-auto">
           <button 
             type="button" 
-            id="select-all-btn" 
-            class="px-3 py-1.5 rounded-lg bg-[#131F30] hover:bg-[#1A2D42] border border-[#1C2E42] text-xs font-mono text-[#8FA8C0] hover:text-white transition-colors inline-flex items-center gap-1.5"
+            onclick="selectAllFiltered()"
+            class="px-3 py-2.5 rounded-xl bg-[#131F30] hover:bg-[#1A2D42] border border-[#1C2E42] text-xs font-mono text-slate-300 hover:text-white transition flex items-center gap-1.5"
           >
             <i data-lucide="check-square" class="w-3.5 h-3.5 text-[#0E7FE0]"></i>
             <span>Select All</span>
           </button>
           <button 
             type="button" 
-            id="download-selected-zip-btn" 
-            class="flex-1 md:flex-initial px-4 py-1.5 rounded-lg bg-[#0E7FE0] hover:bg-[#1A9FFF] text-white text-xs font-mono font-bold transition-all shadow-md shadow-[#0E7FE0]/20 inline-flex items-center justify-center gap-2"
+            id="download-zip-btn"
+            onclick="downloadSelectedAsZip()"
+            class="flex-1 sm:flex-initial px-4 py-2.5 rounded-xl bg-[#0E7FE0] hover:bg-[#1A9FFF] text-white font-mono text-xs font-bold transition-all shadow-lg shadow-[#0E7FE0]/20 flex items-center justify-center gap-2"
           >
             <i data-lucide="archive" class="w-4 h-4"></i>
-            <span id="zip-btn-text">Download All as ZIP</span>
+            <span id="zip-button-label">Download All as ZIP</span>
           </button>
         </div>
-      </div>
-
-      <!-- Filters & Tab Controls -->
-      <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 border-b border-[#1C2E42] pb-3">
-        <!-- Tabs -->
-        <div class="flex items-center gap-2 overflow-x-auto custom-scrollbar pb-1 sm:pb-0">
-          <button class="tab-btn px-3 py-1.5 rounded-lg text-xs font-mono font-medium transition-colors bg-[#0E7FE0] text-white" data-filter="all">
-            All Media (<span id="count-all">0</span>)
-          </button>
-          <button class="tab-btn px-3 py-1.5 rounded-lg text-xs font-mono font-medium transition-colors bg-[#131F30] text-[#8FA8C0] hover:text-white" data-filter="photo">
-            Photos (<span id="count-photos">0</span>)
-          </button>
-          <button class="tab-btn px-3 py-1.5 rounded-lg text-xs font-mono font-medium transition-colors bg-[#131F30] text-[#8FA8C0] hover:text-white" data-filter="video">
-            Videos (<span id="count-videos">0</span>)
-          </button>
-          <button class="tab-btn px-3 py-1.5 rounded-lg text-xs font-mono font-medium transition-colors bg-[#131F30] text-[#8FA8C0] hover:text-white" data-filter="vector">
-            SVGs & Icons (<span id="count-vectors">0</span>)
-          </button>
-        </div>
-
-        <!-- Search input within results -->
-        <div class="relative w-full sm:w-64">
-          <i data-lucide="search" class="w-3.5 h-3.5 absolute left-3 top-3 text-[#4D6B85]"></i>
-          <input 
-            type="text" 
-            id="filter-search" 
-            placeholder="Search filename or format..." 
-            class="w-full pl-9 pr-3 py-1.5 bg-[#0D1520] border border-[#1C2E42] rounded-lg text-xs font-mono text-white placeholder-[#4D6B85] focus:border-[#0E7FE0] outline-none"
-          />
-        </div>
-      </div>
-
-      <!-- Media Grid -->
-      <div id="media-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        <!-- Media Cards injected by JavaScript -->
-      </div>
-
-      <!-- Empty State -->
-      <div id="empty-filtered-state" class="hidden flex-col items-center justify-center py-12 text-center text-[#8FA8C0]">
-        <i data-lucide="filter-x" class="w-10 h-10 text-[#4D6B85] mb-2"></i>
-        <p class="text-sm font-mono">No media matches current filter</p>
       </div>
     </section>
 
+    <!-- Filter Category Tabs & Quick Stats -->
+    <div class="flex flex-wrap items-center justify-between gap-3 bg-[#0C121D] border border-[#1A2638] rounded-xl p-2 text-xs font-mono">
+      <div class="flex flex-wrap items-center gap-1">
+        <button 
+          onclick="setTab('all')" 
+          id="tab-all"
+          class="tab-btn px-3 py-1.5 rounded-lg bg-blue-600 text-white font-bold transition flex items-center gap-1.5"
+        >
+          <i data-lucide="layers" class="w-3.5 h-3.5"></i>
+          <span>ALL ASSETS</span>
+          <span id="badge-count-all" class="px-1.5 py-0.2 rounded-full bg-black/40 text-[10px]">35</span>
+        </button>
+        <button 
+          onclick="setTab('video')" 
+          id="tab-video"
+          class="tab-btn px-3 py-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-[#131F30] transition flex items-center gap-1.5"
+        >
+          <i data-lucide="video" class="w-3.5 h-3.5 text-blue-400"></i>
+          <span>CCTV VIDEOS (MP4)</span>
+          <span id="badge-count-video" class="px-1.5 py-0.2 rounded-full bg-blue-950 text-blue-300 text-[10px]">12</span>
+        </button>
+        <button 
+          onclick="setTab('plate')" 
+          id="tab-plate"
+          class="tab-btn px-3 py-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-[#131F30] transition flex items-center gap-1.5"
+        >
+          <i data-lucide="credit-card" class="w-3.5 h-3.5 text-emerald-400"></i>
+          <span>ANPR PLATES</span>
+          <span id="badge-count-plate" class="px-1.5 py-0.2 rounded-full bg-emerald-950 text-emerald-300 text-[10px]">6</span>
+        </button>
+        <button 
+          onclick="setTab('crop')" 
+          id="tab-crop"
+          class="tab-btn px-3 py-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-[#131F30] transition flex items-center gap-1.5"
+        >
+          <i data-lucide="car" class="w-3.5 h-3.5 text-amber-400"></i>
+          <span>VEHICLE CROPS</span>
+          <span id="badge-count-crop" class="px-1.5 py-0.2 rounded-full bg-amber-950 text-amber-300 text-[10px]">8</span>
+        </button>
+        <button 
+          onclick="setTab('tactical')" 
+          id="tab-tactical"
+          class="tab-btn px-3 py-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-[#131F30] transition flex items-center gap-1.5"
+        >
+          <i data-lucide="map" class="w-3.5 h-3.5 text-purple-400"></i>
+          <span>TACTICAL MAPS</span>
+          <span id="badge-count-tactical" class="px-1.5 py-0.2 rounded-full bg-purple-950 text-purple-300 text-[10px]">9</span>
+        </button>
+      </div>
+
+      <div class="flex items-center gap-3 text-slate-400 pr-2">
+        <span id="selection-counter" class="text-blue-400 font-bold">0 selected</span>
+        <span>·</span>
+        <span>Ready for 1-click export</span>
+      </div>
+    </div>
+
+    <!-- Media Grid -->
+    <div id="media-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <!-- Generated via Javascript -->
+    </div>
+
   </main>
 
-  <!-- Lightbox Modal -->
-  <div id="lightbox-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black/90 backdrop-blur-md p-4">
-    <div class="relative max-w-5xl w-full max-h-[90vh] bg-[#0D1520] border border-[#1C2E42] rounded-xl flex flex-col overflow-hidden shadow-2xl">
-      <!-- Modal Header -->
-      <div class="flex items-center justify-between px-4 py-3 border-b border-[#1C2E42]">
-        <div class="flex items-center gap-2 overflow-hidden">
-          <span id="lightbox-type" class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#0E7FE0]/20 text-[#0E7FE0]">IMAGE</span>
-          <span id="lightbox-filename" class="text-xs font-mono text-white truncate max-w-md">filename.jpg</span>
+  <!-- Video & Image Lightbox Modal -->
+  <div id="lightbox-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-md p-4 hidden">
+    <div class="relative max-w-5xl w-full bg-[#0D1520] border border-[#1C2E42] rounded-2xl overflow-hidden shadow-2xl flex flex-col max-h-[92vh]">
+      <!-- Header -->
+      <div class="px-5 py-3.5 border-b border-[#1C2E42] flex items-center justify-between bg-[#080C14]">
+        <div class="flex items-center gap-2.5 min-w-0">
+          <span id="lightbox-badge" class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-blue-600 text-white">VIDEO</span>
+          <h3 id="lightbox-title" class="text-sm font-mono font-bold text-white truncate">Filename</h3>
         </div>
         <div class="flex items-center gap-2">
-          <button id="lightbox-dl-btn" class="p-1.5 rounded-lg bg-[#0E7FE0] hover:bg-[#1A9FFF] text-white text-xs font-mono font-bold inline-flex items-center gap-1.5 px-3">
+          <button id="lightbox-dl-btn" class="px-3 py-1.5 rounded-lg bg-[#0E7FE0] hover:bg-[#1A9FFF] text-white text-xs font-mono font-semibold transition flex items-center gap-1.5">
             <i data-lucide="download" class="w-3.5 h-3.5"></i>
             <span>Download</span>
           </button>
-          <button id="lightbox-close-btn" class="p-1.5 text-[#8FA8C0] hover:text-white transition-colors">
+          <button onclick="closeLightbox()" class="p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-[#1C2E42] transition">
             <i data-lucide="x" class="w-5 h-5"></i>
           </button>
         </div>
       </div>
-      <!-- Modal Body -->
-      <div class="flex-1 overflow-auto p-4 flex items-center justify-center min-h-[300px] bg-[#080C14]">
-        <div id="lightbox-content" class="w-full flex items-center justify-center"></div>
+
+      <!-- Media Canvas -->
+      <div id="lightbox-canvas" class="flex-1 bg-black flex items-center justify-center overflow-hidden p-2 min-h-[360px]">
+        <!-- Dynamic Video / Image injected -->
       </div>
-      <!-- Modal Footer -->
-      <div class="px-4 py-2 bg-[#0D1520] border-t border-[#1C2E42] text-[11px] font-mono text-[#8FA8C0] flex items-center justify-between">
-        <a id="lightbox-origin-link" href="#" target="_blank" rel="noopener" class="text-[#0E7FE0] hover:underline truncate max-w-xl"></a>
-        <button id="lightbox-copy-btn" class="hover:text-white flex items-center gap-1 ml-2 flex-shrink-0">
-          <i data-lucide="copy" class="w-3.5 h-3.5"></i>
-          <span>Copy URL</span>
+
+      <!-- Footer Metadata -->
+      <div class="px-5 py-2.5 border-t border-[#1C2E42] bg-[#080C14] flex flex-wrap items-center justify-between text-xs font-mono text-slate-400">
+        <span id="lightbox-meta">1920×1080 · H.264 · 25 FPS</span>
+        <span class="text-emerald-400">Verified SENTRAX Platform Sighting Asset</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Interactive Autopilot Demo Walkthrough Modal -->
+  <div id="demo-player-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/95 backdrop-blur-lg p-4 hidden">
+    <div class="relative max-w-5xl w-full bg-[#090E17] border border-blue-500/50 rounded-2xl overflow-hidden shadow-[0_0_80px_rgba(14,127,224,0.3)] flex flex-col max-h-[95vh]">
+      <!-- Demo Top Bar -->
+      <div class="px-6 py-4 border-b border-[#1C2E42] bg-[#0C131F] flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <span class="w-3 h-3 rounded-full bg-red-500 animate-ping"></span>
+          <div>
+            <h2 class="text-base font-mono font-bold text-white flex items-center gap-2">
+              <span>SENTRAX AUTOPILOT DEMO SIMULATOR</span>
+              <span class="px-2 py-0.5 rounded bg-red-600/20 border border-red-500/40 text-red-400 text-[10px] uppercase font-bold">AUTOMATED WALKTHROUGH</span>
+            </h2>
+            <p class="text-xs text-slate-400">High-definition sequential video presentation of the full law enforcement surveillance workflow</p>
+          </div>
+        </div>
+        <button onclick="closeDemoPlayer()" class="p-2 text-slate-400 hover:text-white rounded-lg hover:bg-[#1A2638] transition">
+          <i data-lucide="x" class="w-5 h-5"></i>
         </button>
       </div>
+
+      <!-- Step Indicator Bar -->
+      <div class="px-6 py-2.5 bg-[#060A11] border-b border-[#1C2E42] flex items-center justify-between gap-2 overflow-x-auto text-xs font-mono">
+        <div id="step-btn-1" class="step-badge flex items-center gap-1.5 px-3 py-1 rounded-lg bg-blue-600 text-white font-bold">
+          <span>1. SOC MATRIX</span>
+        </div>
+        <div id="step-btn-2" class="step-badge flex items-center gap-1.5 px-3 py-1 rounded-lg text-slate-400">
+          <span>2. ANPR OCR LOCK</span>
+        </div>
+        <div id="step-btn-3" class="step-badge flex items-center gap-1.5 px-3 py-1 rounded-lg text-slate-400">
+          <span>3. WATCHLIST INTERCEPT</span>
+        </div>
+        <div id="step-btn-4" class="step-badge flex items-center gap-1.5 px-3 py-1 rounded-lg text-slate-400">
+          <span>4. EVIDENCE SHA-256</span>
+        </div>
+        <div id="step-btn-5" class="step-badge flex items-center gap-1.5 px-3 py-1 rounded-lg text-slate-400">
+          <span>5. TRAJECTORY REPLAY</span>
+        </div>
+      </div>
+
+      <!-- Main Video Screen with Animated HUD -->
+      <div class="relative flex-1 bg-black min-h-[420px] flex items-center justify-center overflow-hidden">
+        <video 
+          id="demo-video-elem" 
+          autoplay 
+          loop 
+          muted 
+          playsinline 
+          class="w-full h-full object-cover max-h-[60vh]"
+        >
+          <source id="demo-video-src" src="../videos/traffic_city_junction.mp4" type="video/mp4">
+        </video>
+
+        <!-- Overlay HUD Bounding Boxes & Badges -->
+        <div class="absolute inset-0 pointer-events-none p-6 flex flex-col justify-between">
+          <div class="flex items-start justify-between">
+            <div class="bg-black/80 backdrop-blur-md border border-blue-500/60 rounded-lg p-3 text-xs font-mono space-y-1">
+              <div class="flex items-center gap-2 text-emerald-400 font-bold">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span id="demo-hud-camera">CAMERA CAM01 // MG ROAD JUNCTION</span>
+              </div>
+              <div class="text-slate-300">YOLOv11 Detection: <strong class="text-white">Active (97.8% Conf)</strong></div>
+              <div class="text-slate-300">Live ANPR OCR: <strong id="demo-hud-plate" class="text-amber-400 font-bold">GJ01AB1234</strong></div>
+            </div>
+
+            <div id="demo-hud-alert-box" class="hidden bg-red-950/90 border-2 border-red-600 rounded-xl p-3 text-xs font-mono text-red-200 animate-pulse shadow-[0_0_30px_rgba(220,38,38,0.5)]">
+              <div class="flex items-center gap-2 font-bold text-red-400 text-sm">
+                <i data-lucide="siren" class="w-4 h-4"></i>
+                <span>HIGH PRIORITY INTERCEPT</span>
+              </div>
+              <div>TARGET: <strong class="text-white">UP32PQ6677 (ARMED ROBBERY)</strong></div>
+              <div>DISPATCH: Ahmedabad Zone 1 Quick Patrol Unit 04</div>
+            </div>
+          </div>
+
+          <!-- Bottom Subtitle / Narration Banner -->
+          <div class="bg-black/85 backdrop-blur-md border border-white/15 rounded-xl p-4 text-center">
+            <div id="demo-narration-title" class="text-sm font-mono font-bold text-blue-400 mb-1">
+              STEP 1 OF 5 — 24/7 Optical Video Stream Ingestion
+            </div>
+            <p id="demo-narration-text" class="text-xs text-slate-200 font-sans max-w-2xl mx-auto leading-relaxed">
+              SENTRAX continuously ingests live HLS and RTSP feeds from Gujarat Police municipal CCTV cameras across Ahmedabad and Gandhinagar, processing frames at 25 FPS on real-time neural models.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Demo Controller Controls -->
+      <div class="px-6 py-3.5 bg-[#0C131F] border-t border-[#1C2E42] flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button 
+            onclick="prevDemoStep()" 
+            class="px-3.5 py-1.5 rounded-lg bg-[#131F30] hover:bg-[#1A2638] text-slate-300 text-xs font-mono transition"
+          >
+            ◀ Previous
+          </button>
+          <button 
+            id="demo-play-pause-btn"
+            onclick="toggleDemoAutoplay()" 
+            class="px-4 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-mono text-xs font-bold transition flex items-center gap-1.5"
+          >
+            <i data-lucide="pause" class="w-3.5 h-3.5"></i>
+            <span id="demo-play-label">PAUSE AUTOPLAY</span>
+          </button>
+          <button 
+            onclick="nextDemoStep()" 
+            class="px-3.5 py-1.5 rounded-lg bg-[#131F30] hover:bg-[#1A2638] text-slate-300 text-xs font-mono transition"
+          >
+            Next ▶
+          </button>
+        </div>
+
+        <div class="text-xs font-mono text-slate-400">
+          Time remaining on step: <strong id="step-countdown" class="text-blue-400">6s</strong>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- ZIP Progress Modal -->
-  <div id="zip-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black/85 backdrop-blur-sm p-4">
-    <div class="max-w-md w-full bg-[#0D1520] border border-[#1C2E42] rounded-xl p-6 flex flex-col gap-4 shadow-2xl">
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-lg bg-[#0E7FE0]/20 border border-[#0E7FE0]/40 flex items-center justify-center text-[#0E7FE0]">
-          <i data-lucide="archive" class="w-5 h-5 animate-pulse"></i>
-        </div>
-        <div>
-          <h3 class="text-sm font-bold text-white font-mono">PACKAGING ZIP ARCHIVE</h3>
-          <p id="zip-modal-status" class="text-xs text-[#8FA8C0]">Downloading media assets...</p>
-        </div>
+  <!-- ZIP Download Progress Modal -->
+  <div id="zip-progress-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 hidden">
+    <div class="bg-[#0D1520] border border-[#1C2E42] rounded-2xl p-6 max-w-md w-full shadow-2xl text-center space-y-4">
+      <div class="w-12 h-12 mx-auto rounded-xl bg-blue-600/20 border border-blue-500/40 flex items-center justify-center text-blue-400">
+        <i data-lucide="archive" class="w-6 h-6 animate-pulse"></i>
       </div>
+      <h3 class="text-base font-mono font-bold text-white">Archiving SENTRAX Media Assets</h3>
+      <p id="zip-status-text" class="text-xs font-mono text-[#8FA8C0]">Packaging selected videos and photos into zip...</p>
       
       <!-- Progress Bar -->
-      <div class="w-full bg-[#131F30] rounded-full h-3 overflow-hidden border border-[#1C2E42]">
-        <div id="zip-modal-bar" class="bg-[#0E7FE0] h-full transition-all duration-150 rounded-full" style="width: 0%"></div>
+      <div class="w-full bg-[#080C14] h-2.5 rounded-full overflow-hidden border border-[#1C2E42]">
+        <div id="zip-progress-bar" class="bg-gradient-to-r from-blue-600 to-emerald-500 h-full w-0 transition-all duration-150"></div>
       </div>
 
-      <div class="flex items-center justify-between text-xs font-mono text-[#8FA8C0]">
-        <span id="zip-modal-count">0 / 0 files</span>
-        <span id="zip-modal-percent">0%</span>
+      <div class="text-[11px] font-mono text-slate-400 flex items-center justify-between">
+        <span id="zip-progress-count">0 / 0 files</span>
+        <span id="zip-progress-percent">0%</span>
       </div>
     </div>
   </div>
 
-  <!-- Toast Notification -->
-  <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
-    <div class="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-[#0D1520] border border-[#1C2E42] text-white text-xs font-mono shadow-2xl">
-      <span id="toast-icon"></span>
-      <span id="toast-msg">Notification</span>
-    </div>
-  </div>
-
-  <!-- Main JavaScript Logic -->
+  <!-- Javascript Logic -->
   <script>
-    // State
-    let extractedMedia = [];
-    let currentFilter = 'all';
-    let searchQuery = '';
-    let currentTargetUrl = '';
-    let currentDomain = '';
+    // Complete Catalogue of SENTRAX Official Assets
+    const SENTRAX_ASSETS = [
+      // Videos (12 CCTV Surveillance Feeds)
+      { id: 'v1', title: 'MG Road Junction Surveillance Stream', type: 'video', category: 'video', url: '../videos/cam_mg_road.mp4', thumb: '../images/cam_mg_road_thumb.jpg', desc: '1080p · 25 FPS · Low Congestion', res: '1920×1080', format: 'MP4' },
+      { id: 'v2', title: 'Sardar Bridge Sabarmati Entry', type: 'video', category: 'video', url: '../videos/cam_sardar_bridge.mp4', thumb: '../images/cam_sardar_bridge_thumb.jpg', desc: '1080p · 25 FPS · Low Congestion', res: '1920×1080', format: 'MP4' },
+      { id: 'v3', title: 'Vastrapur Lake Gate Feed', type: 'video', category: 'video', url: '../videos/cam_vastrapur.mp4', thumb: '../images/cam_vastrapur_thumb.jpg', desc: '1080p · 25 FPS · Medium Congestion', res: '1920×1080', format: 'MP4' },
+      { id: 'v4', title: 'SG Highway Toll Plaza', type: 'video', category: 'video', url: '../videos/cam_sg_highway_toll.mp4', thumb: '../images/cam_sg_highway_thumb.jpg', desc: '1080p · 25 FPS · High Congestion', res: '1920×1080', format: 'MP4' },
+      { id: 'v5', title: 'GIFT City Grand Entry Feed', type: 'video', category: 'video', url: '../videos/cam_gift_city.mp4', thumb: '../images/cam_gift_city_thumb.jpg', desc: '1080p · 25 FPS · Highway Corridors', res: '1920×1080', format: 'MP4' },
+      { id: 'v6', title: 'Sabarmati Riverfront North', type: 'video', category: 'video', url: '../videos/cam_sabarmati.mp4', thumb: '../images/cam_sabarmati_thumb.jpg', desc: '1080p · 25 FPS · Urban Corridor', res: '1920×1080', format: 'MP4' },
+      { id: 'v7', title: 'Gandhinagar Sector 15 Gate', type: 'video', category: 'video', url: '../videos/cam_sector15.mp4', thumb: '../images/feed_cam05.jpg', desc: '1080p · 25 FPS · Municipal Checkpoint', res: '1920×1080', format: 'MP4' },
+      { id: 'v8', title: 'GNLU Campus Circle Feed', type: 'video', category: 'video', url: '../videos/cam_gnlu_gate.mp4', thumb: '../images/cam_gnlu_gate_thumb.jpg', desc: '1080p · 25 FPS · Perimeter Surveillance', res: '1920×1080', format: 'MP4' },
+      { id: 'v9', title: 'Chiloda Highway Circle Stream', type: 'video', category: 'video', url: '../videos/cam_chiloda_circle.mp4', thumb: '../images/feed_cam08.jpg', desc: '1080p · 25 FPS · Multi-Lane Flow', res: '1920×1080', format: 'MP4' },
+      { id: 'v10', title: 'Kudasan Crossroad Gandhinagar', type: 'video', category: 'video', url: '../videos/cam_kudasan.mp4', thumb: '../images/feed_cam09.jpg', desc: '1080p · 25 FPS · Traffic Signal Point', res: '1920×1080', format: 'MP4' },
+      { id: 'v11', title: 'Real Traffic Junction Urban Stream', type: 'video', category: 'video', url: '../videos/traffic_city_junction.mp4', thumb: '../images/traffic_city_junction_thumb.jpg', desc: '1080p · 30 FPS · Mixed Vehicle Traffic', res: '1920×1080', format: 'MP4' },
+      { id: 'v12', title: 'Tactical CCTV Surveillance Continuous', type: 'video', category: 'video', url: '../videos/traffic_cctv_real.mp4', thumb: '../images/feed_cam03.jpg', desc: '1080p · 30 FPS · High Definition Night/Day', res: '1920×1080', format: 'MP4' },
 
-    // DOM Elements
-    const form = document.getElementById('extract-form');
-    const urlInput = document.getElementById('url-input');
-    const clearBtn = document.getElementById('clear-btn');
-    const submitBtn = document.getElementById('submit-btn');
-    const loadingState = document.getElementById('loading-state');
-    const loadingTitle = document.getElementById('loading-title');
-    const resultsSection = document.getElementById('results-section');
-    const mediaGrid = document.getElementById('media-grid');
-    const emptyFilteredState = document.getElementById('empty-filtered-state');
-    const filterSearch = document.getElementById('filter-search');
-    const selectAllBtn = document.getElementById('select-all-btn');
-    const downloadSelectedZipBtn = document.getElementById('download-selected-zip-btn');
-    const zipBtnText = document.getElementById('zip-btn-text');
+      // ANPR License Plates
+      { id: 'p1', title: 'License Plate Crop GJ01AB1234', type: 'image', category: 'plate', url: '../images/plate_gj01ab1234.png', thumb: '../images/plate_gj01ab1234.png', desc: 'ANPR OCR 98.4% · Gujarat Commuter', res: 'High-Res PNG', format: 'PNG' },
+      { id: 'p2', title: 'Watchlist Target Plate UP32PQ6677', type: 'image', category: 'plate', url: '../images/plate_up32pq6677.png', thumb: '../images/plate_up32pq6677.png', desc: 'Active Warrant · Immediate Intercept', res: 'High-Res PNG', format: 'PNG' },
+      { id: 'p3', title: 'License Plate Crop DL10XY9090', type: 'image', category: 'plate', url: '../images/plate_dl10xy9090.png', thumb: '../images/plate_dl10xy9090.png', desc: 'ANPR OCR 96.1% · Inter-State Transit', res: 'High-Res PNG', format: 'PNG' },
+      { id: 'p4', title: 'License Plate Crop GJ05CD5678', type: 'image', category: 'plate', url: '../images/plate_gj05cd5678.png', thumb: '../images/plate_gj05cd5678.png', desc: 'ANPR OCR 97.2% · Surat Corridor', res: 'High-Res PNG', format: 'PNG' },
+      { id: 'p5', title: 'License Plate Crop RJ14GH3456', type: 'image', category: 'plate', url: '../images/plate_rj14gh3456.png', thumb: '../images/plate_rj14gh3456.png', desc: 'ANPR OCR 95.8% · Commercial Truck', res: 'High-Res PNG', format: 'PNG' },
+      { id: 'p6', title: '3D Plate Scanner Optical Model', type: 'image', category: 'plate', url: '../images/plate_scanner_3d.png', thumb: '../images/plate_scanner_3d.png', desc: 'Forensic Hardware Visualization', res: 'HQ Render', format: 'PNG' },
 
-    // Lightbox Elements
-    const lightboxModal = document.getElementById('lightbox-modal');
-    const lightboxType = document.getElementById('lightbox-type');
-    const lightboxFilename = document.getElementById('lightbox-filename');
-    const lightboxContent = document.getElementById('lightbox-content');
-    const lightboxDlBtn = document.getElementById('lightbox-dl-btn');
-    const lightboxCloseBtn = document.getElementById('lightbox-close-btn');
-    const lightboxOriginLink = document.getElementById('lightbox-origin-link');
-    const lightboxCopyBtn = document.getElementById('lightbox-copy-btn');
-    let currentActiveMedia = null;
+      // Vehicle Detections & Forensic Crops
+      { id: 'c1', title: 'YOLO Crop GJ01AB1234 (Hyundai White)', type: 'image', category: 'crop', url: '../images/crop_gj01ab1234.jpg', thumb: '../images/crop_gj01ab1234.jpg', desc: 'Vehicle Re-ID Sighting #1 · MG Road', res: '480×320 JPG', format: 'JPG' },
+      { id: 'c2', title: 'YOLO Crop DL10XY9090 (Sedan Grey)', type: 'image', category: 'crop', url: '../images/crop_dl10xy9090.jpg', thumb: '../images/crop_dl10xy9090.jpg', desc: 'Vehicle Re-ID Sighting #2 · Vastrapur', res: '480×320 JPG', format: 'JPG' },
+      { id: 'c3', title: 'YOLO Crop GJ05CD5678 (Truck Commercial)', type: 'image', category: 'crop', url: '../images/crop_gj05cd5678.jpg', thumb: '../images/crop_gj05cd5678.jpg', desc: 'Vehicle Re-ID Sighting #3 · SG Highway', res: '480×320 JPG', format: 'JPG' },
+      { id: 'c4', title: 'YOLO Crop RJ14GH3456 (Cargo Van)', type: 'image', category: 'crop', url: '../images/crop_rj14gh3456.jpg', thumb: '../images/crop_rj14gh3456.jpg', desc: 'Vehicle Re-ID Sighting #4 · Chiloda', res: '480×320 JPG', format: 'JPG' },
+      { id: 'c5', title: 'Scorpio Target High-Res Forensic Crop', type: 'image', category: 'crop', url: '../images/vehicle_scorpio_crop.jpg', thumb: '../images/vehicle_scorpio_crop.jpg', desc: 'Evidential Snapshot for Court Dossier', res: '640×480 JPG', format: 'JPG' },
+      { id: 'c6', title: 'Swift Intercept Verified Match', type: 'image', category: 'crop', url: '../images/hit_swift_clean.jpg', thumb: '../images/hit_swift_clean.jpg', desc: 'Forensic Visual Match Proof', res: 'Snapshot', format: 'JPG' },
+      { id: 'c7', title: 'Fortuner Corridor Optical Hit', type: 'image', category: 'crop', url: '../images/hit_fortuner_clean.jpg', thumb: '../images/hit_fortuner_clean.jpg', desc: 'Highway ANPR Match Event', res: 'Snapshot', format: 'JPG' },
+      { id: 'c8', title: 'GNLU Full Field Forensic Frame', type: 'image', category: 'crop', url: '../images/evidence_gnlu_large.jpg', thumb: '../images/evidence_gnlu_large.jpg', desc: 'Section 65B Certified Frame Seal', res: '1920×1080 JPG', format: 'JPG' },
 
-    // Initialize Lucide Icons
-    function refreshIcons() {
-      if (window.lucide) {
-        window.lucide.createIcons();
-      }
-    }
-    refreshIcons();
+      // Tactical Maps & Platform Visuals
+      { id: 't1', title: 'Gujarat State Tactical Grid Map', type: 'image', category: 'tactical', url: '../images/gujarat_map_tactical.jpg', thumb: '../images/gujarat_map_tactical.jpg', desc: 'Sentinel Surveillance GIS Topology', res: 'HQ Map', format: 'JPG' },
+      { id: 't2', title: 'Ahmedabad-Gandhinagar HUD Corridor', type: 'image', category: 'tactical', url: '../images/gujarat_hud_map.jpg', thumb: '../images/gujarat_hud_map.jpg', desc: 'Night Operation Cyber Command HUD', res: 'HQ HUD', format: 'JPG' },
+      { id: 't3', title: 'State Holographic Radar Map', type: 'image', category: 'tactical', url: '../images/gujarat_hologram.png', thumb: '../images/gujarat_hologram.png', desc: 'Integrated SOC Geospatial Layer', res: 'Vector PNG', format: 'PNG' },
+      { id: 't4', title: 'Optical CCTV Sensor 3D Model', type: 'image', category: 'tactical', url: '../images/cctv_camera_3d.png', thumb: '../images/cctv_camera_3d.png', desc: 'Hardware Sensor Telemetry Spec', res: '3D Render', format: 'PNG' },
+      { id: 't5', title: 'Police Rapid Response Interceptor 3D', type: 'image', category: 'tactical', url: '../images/police_car_3d.png', thumb: '../images/police_car_3d.png', desc: 'Field Patrol Unit Deployment Model', res: '3D Render', format: 'PNG' },
+      { id: 't6', title: 'Alert Beacon Incident Strobe 3D', type: 'image', category: 'tactical', url: '../images/alert_beacon_3d.png', thumb: '../images/alert_beacon_3d.png', desc: 'Watchlist Intercept Beacon', res: '3D Render', format: 'PNG' },
+    ];
 
-    // Input handlers
-    urlInput.addEventListener('input', () => {
-      clearBtn.classList.toggle('hidden', !urlInput.value.trim());
-    });
-    clearBtn.addEventListener('click', () => {
-      urlInput.value = '';
-      clearBtn.classList.add('hidden');
-      urlInput.focus();
-    });
+    let currentTab = 'all';
+    let selectedItemIds = new Set(SENTRAX_ASSETS.map(a => a.id)); // All selected by default for easy zip
 
-    // Sample chips
-    document.querySelectorAll('.sample-chip').forEach(chip => {
-      chip.addEventListener('click', () => {
-        urlInput.value = chip.dataset.url;
-        clearBtn.classList.remove('hidden');
-        form.dispatchEvent(new Event('submit'));
-      });
-    });
-
-    // Toast function
-    function showToast(message, type = 'info') {
-      const toast = document.getElementById('toast');
-      const toastMsg = document.getElementById('toast-msg');
-      const toastIcon = document.getElementById('toast-icon');
-
-      toastMsg.textContent = message;
-      if (type === 'success') {
-        toastIcon.innerHTML = '<span class="text-emerald-400">✓</span>';
-      } else if (type === 'error') {
-        toastIcon.innerHTML = '<span class="text-red-400">✕</span>';
-      } else {
-        toastIcon.innerHTML = '<span class="text-[#0E7FE0]">ℹ</span>';
-      }
-
-      toast.classList.remove('translate-y-20', 'opacity-0');
-      setTimeout(() => {
-        toast.classList.add('translate-y-20', 'opacity-0');
-      }, 3000);
-    }
-
-    // URL resolution helper
-    function resolveUrl(relativeOrAbsolute, baseUrl) {
-      try {
-        if (!relativeOrAbsolute) return null;
-        const cleaned = relativeOrAbsolute.trim();
-        if (cleaned.startsWith('data:') && cleaned.length < 100) return null; // skip tiny placeholders
-        return new URL(cleaned, baseUrl).href;
-      } catch (e) {
-        return null;
-      }
-    }
-
-    // Media Collector
-    class MediaCollector {
-      constructor(baseUrl) {
-        this.baseUrl = baseUrl;
-        this.items = new Map();
-      }
-
-      add(url, type, format, sourceTag, context = '') {
-        const fullUrl = resolveUrl(url, this.baseUrl);
-        if (!fullUrl) return;
-        if (fullUrl.startsWith('javascript:')) return;
-        if (this.items.has(fullUrl)) return;
-
-        let filename = 'media';
-        try {
-          const pathParts = new URL(fullUrl).pathname.split('/');
-          const last = pathParts[pathParts.length - 1];
-          if (last && last.length > 0) {
-            filename = decodeURIComponent(last.split('?')[0]);
-          }
-        } catch (_) {}
-
-        // Format detection
-        let detectedFormat = format;
-        if (!detectedFormat) {
-          const ext = filename.split('.').pop()?.toUpperCase();
-          if (ext && ext.length <= 4) detectedFormat = ext;
-          else detectedFormat = type === 'video' ? 'VIDEO' : 'IMAGE';
-        }
-
-        this.items.set(fullUrl, {
-          url: fullUrl,
-          type: type, // 'photo' | 'video' | 'vector'
-          format: detectedFormat,
-          sourceTag: sourceTag,
-          filename: filename,
-          context: context,
-          selected: true
-        });
-      }
-
-      toArray() {
-        return Array.from(this.items.values());
-      }
-    }
-
-    // MULTI-ENGINE SCRAPER
-    async function extractFromUrl(targetUrl) {
-      const collector = new MediaCollector(targetUrl);
-      let pageTitle = '';
-      let faviconUrl = '';
-      const domain = new URL(targetUrl).hostname;
-
-      loadingTitle.textContent = `Analyzing ${domain}...`;
-
-      // Strategy A: Check Wikipedia REST API if Wikipedia
-      if (domain.includes('wikipedia.org')) {
-        try {
-          const pathParts = new URL(targetUrl).pathname.split('/');
-          const title = pathParts[pathParts.length - 1];
-          if (title) {
-            loadingTitle.textContent = 'Querying Wikipedia Media REST API...';
-            const lang = domain.split('.')[0] || 'en';
-            const res = await fetch(`https://${lang}.wikipedia.org/api/rest_v1/page/media-list/${encodeURIComponent(title)}`);
-            if (res.ok) {
-              const data = await res.json();
-              if (data.items && Array.isArray(data.items)) {
-                data.items.forEach(item => {
-                  if (item.srcset && Array.isArray(item.srcset) && item.srcset.length > 0) {
-                    const topSrc = item.srcset[item.srcset.length - 1].src;
-                    const isSvg = topSrc.endsWith('.svg') || topSrc.includes('.svg');
-                    collector.add(topSrc, isSvg ? 'vector' : (item.type === 'video' ? 'video' : 'photo'), isSvg ? 'SVG' : '', 'wikipedia-api', item.title || '');
-                  }
-                });
-              }
-            }
-          }
-        } catch (e) {
-          console.warn('Wikipedia API check skipped:', e);
-        }
-      }
-
-      // Strategy B: Jina AI Universal Web Reader (free, fast, resolves client-side SPA DOM and markdown images)
-      try {
-        loadingTitle.textContent = 'Scraping content via Universal Reader Engine...';
-        const jinaController = new AbortController();
-        const timeoutId = setTimeout(() => jinaController.abort(), 10000);
-        const jinaRes = await fetch(`https://r.jina.ai/${targetUrl}`, { signal: jinaController.signal });
-        clearTimeout(timeoutId);
-
-        if (jinaRes.ok) {
-          const text = await jinaRes.text();
-
-          // Extract Title
-          const titleMatch = text.match(/Title:\s*(.+)/i);
-          if (titleMatch && titleMatch[1]) {
-            pageTitle = titleMatch[1].trim();
-          }
-
-          // Extract Markdown Images: ![alt](url)
-          const imgRegex = /!\[([^\]]*)\]\((https?:\/\/[^\s\)\"\']+)\)/gi;
-          let match;
-          while ((match = imgRegex.exec(text)) !== null) {
-            const alt = match[1];
-            const url = match[2];
-            const isSvg = url.toLowerCase().includes('.svg');
-            collector.add(url, isSvg ? 'vector' : 'photo', isSvg ? 'SVG' : '', 'reader image', alt);
-          }
-
-          // Extract Media Links: [alt](url.mp4/webm/jpg/png...)
-          const linkRegex = /\[([^\]]*)\]\((https?:\/\/[^\s\)\"\']+\.(jpg|jpeg|png|webp|gif|svg|mp4|webm|mov|mkv)(?:\?[^\s\)\"\']*)?)\)/gi;
-          while ((match = linkRegex.exec(text)) !== null) {
-            const alt = match[1];
-            const url = match[2];
-            const ext = match[3].toLowerCase();
-            const isVideo = ['mp4', 'webm', 'mov', 'mkv'].includes(ext);
-            const isSvg = ext === 'svg';
-            collector.add(url, isVideo ? 'video' : (isSvg ? 'vector' : 'photo'), ext.toUpperCase(), 'reader link', alt);
-          }
-
-          // Extract YouTube / Vimeo embeds in text
-          const ytRegex = /(https?:\/\/(?:www\.)?(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)[a-zA-Z0-9_-]+)/gi;
-          while ((match = ytRegex.exec(text)) !== null) {
-            collector.add(match[1], 'video', 'YOUTUBE', 'embed');
-          }
-        }
-      } catch (e) {
-        console.warn('Jina reader fallback:', e.message);
-      }
-
-      // Strategy C: Microlink Media API (High quality social / og / video / hero images)
-      try {
-        loadingTitle.textContent = 'Extracting metadata & media records...';
-        const mlRes = await fetch(`https://api.microlink.io/?url=${encodeURIComponent(targetUrl)}&video=true`);
-        if (mlRes.ok) {
-          const json = await mlRes.json();
-          if (json.data) {
-            if (!pageTitle && json.data.title) pageTitle = json.data.title;
-            if (json.data.image && json.data.image.url) {
-              collector.add(json.data.image.url, 'photo', (json.data.image.type || 'HERO').toUpperCase(), 'og/hero image');
-            }
-            if (json.data.logo && json.data.logo.url) {
-              faviconUrl = json.data.logo.url;
-              collector.add(json.data.logo.url, 'vector', 'LOGO', 'logo/icon');
-            }
-            if (json.data.video && json.data.video.url) {
-              collector.add(json.data.video.url, 'video', (json.data.video.type || 'MP4').toUpperCase(), 'og:video');
-            }
-          }
-        }
-      } catch (e) {
-        console.warn('Microlink error:', e.message);
-      }
-
-      // Strategy D: Fallback direct HTML Scraper via CodeTabs / AllOrigins
-      if (collector.items.size < 5) {
-        try {
-          loadingTitle.textContent = 'Extracting DOM tree...';
-          const proxyRes = await fetch(`https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(targetUrl)}`);
-          if (proxyRes.ok) {
-            const html = await proxyRes.text();
-            if (html) {
-              parseHtmlDom(html, targetUrl, collector);
-            }
-          }
-        } catch (e) {
-          console.warn('DOM proxy fallback error:', e.message);
-        }
-      }
-
-      return {
-        title: pageTitle || domain,
-        favicon: faviconUrl || `https://www.google.com/s2/favicons?domain=${domain}&sz=64`,
-        media: collector.toArray()
-      };
-    }
-
-    function parseHtmlDom(html, baseUrl, collector) {
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(html, 'text/html');
-
-      // 1. Meta / OpenGraph
-      doc.querySelectorAll('meta[property="og:image"], meta[property="og:image:secure_url"], meta[name="twitter:image"]').forEach(m => {
-        collector.add(m.getAttribute('content'), 'photo', 'OG-IMG', 'meta');
-      });
-      doc.querySelectorAll('meta[property="og:video"], meta[property="og:video:secure_url"]').forEach(m => {
-        collector.add(m.getAttribute('content'), 'video', 'OG-VID', 'meta');
-      });
-
-      // 2. Images
-      doc.querySelectorAll('img').forEach(img => {
-        const src = img.getAttribute('src');
-        const dataSrc = img.getAttribute('data-src') || img.getAttribute('data-original') || img.getAttribute('data-lazy-src');
-        const srcset = img.getAttribute('srcset') || img.getAttribute('data-srcset');
-
-        if (srcset) {
-          const candidates = srcset.split(',').map(s => s.trim().split(' ')[0]).filter(Boolean);
-          if (candidates.length > 0) {
-            collector.add(candidates[candidates.length - 1], 'photo', '', 'img (srcset)', img.alt || '');
-          }
-        }
-        if (dataSrc) collector.add(dataSrc, 'photo', '', 'img (data-src)', img.alt || '');
-        if (src) {
-          const isSvg = src.toLowerCase().endsWith('.svg') || src.includes('.svg?');
-          collector.add(src, isSvg ? 'vector' : 'photo', isSvg ? 'SVG' : '', 'img', img.alt || '');
-        }
-      });
-
-      // 3. Videos
-      doc.querySelectorAll('video').forEach(video => {
-        if (video.src) collector.add(video.src, 'video', 'MP4', 'video');
-        if (video.poster) collector.add(video.poster, 'photo', 'POSTER', 'video poster');
-        video.querySelectorAll('source').forEach(s => {
-          if (s.src) collector.add(s.src, 'video', (s.type ? s.type.split('/')[1] : 'MP4').toUpperCase(), 'video source');
-        });
-      });
-
-      // 4. iframes
-      doc.querySelectorAll('iframe').forEach(iframe => {
-        const src = iframe.getAttribute('src') || iframe.getAttribute('data-src');
-        if (!src) return;
-        const resolved = resolveUrl(src, baseUrl);
-        if (!resolved) return;
-        if (resolved.includes('youtube.com') || resolved.includes('youtu.be')) {
-          collector.add(resolved, 'video', 'YOUTUBE', 'iframe embed');
-        } else if (resolved.includes('vimeo.com')) {
-          collector.add(resolved, 'video', 'VIMEO', 'iframe embed');
-        }
-      });
-    }
-
-    // Main extraction submission
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      let rawUrl = urlInput.value.trim();
-      if (!rawUrl) return;
-
-      if (!rawUrl.startsWith('http://') && !rawUrl.startsWith('https://')) {
-        rawUrl = 'https://' + rawUrl;
-        urlInput.value = rawUrl;
-      }
-
-      try {
-        const parsedBase = new URL(rawUrl);
-        currentTargetUrl = rawUrl;
-        currentDomain = parsedBase.hostname;
-      } catch (err) {
-        showToast('Please enter a valid web URL', 'error');
-        return;
-      }
-
-      // UI state transition
-      submitBtn.disabled = true;
-      loadingState.classList.remove('hidden');
-      resultsSection.classList.add('hidden');
-
-      try {
-        const result = await extractFromUrl(rawUrl);
-        extractedMedia = result.media;
-
-        // Header Info
-        document.getElementById('res-title').textContent = result.title;
-        document.getElementById('res-url').textContent = rawUrl;
-
-        const faviconImg = document.getElementById('res-favicon');
-        if (result.favicon) {
-          faviconImg.src = result.favicon;
-          faviconImg.classList.remove('hidden');
-        } else {
-          faviconImg.classList.add('hidden');
-        }
-
-        // Render Results
-        updateCounts();
-        resultsSection.classList.remove('hidden');
-        renderGrid();
-
-        if (extractedMedia.length > 0) {
-          showToast(`Successfully extracted ${extractedMedia.length} media assets!`, 'success');
-        } else {
-          showToast('Extraction complete, but no media files were discovered on this page.', 'info');
-        }
-      } catch (err) {
-        console.error(err);
-        showToast('Extraction error: ' + (err.message || 'Unable to load website'), 'error');
-      } finally {
-        submitBtn.disabled = false;
-        loadingState.classList.add('hidden');
-        refreshIcons();
-      }
-    });
-
-    function updateCounts() {
-      const allCount = extractedMedia.length;
-      const photoCount = extractedMedia.filter(m => m.type === 'photo').length;
-      const videoCount = extractedMedia.filter(m => m.type === 'video').length;
-      const vectorCount = extractedMedia.filter(m => m.type === 'vector').length;
-
-      document.getElementById('count-all').textContent = allCount;
-      document.getElementById('count-photos').textContent = photoCount;
-      document.getElementById('count-videos').textContent = videoCount;
-      document.getElementById('count-vectors').textContent = vectorCount;
-
-      const selectedCount = extractedMedia.filter(m => m.selected).length;
-      zipBtnText.textContent = selectedCount === allCount 
-        ? 'Download All as ZIP' 
-        : `Download Selected (${selectedCount}) as ZIP`;
-    }
-
-    // Filter tab clicks
-    document.querySelectorAll('.tab-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.tab-btn').forEach(b => {
-          b.classList.remove('bg-[#0E7FE0]', 'text-white');
-          b.classList.add('bg-[#131F30]', 'text-[#8FA8C0]');
-        });
-        btn.classList.remove('bg-[#131F30]', 'text-[#8FA8C0]');
-        btn.classList.add('bg-[#0E7FE0]', 'text-white');
-
-        currentFilter = btn.dataset.filter;
-        renderGrid();
-      });
-    });
-
-    // In-page search filter
-    filterSearch.addEventListener('input', (e) => {
-      searchQuery = e.target.value.toLowerCase().trim();
-      renderGrid();
-    });
-
-    // Render Media Grid
+    // Render Grid
     function renderGrid() {
-      mediaGrid.innerHTML = '';
+      const grid = document.getElementById('media-grid');
+      const filtered = SENTRAX_ASSETS.filter(a => currentTab === 'all' || a.category === currentTab);
 
-      const filtered = extractedMedia.filter(item => {
-        if (currentFilter !== 'all' && item.type !== currentFilter) return false;
-        if (searchQuery) {
-          return item.filename.toLowerCase().includes(searchQuery) ||
-                 item.format.toLowerCase().includes(searchQuery) ||
-                 item.url.toLowerCase().includes(searchQuery);
-        }
-        return true;
-      });
-
-      if (filtered.length === 0) {
-        emptyFilteredState.classList.remove('hidden');
-      } else {
-        emptyFilteredState.classList.add('hidden');
-      }
-
-      filtered.forEach((item, index) => {
+      grid.innerHTML = '';
+      filtered.forEach(item => {
+        const isSelected = selectedItemIds.has(item.id);
         const card = document.createElement('div');
-        card.className = 'group relative bg-[#0D1520] border border-[#1C2E42] hover:border-[#0E7FE0]/60 rounded-xl overflow-hidden shadow-lg transition-all flex flex-col';
-
-        // Checkbox & Type badge header
-        const cardHeader = document.createElement('div');
-        cardHeader.className = 'absolute top-2.5 left-2.5 right-2.5 flex items-center justify-between z-10 pointer-events-auto';
-
-        const checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.checked = item.selected;
-        checkbox.className = 'w-4 h-4 rounded border-[#1C2E42] text-[#0E7FE0] focus:ring-0 focus:ring-offset-0 bg-[#080C14]/80 cursor-pointer';
-        checkbox.addEventListener('change', (e) => {
-          item.selected = e.target.checked;
-          updateCounts();
-        });
-
-        const badge = document.createElement('span');
-        badge.className = `px-2 py-0.5 rounded text-[9px] font-mono font-bold tracking-wider backdrop-blur-md shadow ${
-          item.type === 'video' ? 'bg-red-500/20 text-red-400 border border-red-500/30' :
-          item.type === 'vector' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' :
-          'bg-[#0E7FE0]/20 text-[#0E7FE0] border border-[#0E7FE0]/30'
+        card.className = `relative flex flex-col bg-[#0D1520] border rounded-xl overflow-hidden transition-all duration-200 group ${
+          isSelected ? 'border-[#0E7FE0] shadow-lg shadow-[#0E7FE0]/10' : 'border-[#1C2E42] hover:border-slate-500'
         }`;
-        badge.textContent = item.format;
 
-        cardHeader.appendChild(checkbox);
-        cardHeader.appendChild(badge);
-        card.appendChild(cardHeader);
+        card.innerHTML = `
+          <!-- Thumbnail / Preview Area -->
+          <div class="relative h-44 bg-black overflow-hidden flex items-center justify-center cursor-pointer" onclick="openLightbox('${item.id}')">
+            ${
+              item.type === 'video'
+                ? `
+                  <video src="${item.url}" muted loop playsinline class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-300"></video>
+                  <div class="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors flex items-center justify-center">
+                    <div class="w-10 h-10 rounded-full bg-[#0E7FE0]/80 text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                      <i data-lucide="play" class="w-5 h-5 fill-current ml-0.5"></i>
+                    </div>
+                  </div>
+                  <span class="absolute top-2 left-2 px-2 py-0.5 rounded bg-blue-600/90 text-[10px] font-mono font-bold text-white uppercase flex items-center gap-1">
+                    <i data-lucide="video" class="w-3 h-3"></i> VIDEO
+                  </span>
+                `
+                : `
+                  <img src="${item.thumb || item.url}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                  <span class="absolute top-2 left-2 px-2 py-0.5 rounded bg-slate-800/90 border border-slate-700 text-[10px] font-mono font-bold text-slate-300 uppercase">
+                    ${item.format}
+                  </span>
+                `
+            }
 
-        // Media Preview Area
-        const mediaContainer = document.createElement('div');
-        mediaContainer.className = 'relative w-full h-44 bg-[#080C14] flex items-center justify-center overflow-hidden cursor-pointer';
-        mediaContainer.addEventListener('click', (e) => {
-          if (e.target.tagName !== 'INPUT') {
-            openLightbox(item);
-          }
-        });
-
-        if (item.type === 'video') {
-          if (item.format === 'YOUTUBE' || item.format === 'VIMEO') {
-            mediaContainer.innerHTML = `
-              <div class="flex flex-col items-center justify-center p-4 text-center">
-                <div class="w-12 h-12 rounded-full bg-red-500/20 border border-red-500/30 flex items-center justify-center text-red-400 mb-2">
-                  <i data-lucide="play" class="w-6 h-6 fill-current"></i>
-                </div>
-                <span class="text-xs font-mono text-white font-semibold">${item.format} Embed</span>
-              </div>
-            `;
-          } else {
-            mediaContainer.innerHTML = `
-              <div class="flex flex-col items-center justify-center p-4 text-center">
-                <div class="w-12 h-12 rounded-full bg-[#0E7FE0]/20 border border-[#0E7FE0]/30 flex items-center justify-center text-[#0E7FE0] mb-2">
-                  <i data-lucide="video" class="w-6 h-6"></i>
-                </div>
-                <span class="text-xs font-mono text-white truncate max-w-[160px]">${item.filename}</span>
-              </div>
-            `;
-          }
-        } else {
-          // Photo or Vector
-          const img = document.createElement('img');
-          img.src = item.url;
-          img.alt = item.filename;
-          img.loading = 'lazy';
-          img.className = 'w-full h-full object-contain p-2 transition-transform duration-300 group-hover:scale-105';
-          img.onerror = () => {
-            img.style.display = 'none';
-            const fallback = document.createElement('div');
-            fallback.className = 'text-[#4D6B85] text-xs font-mono flex flex-col items-center';
-            fallback.innerHTML = '<i data-lucide="image-off" class="w-8 h-8 mb-1"></i><span class="text-[10px]">Direct View Only</span>';
-            mediaContainer.appendChild(fallback);
-            refreshIcons();
-          };
-          mediaContainer.appendChild(img);
-        }
-        card.appendChild(mediaContainer);
-
-        // Card Details & Actions Footer
-        const cardFooter = document.createElement('div');
-        cardFooter.className = 'p-3 border-t border-[#1C2E42] bg-[#0D1520] flex flex-col gap-2 mt-auto';
-
-        const fileInfo = document.createElement('div');
-        fileInfo.className = 'flex items-center justify-between text-[11px] font-mono text-[#8FA8C0]';
-        fileInfo.innerHTML = `
-          <span class="truncate max-w-[150px]" title="${item.filename}">${item.filename}</span>
-          <span class="text-[10px] text-[#4D6B85] uppercase">${item.sourceTag}</span>
-        `;
-        cardFooter.appendChild(fileInfo);
-
-        const actions = document.createElement('div');
-        actions.className = 'flex items-center justify-between gap-1 pt-1';
-
-        actions.innerHTML = `
-          <div class="flex items-center gap-1">
-            <button class="preview-btn p-1.5 rounded hover:bg-[#1C2E42] text-[#8FA8C0] hover:text-white transition-colors" title="Full Preview">
-              <i data-lucide="maximize-2" class="w-3.5 h-3.5"></i>
-            </button>
-            <a href="${item.url}" target="_blank" rel="noopener" class="p-1.5 rounded hover:bg-[#1C2E42] text-[#8FA8C0] hover:text-white transition-colors" title="Open in new tab">
-              <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
-            </a>
-            <button class="copy-url-btn p-1.5 rounded hover:bg-[#1C2E42] text-[#8FA8C0] hover:text-white transition-colors" title="Copy URL">
-              <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+            <!-- Checkbox Overlay (Top Right) -->
+            <button 
+              type="button" 
+              onclick="event.stopPropagation(); toggleSelect('${item.id}')"
+              class="absolute top-2 right-2 w-6 h-6 rounded-md flex items-center justify-center transition-colors ${
+                isSelected ? 'bg-[#0E7FE0] text-white' : 'bg-black/60 text-slate-400 hover:text-white'
+              }"
+            >
+              <i data-lucide="${isSelected ? 'check' : 'square'}" class="w-4 h-4"></i>
             </button>
           </div>
-          <button class="download-single-btn px-2.5 py-1 rounded bg-[#131F30] hover:bg-[#0E7FE0] text-[#8FA8C0] hover:text-white text-xs font-mono font-semibold transition-colors flex items-center gap-1">
-            <i data-lucide="download" class="w-3 h-3"></i>
-            <span>Save</span>
-          </button>
+
+          <!-- Metadata Info -->
+          <div class="p-3 flex-1 flex flex-col justify-between gap-2 border-t border-[#1C2E42]">
+            <div>
+              <h4 class="text-xs font-mono font-bold text-white line-clamp-1 group-hover:text-[#0E7FE0] transition-colors" title="${item.title}">
+                ${item.title}
+              </h4>
+              <p class="text-[11px] text-[#8FA8C0] mt-0.5 truncate">${item.desc}</p>
+            </div>
+
+            <div class="flex items-center justify-between pt-2 border-t border-[#1C2E42]/50 text-[10px] font-mono">
+              <span class="text-slate-400">${item.res}</span>
+              <a 
+                href="${item.url}" 
+                download 
+                onclick="event.stopPropagation()" 
+                class="px-2 py-1 rounded bg-[#131F30] hover:bg-[#0E7FE0] text-slate-300 hover:text-white transition flex items-center gap-1 font-bold"
+              >
+                <i data-lucide="download" class="w-3 h-3"></i>
+                <span>GET</span>
+              </a>
+            </div>
+          </div>
         `;
-
-        actions.querySelector('.preview-btn').addEventListener('click', () => openLightbox(item));
-        actions.querySelector('.copy-url-btn').addEventListener('click', () => {
-          navigator.clipboard.writeText(item.url);
-          showToast('Copied media URL to clipboard!', 'success');
-        });
-        actions.querySelector('.download-single-btn').addEventListener('click', () => downloadSingle(item));
-
-        cardFooter.appendChild(actions);
-        card.appendChild(cardFooter);
-
-        mediaGrid.appendChild(card);
+        grid.appendChild(card);
       });
 
-      refreshIcons();
+      updateBadges();
+      lucide.createIcons();
     }
 
-    // Select all / Deselect all
-    selectAllBtn.addEventListener('click', () => {
-      const allSelected = extractedMedia.every(m => m.selected);
-      extractedMedia.forEach(m => m.selected = !allSelected);
-      selectAllBtn.querySelector('span').textContent = allSelected ? 'Select All' : 'Deselect All';
-      updateCounts();
-      renderGrid();
-    });
-
-    // Single item download
-    async function downloadSingle(item) {
-      showToast(`Starting download: ${item.filename}`, 'info');
-      try {
-        const blob = await fetchBlobSafe(item.url);
-        saveAs(blob, item.filename);
-        showToast(`Downloaded ${item.filename}`, 'success');
-      } catch (err) {
-        console.warn('Direct blob fetch failed, opening in tab:', err);
-        window.open(item.url, '_blank');
-      }
-    }
-
-    // Safe blob fetcher
-    async function fetchBlobSafe(url) {
-      try {
-        const res = await fetch(url, { mode: 'cors' });
-        if (res.ok) return await res.blob();
-      } catch (_) {}
-
-      // Fallback via codetabs
-      try {
-        const res = await fetch(`https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`);
-        if (res.ok) return await res.blob();
-      } catch (_) {}
-
-      throw new Error('Could not fetch asset blob due to host restrictions');
-    }
-
-    // Lightbox modal logic
-    function openLightbox(item) {
-      currentActiveMedia = item;
-      lightboxType.textContent = item.format;
-      lightboxFilename.textContent = item.filename;
-      lightboxOriginLink.textContent = item.url;
-      lightboxOriginLink.href = item.url;
-
-      lightboxContent.innerHTML = '';
-      if (item.type === 'video') {
-        if (item.format === 'YOUTUBE' || item.format === 'VIMEO') {
-          lightboxContent.innerHTML = `
-            <iframe src="${item.url}" class="w-full max-w-3xl aspect-video rounded-lg border border-[#1C2E42]" frameborder="0" allowfullscreen></iframe>
-          `;
-        } else {
-          lightboxContent.innerHTML = `
-            <video controls autoplay class="max-h-[70vh] max-w-full rounded-lg shadow-lg">
-              <source src="${item.url}">
-              Your browser does not support HTML5 video.
-            </video>
-          `;
-        }
+    // Toggle Select
+    function toggleSelect(id) {
+      if (selectedItemIds.has(id)) {
+        selectedItemIds.delete(id);
       } else {
-        lightboxContent.innerHTML = `
-          <img src="${item.url}" alt="${item.filename}" class="max-h-[70vh] max-w-full object-contain rounded-lg shadow-lg" />
+        selectedItemIds.add(id);
+      }
+      renderGrid();
+    }
+
+    function selectAllFiltered() {
+      const filtered = SENTRAX_ASSETS.filter(a => currentTab === 'all' || a.category === currentTab);
+      const allSelected = filtered.every(a => selectedItemIds.has(a.id));
+      if (allSelected) {
+        filtered.forEach(a => selectedItemIds.delete(a.id));
+      } else {
+        filtered.forEach(a => selectedItemIds.add(a.id));
+      }
+      renderGrid();
+    }
+
+    // Tab Switching
+    function setTab(tab) {
+      currentTab = tab;
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('bg-blue-600', 'text-white', 'font-bold');
+        btn.classList.add('text-slate-400');
+      });
+      const activeBtn = document.getElementById(`tab-${tab}`);
+      if (activeBtn) {
+        activeBtn.classList.add('bg-blue-600', 'text-white', 'font-bold');
+        activeBtn.classList.remove('text-slate-400');
+      }
+      renderGrid();
+    }
+
+    function updateBadges() {
+      document.getElementById('badge-count-all').innerText = SENTRAX_ASSETS.length;
+      document.getElementById('badge-count-video').innerText = SENTRAX_ASSETS.filter(a => a.category === 'video').length;
+      document.getElementById('badge-count-plate').innerText = SENTRAX_ASSETS.filter(a => a.category === 'plate').length;
+      document.getElementById('badge-count-crop').innerText = SENTRAX_ASSETS.filter(a => a.category === 'crop').length;
+      document.getElementById('badge-count-tactical').innerText = SENTRAX_ASSETS.filter(a => a.category === 'tactical').length;
+      document.getElementById('selection-counter').innerText = `${selectedItemIds.size} of ${SENTRAX_ASSETS.length} selected`;
+      document.getElementById('zip-button-label').innerText = `Download ZIP (${selectedItemIds.size})`;
+    }
+
+    // Lightbox
+    function openLightbox(id) {
+      const item = SENTRAX_ASSETS.find(a => a.id === id);
+      if (!item) return;
+
+      document.getElementById('lightbox-title').innerText = item.title;
+      document.getElementById('lightbox-badge').innerText = item.format;
+      document.getElementById('lightbox-meta').innerText = `${item.res} · ${item.desc}`;
+      
+      const canvas = document.getElementById('lightbox-canvas');
+      if (item.type === 'video') {
+        canvas.innerHTML = `
+          <video controls autoplay class="w-full max-h-[70vh] rounded-lg shadow-2xl">
+            <source src="${item.url}" type="video/mp4">
+          </video>
+        `;
+      } else {
+        canvas.innerHTML = `
+          <img src="${item.url}" alt="${item.title}" class="max-h-[70vh] max-w-full object-contain rounded-lg shadow-2xl" />
         `;
       }
 
-      lightboxModal.classList.remove('hidden');
-      refreshIcons();
+      document.getElementById('lightbox-dl-btn').onclick = () => {
+        const a = document.createElement('a');
+        a.href = item.url;
+        a.download = item.title.replace(/[^a-zA-Z0-9_-]/g, '_') + '.' + item.format.toLowerCase();
+        a.click();
+      };
+
+      document.getElementById('lightbox-modal').classList.remove('hidden');
+      lucide.createIcons();
     }
 
-    lightboxCloseBtn.addEventListener('click', () => {
-      lightboxModal.classList.add('hidden');
-      lightboxContent.innerHTML = '';
-    });
-    lightboxModal.addEventListener('click', (e) => {
-      if (e.target === lightboxModal) {
-        lightboxModal.classList.add('hidden');
-        lightboxContent.innerHTML = '';
-      }
-    });
-    lightboxDlBtn.addEventListener('click', () => {
-      if (currentActiveMedia) downloadSingle(currentActiveMedia);
-    });
-    lightboxCopyBtn.addEventListener('click', () => {
-      if (currentActiveMedia) {
-        navigator.clipboard.writeText(currentActiveMedia.url);
-        showToast('Copied media URL to clipboard!', 'success');
-      }
-    });
+    function closeLightbox() {
+      document.getElementById('lightbox-modal').classList.add('hidden');
+      document.getElementById('lightbox-canvas').innerHTML = '';
+    }
 
-    // ZIP Download Engine
-    downloadSelectedZipBtn.addEventListener('click', async () => {
-      const selected = extractedMedia.filter(m => m.selected);
+    // Batch ZIP Download with JSZip
+    async function downloadSelectedAsZip() {
+      const selected = SENTRAX_ASSETS.filter(a => selectedItemIds.has(a.id));
       if (selected.length === 0) {
-        showToast('Please select at least one media item to download', 'error');
+        alert('Please select at least one media asset to download.');
         return;
       }
 
-      const zipModal = document.getElementById('zip-modal');
-      const zipBar = document.getElementById('zip-modal-bar');
-      const zipCount = document.getElementById('zip-modal-count');
-      const zipPercent = document.getElementById('zip-modal-percent');
-      const zipStatus = document.getElementById('zip-modal-status');
+      const modal = document.getElementById('zip-progress-modal');
+      const bar = document.getElementById('zip-progress-bar');
+      const countLabel = document.getElementById('zip-progress-count');
+      const pctLabel = document.getElementById('zip-progress-percent');
+      const statusText = document.getElementById('zip-status-text');
 
-      zipModal.classList.remove('hidden');
-      downloadSelectedZipBtn.disabled = true;
+      modal.classList.remove('hidden');
+      bar.style.width = '0%';
+      pctLabel.innerText = '0%';
 
       const zip = new JSZip();
-      const photosFolder = zip.folder('photos');
-      const videosFolder = zip.folder('videos');
+      const videoFolder = zip.folder('videos');
+      const plateFolder = zip.folder('plates');
+      const cropFolder = zip.folder('crops');
+      const tacticalFolder = zip.folder('tactical');
 
       let completed = 0;
-      const total = selected.length;
-
-      zipStatus.textContent = 'Fetching and archiving assets...';
-
       for (let i = 0; i < selected.length; i++) {
         const item = selected[i];
-        zipCount.textContent = `${i + 1} / ${total} files`;
-        const pct = Math.round(((i) / total) * 100);
-        zipBar.style.width = `${pct}%`;
-        zipPercent.textContent = `${pct}%`;
+        statusText.innerText = `Archiving ${item.title}...`;
+        countLabel.innerText = `${i + 1} / ${selected.length} assets`;
+        const pct = Math.round(((i + 1) / selected.length) * 100);
+        bar.style.width = `${pct}%`;
+        pctLabel.innerText = `${pct}%`;
 
         try {
-          const blob = await fetchBlobSafe(item.url);
-          const safeName = `${String(i + 1).padStart(3, '0')}_${item.filename.replace(/[^a-zA-Z0-9._-]/g, '_')}`;
-          if (item.type === 'video') {
-            videosFolder.file(safeName, blob);
-          } else {
-            photosFolder.file(safeName, blob);
-          }
-        } catch (err) {
-          console.warn('Skipping un-fetchable item:', item.url);
+          const res = await fetch(item.url);
+          const blob = await res.blob();
+          const cleanName = item.title.replace(/[^a-zA-Z0-9._-]/g, '_') + '.' + item.format.toLowerCase();
+
+          if (item.category === 'video') videoFolder.file(cleanName, blob);
+          else if (item.category === 'plate') plateFolder.file(cleanName, blob);
+          else if (item.category === 'crop') cropFolder.file(cleanName, blob);
+          else tacticalFolder.file(cleanName, blob);
+        } catch (e) {
+          console.warn('Skipping item fetch failure:', item.url, e);
         }
         completed++;
       }
 
-      // Add manifest metadata.json
-      zip.file('metadata.json', JSON.stringify({
-        source_url: currentTargetUrl,
-        domain: currentDomain,
-        extracted_at: new Date().toISOString(),
-        total_items: selected.length,
-        items: selected.map(s => ({
-          filename: s.filename,
-          url: s.url,
-          type: s.type,
-          format: s.format
-        }))
+      // Add forensic metadata manifest
+      zip.file('sentrax_manifest.json', JSON.stringify({
+        project: 'SENTRAX CCTV Intelligence & Digital Forensics Platform',
+        website: 'https://shakyavinit.github.io/sentrax/',
+        exported_at: new Date().toISOString(),
+        total_assets: selected.length,
+        assets: selected.map(s => ({ title: s.title, format: s.format, res: s.res, url: s.url }))
       }, null, 2));
 
-      zipBar.style.width = '100%';
-      zipPercent.textContent = '100%';
-      zipStatus.textContent = 'Compressing archive...';
+      statusText.innerText = 'Compressing archive...';
+      const content = await zip.generateAsync({ type: 'blob' });
+      saveAs(content, `SENTRAX_Official_Media_${new Date().toISOString().slice(0, 10)}.zip`);
 
-      try {
-        const zipBlob = await zip.generateAsync({ type: 'blob' });
-        const dateStr = new Date().toISOString().slice(0, 10);
-        const zipName = `sentrax_media_${currentDomain.replace(/[^a-zA-Z0-9.-]/g, '_')}_${dateStr}.zip`;
-        saveAs(zipBlob, zipName);
-        showToast('ZIP archive downloaded successfully!', 'success');
-      } catch (err) {
-        showToast('Failed to generate ZIP: ' + err.message, 'error');
-      } finally {
-        zipModal.classList.add('hidden');
-        downloadSelectedZipBtn.disabled = false;
-      }
-    });
-
-    // ─────────────────────────────────────────────────────────────
-    // ACCESS CONTROL GATEKEEPER
-    // ─────────────────────────────────────────────────────────────
-    function checkAuthGate() {
-      const gate = document.getElementById('auth-gate-modal');
-      if (sessionStorage.getItem('sx_dev_auth') === 'verified') {
-        if (gate) gate.style.display = 'none';
-      } else {
-        if (gate) gate.style.display = 'flex';
-      }
+      modal.classList.add('hidden');
     }
 
-    function verifyExtractorPin() {
-      const input = document.getElementById('auth-pin-input');
-      const pin = input ? input.value.trim() : '';
-      const err = document.getElementById('auth-error-msg');
-      if (pin === '7391' || pin === 'sentrax-ops') {
-        sessionStorage.setItem('sx_dev_auth', 'verified');
-        const gate = document.getElementById('auth-gate-modal');
-        if (gate) {
-          gate.style.opacity = '0';
-          gate.style.transition = 'opacity 0.25s ease';
-          setTimeout(() => gate.style.display = 'none', 250);
-        }
-        showToast('Developer session authenticated', 'success');
-      } else {
-        if (err) err.classList.remove('hidden');
-        if (input) {
-          input.classList.add('border-rose-500');
-          input.value = '';
-          input.focus();
-        }
-        setTimeout(() => {
-          if (err) err.classList.add('hidden');
-          if (input) input.classList.remove('border-rose-500');
-        }, 3000);
+    // ─── AUTOPILOT DEMO SIMULATOR ENGINE ─────────────────────────────────────
+    const DEMO_STEPS = [
+      {
+        step: 1,
+        video: '../videos/traffic_city_junction.mp4',
+        camera: 'CAMERA CAM01 // MG ROAD URBAN JUNCTION',
+        plate: 'GJ01AB1234 (RECOGNIZED · 98.4%)',
+        alert: false,
+        title: 'STEP 1 OF 5 — High-Definition Video Ingestion & YOLOv11 Vehicle Tracking',
+        narration: 'SENTRAX ingests municipal CCTV video streams from Ahmedabad & Gandhinagar, processing frames in real-time to detect vehicles, measure flow velocity, and isolate regions of interest.'
+      },
+      {
+        step: 2,
+        video: '../videos/cam_mg_road.mp4',
+        camera: 'CAMERA CAM02 // SARDAR BRIDGE INGRESS',
+        plate: 'GJ01AB1234 (OCR LOCKED)',
+        alert: false,
+        title: 'STEP 2 OF 5 — Neural ANPR License Plate OCR Recognition',
+        narration: 'Dual-stage Indian License Plate Detector crops the registration plate and executes PaddleOCR neural character segmentation to output clean alphanumerics even under low light.'
+      },
+      {
+        step: 3,
+        video: '../videos/cam_sg_highway_toll.mp4',
+        camera: 'CAMERA CAM04 // SG HIGHWAY TOLL PLAZA',
+        plate: 'UP32PQ6677 (ARMED ROBBERY WARRANT)',
+        alert: true,
+        title: 'STEP 3 OF 5 — Automated Watchlist Intercept & Tactical Alert Siren',
+        narration: 'Instant cross-database matching compares detected plates against Police Central Watchlist, firing high-priority alerts with automated GPS geofence and patrol unit dispatching.'
+      },
+      {
+        step: 4,
+        video: '../videos/cam_vastrapur.mp4',
+        camera: 'CAMERA CAM03 // VASTRAPUR LAKE PERIMETER',
+        plate: 'UP32PQ6677 (EVIDENCE FRAME RECORDED)',
+        alert: true,
+        title: 'STEP 4 OF 5 — SHA-256 Tamper-Evident Digital Evidence Sealing',
+        narration: 'Every sighting frame and video snippet is cryptographically sealed with SHA-256 hash algorithms, ensuring Section 65B Indian Evidence Act legal compliance in court.'
+      },
+      {
+        step: 5,
+        video: '../videos/cam_gift_city.mp4',
+        camera: 'CAMERA CAM06 // GIFT CITY HIGH-SECURITY GATE',
+        plate: 'UP32PQ6677 (CORRIDOR INTERCEPT COMPLETE)',
+        alert: false,
+        title: 'STEP 5 OF 5 — Cross-Camera Multi-Sensor Trajectory Correlation',
+        narration: 'Corridor tracking correlates sighting timestamps across 15+ camera nodes, reconstructing the exact transit trajectory across Ahmedabad and Gandhinagar with speed analysis.'
       }
+    ];
+
+    let currentDemoStep = 0;
+    let demoTimer = null;
+    let demoAutoplay = true;
+    let secondsLeft = 7;
+
+    function openDemoPlayer() {
+      document.getElementById('demo-player-modal').classList.remove('hidden');
+      currentDemoStep = 0;
+      loadDemoStep(currentDemoStep);
+      startDemoTimer();
+      lucide.createIcons();
     }
 
+    function closeDemoPlayer() {
+      document.getElementById('demo-player-modal').classList.add('hidden');
+      clearInterval(demoTimer);
+    }
+
+    function loadDemoStep(idx) {
+      const step = DEMO_STEPS[idx];
+      const videoElem = document.getElementById('demo-video-elem');
+      const videoSrc = document.getElementById('demo-video-src');
+
+      videoSrc.src = step.video;
+      videoElem.load();
+      videoElem.play().catch(() => {});
+
+      document.getElementById('demo-hud-camera').innerText = step.camera;
+      document.getElementById('demo-hud-plate').innerText = step.plate;
+      document.getElementById('demo-narration-title').innerText = step.title;
+      document.getElementById('demo-narration-text').innerText = step.narration;
+
+      const alertBox = document.getElementById('demo-hud-alert-box');
+      if (step.alert) {
+        alertBox.classList.remove('hidden');
+      } else {
+        alertBox.classList.add('hidden');
+      }
+
+      // Update Step Badges
+      for (let i = 1; i <= 5; i++) {
+        const btn = document.getElementById(`step-btn-${i}`);
+        if (i === idx + 1) {
+          btn.className = 'step-badge flex items-center gap-1.5 px-3 py-1 rounded-lg bg-blue-600 text-white font-bold';
+        } else {
+          btn.className = 'step-badge flex items-center gap-1.5 px-3 py-1 rounded-lg text-slate-400';
+        }
+      }
+
+      secondsLeft = 8;
+      document.getElementById('step-countdown').innerText = `${secondsLeft}s`;
+    }
+
+    function startDemoTimer() {
+      clearInterval(demoTimer);
+      demoTimer = setInterval(() => {
+        if (!demoAutoplay) return;
+        secondsLeft--;
+        document.getElementById('step-countdown').innerText = `${secondsLeft}s`;
+        if (secondsLeft <= 0) {
+          nextDemoStep();
+        }
+      }, 1000);
+    }
+
+    function nextDemoStep() {
+      currentDemoStep = (currentDemoStep + 1) % DEMO_STEPS.length;
+      loadDemoStep(currentDemoStep);
+    }
+
+    function prevDemoStep() {
+      currentDemoStep = (currentDemoStep - 1 + DEMO_STEPS.length) % DEMO_STEPS.length;
+      loadDemoStep(currentDemoStep);
+    }
+
+    function toggleDemoAutoplay() {
+      demoAutoplay = !demoAutoplay;
+      const label = document.getElementById('demo-play-label');
+      label.innerText = demoAutoplay ? 'PAUSE AUTOPLAY' : 'RESUME AUTOPLAY';
+    }
+
+    // Initialize on Page Load
     window.addEventListener('DOMContentLoaded', () => {
-      checkAuthGate();
-      const pinInput = document.getElementById('auth-pin-input');
-      if (pinInput) {
-        pinInput.addEventListener('keydown', (e) => {
-          if (e.key === 'Enter') verifyExtractorPin();
-        });
-      }
+      renderGrid();
     });
   </script>
 </body>
