@@ -612,132 +612,147 @@
 
   <!-- Javascript -->
   <script>
-    // Official Real Screens of https://shakyavinit.github.io/sentrax/
+    // Official Real Screens of https://shakyavinit.github.io/sentrax/ (All 16 Platform Modules)
     const PLATFORM_SCREENS = [
       {
-        id: '01_Command_Dashboard',
-        route: '/',
-        title: 'Executive Command Dashboard & Worker Health',
-        category: 'COMMAND SOC',
-        desc: 'Central law enforcement operations overview: 15 active CCTV cameras, ANPR accuracy telemetry (96.2%), asynchronous Redis/Celery worker nodes, and live vehicle sightings ticker.',
+        id: '01_Secure_Login_Portal',
+        route: '/login',
+        title: 'Secure Police Login & Multi-Factor Portal',
+        category: 'SECURITY',
+        desc: 'Restricted law enforcement gateway with badge number verification, officer credentials, and encrypted token session management.',
         bullets: [
-          'Statewide telemetry: 15 Cameras Online, 96.2% ANPR accuracy',
-          'Live status of Redis Task Broker & Celery Prefork Workers',
-          'Immediate access to vehicle search, alerts, and live video feeds'
+          'Law enforcement officer badge credentials authentication',
+          'Automated session token encryption & security timeout',
+          'Role-based access control (Admin, Forensic Officer, Field Unit)'
         ],
-        image: '../hackathon_kit/screenshots/01_Command_Dashboard.png',
+        image: '../hackathon_kit/screenshots/01_Secure_Login_Portal.png',
         video: '../videos/traffic_city_junction.mp4',
         isVideo: false
       },
       {
-        id: '02_Live_CCTV_GIS_Map',
+        id: '02_Executive_Command_Dashboard',
+        route: '/',
+        title: 'Executive Command Dashboard & Telemetry',
+        category: 'COMMAND SOC',
+        desc: 'Central operations overview: 15 active CCTV cameras, ANPR accuracy telemetry (96.2%), asynchronous Celery worker nodes, and live sightings ticker.',
+        bullets: [
+          'Statewide telemetry: 15 Cameras Online, 96.2% ANPR accuracy',
+          'Live status of Redis Task Broker & Celery Prefork Workers',
+          'Immediate access to vehicle search, threat alerts, and video feeds'
+        ],
+        image: '../hackathon_kit/screenshots/02_Executive_Command_Dashboard.png',
+        video: '../videos/traffic_city_junction.mp4',
+        isVideo: false
+      },
+      {
+        id: '03_Live_CCTV_Surveillance_Matrix',
         route: '/live',
         title: 'Live CCTV Surveillance Matrix & Smart ANPR',
         category: 'LIVE MONITOR',
-        desc: 'Simultaneous CCTV video streams with real-time AI bounding boxes, license plate classifications (UP32PQ6677, GJ01AB1234, GJ05CD5678), and speed telemetry.',
+        desc: 'Simultaneous CCTV streams with real-time AI bounding boxes, license plate classifications (UP32PQ6677, GJ01AB1234), and speed telemetry.',
         bullets: [
           'Simultaneous HD CCTV video streams across major city junctions',
           'Real-time YOLO vehicle detection bounding boxes & confidence scores',
           'Instant optical flow vehicle speed measurement and classification'
         ],
-        image: '../hackathon_kit/screenshots/02_Live_CCTV_GIS_Map.png',
+        image: '../hackathon_kit/screenshots/03_Live_CCTV_Surveillance_Matrix.png',
         video: '../videos/cam_mg_road.mp4',
         isVideo: true
       },
       {
-        id: '03_Tactical_Camera_Grid',
+        id: '04_Tactical_Multi_Camera_Grid',
         route: '/grid',
         title: 'Tactical Multi-Camera Matrix (2x2, 2x3, 3x3 Grid)',
         category: 'TACTICAL MATRIX',
-        desc: 'Situational multi-sensor surveillance matrix inspired by TrafficVision. Displays up to 9 synchronized CCTV feeds with vehicle count counters, speed pill badges, and overspeed alerts.',
+        desc: 'Situational multi-sensor surveillance matrix inspired by TrafficVision. Displays synchronized CCTV feeds with vehicle count counters and speed alerts.',
         bullets: [
           'Synchronous multi-node video grid across Ahmedabad & Gandhinagar',
           'Live per-camera vehicle count and average speed monitoring',
           'Traffic density heatmap and overspeed trigger flags'
         ],
-        image: '../hackathon_kit/screenshots/03_Tactical_Camera_Grid.png',
+        image: '../hackathon_kit/screenshots/04_Tactical_Multi_Camera_Grid.png',
         video: '../videos/cam_sg_highway_toll.mp4',
         isVideo: true
       },
       {
-        id: '04_Vehicle_Journey_Replay',
+        id: '05_Vehicle_Journey_Reconstruction',
         route: '/journey',
         title: 'Vehicle Journey Reconstruction & Radar Lock',
         category: 'JOURNEY REPLAY',
-        desc: 'Chronological suspect trajectory replay across multiple city junctions. Reconstructs suspect path from Sardar Bridge to GIFT City with speed telemetry and GIS radar lock.',
+        desc: 'Chronological suspect trajectory replay across multiple city junctions with speed telemetry and dark GIS radar tracking.',
         bullets: [
           'Chronological timeline across 5 sequential surveillance nodes',
           'Interactive dark radar grid with animated trajectory path replay',
           'Direct Section 65B evidence dossier export button'
         ],
-        image: '../hackathon_kit/screenshots/04_Vehicle_Journey_Replay.png',
+        image: '../hackathon_kit/screenshots/05_Vehicle_Journey_Reconstruction.png',
         video: '../videos/cam_vastrapur.mp4',
         isVideo: false
       },
       {
-        id: '05_Corridor_Route_Planner',
+        id: '06_Patrol_Corridor_Route_Planner',
         route: '/routes',
-        title: 'Patrol Route & Corridor Intercept Planner',
+        title: 'Patrol Corridor & Intercept Route Planner',
         category: 'ROUTE PLANNER',
-        desc: 'Automated transit corridor analyzer. Calculates origin-to-destination distance (18.8 km), transit time (~25 min), and automatically identifies all CCTV cameras covering the corridor.',
+        desc: 'Automated transit corridor analyzer. Calculates corridor distance (18.8 km), transit time (~25 min), and automatically identifies all intercept cameras.',
         bullets: [
           'Haversine corridor distance and transit time calculations',
           'Automated checkpoint camera intercept identification',
           'Sequential camera list with distance offsets from origin'
         ],
-        image: '../hackathon_kit/screenshots/05_Corridor_Route_Planner.png',
+        image: '../hackathon_kit/screenshots/06_Patrol_Corridor_Route_Planner.png',
         video: '../videos/cam_gift_city.mp4',
         isVideo: false
       },
       {
-        id: '06_Threat_Alerts_Engine',
+        id: '07_Threat_Alerts_Engine',
         route: '/alerts',
         title: 'Active Threat Alerts & Warrant Intercepts',
         category: 'THREAT ALERTS',
-        desc: 'Emergency security alerting engine. Instantly triggers visual and acoustic sirens when a wanted vehicle (Armed Robbery, Kidnapping, Stolen) is spotted on municipal feeds.',
+        desc: 'Emergency security alerting engine. Instantly triggers visual and acoustic sirens when a wanted vehicle is spotted on municipal feeds.',
         bullets: [
           'Real-time warrant correlation and APB broadcast dispatch',
           'High-priority audio siren alerts for suspect interceptions',
           'Complete suspect metadata: plate, owner, warrant offense'
         ],
-        image: '../hackathon_kit/screenshots/06_Threat_Alerts_Engine.png',
+        image: '../hackathon_kit/screenshots/07_Threat_Alerts_Engine.png',
         video: '../videos/cam_sg_highway_toll.mp4',
         isVideo: false
       },
       {
-        id: '07_Digital_Evidence_Vault',
+        id: '08_Digital_Evidence_Vault_Section65B',
         route: '/evidence',
-        title: 'Section 65B Digital Evidence Vault',
+        title: 'Section 65B Digital Evidence Vault & Tamper Seal',
         category: 'EVIDENCE VAULT',
-        desc: 'Court-admissible digital evidence vault compliant with Section 65B of the Indian Evidence Act. Every video frame and audit log is sealed with cryptographic SHA-256 hashes.',
+        desc: 'Court-admissible digital evidence vault compliant with Section 65B of Indian Evidence Act with cryptographic SHA-256 hashes.',
         bullets: [
           'Immutable SHA-256 cryptographic seal on every forensic artifact',
           'Section 65B compliance certificate for legal court admissibility',
           'Tamper-evident chain of custody logging with audit tracking'
         ],
-        image: '../hackathon_kit/screenshots/07_Digital_Evidence_Vault.png',
+        image: '../hackathon_kit/screenshots/08_Digital_Evidence_Vault_Section65B.png',
         video: '../videos/cam_gnlu_gate.mp4',
         isVideo: false
       },
       {
-        id: '08_ANPR_Camera_Registry',
+        id: '09_ANPR_Camera_Hardware_Registry',
         route: '/cameras',
         title: 'Distributed ANPR Camera Hardware Registry',
         category: 'CAMERA REGISTRY',
-        desc: 'Complete inventory and telemetry of all 15 municipal cameras across Ahmedabad and Gandhinagar with status, latency, RTSP streams, and hardware health.',
+        desc: 'Complete inventory of all 15 municipal cameras across Ahmedabad and Gandhinagar with status, latency, RTSP streams, and hardware health.',
         bullets: [
           'Hardware specifications, RTSP streaming URLs, and IP telemetry',
           'Real-time congestion classification (LOW, MEDIUM, HIGH)',
           'Live stream ping latency and packet health metrics'
         ],
-        image: '../hackathon_kit/screenshots/08_ANPR_Camera_Registry.png',
+        image: '../hackathon_kit/screenshots/09_ANPR_Camera_Hardware_Registry.png',
         video: '../videos/cam_chiloda_circle.mp4',
         isVideo: false
       },
       {
-        id: '09_Suspect_Watchlist',
+        id: '10_Wanted_Suspect_Watchlist',
         route: '/watchlist',
-        title: 'Suspect & Stolen Vehicle Watchlist Database',
+        title: 'Suspect & Stolen Vehicle Hotlist Database',
         category: 'WATCHLIST',
         desc: 'Central police hotlist database storing wanted registration plates, vehicle descriptions, FIR numbers, and automatic cross-camera alert triggers.',
         bullets: [
@@ -745,23 +760,98 @@
           'Instant cross-camera correlation upon license plate match',
           'One-click add/remove suspect with FIR dossier link'
         ],
-        image: '../hackathon_kit/screenshots/09_Suspect_Watchlist.png',
+        image: '../hackathon_kit/screenshots/10_Wanted_Suspect_Watchlist.png',
         video: '../videos/cam_sardar_bridge.mp4',
         isVideo: false
       },
       {
-        id: '10_Forensic_Analytics',
+        id: '11_Traffic_Crime_Forensic_Analytics',
         route: '/analytics',
         title: 'Urban Traffic & Crime Forensic Analytics',
         category: 'ANALYTICS',
-        desc: 'Longitudinal spatial intelligence analyzing city-wide traffic volume, speed distributions, peak congestion hours, and multi-camera ANPR performance curves.',
+        desc: 'Longitudinal spatial intelligence analyzing city-wide traffic volume, speed distributions, peak congestion hours, and ANPR curves.',
         bullets: [
-          'Interactive Recharts graphs for hourly vehicle throughput',
+          'Interactive charts for hourly vehicle throughput & speed patterns',
           'Speed distribution histograms and overspeed violation trends',
           'Cross-junction congestion analytics for traffic law enforcement'
         ],
-        image: '../hackathon_kit/screenshots/10_Forensic_Analytics.png',
+        image: '../hackathon_kit/screenshots/11_Traffic_Crime_Forensic_Analytics.png',
         video: '../videos/cam_sector15.mp4',
+        isVideo: false
+      },
+      {
+        id: '12_AI_Forensic_Research_Assistant',
+        route: '/research-agent',
+        title: 'Autonomous AI Forensic Research Assistant',
+        category: 'AI AGENT',
+        desc: 'Interactive LLM intelligence agent capable of running multi-junction plate correlations, calculating transit velocities, and generating investigation reports.',
+        bullets: [
+          'Natural language query interface for crime pattern queries',
+          'Synthesizes multi-camera sighting logs into case chronologies',
+          'One-click investigative dossier synthesis and summary'
+        ],
+        image: '../hackathon_kit/screenshots/12_AI_Forensic_Research_Assistant.png',
+        video: '../videos/cam_mg_road.mp4',
+        isVideo: false
+      },
+      {
+        id: '13_Audit_Log_Chain_Of_Custody',
+        route: '/audit',
+        title: 'Immutable Audit Log & Forensic Chain of Custody',
+        category: 'AUDIT TRAIL',
+        desc: 'Tamper-evident activity ledger logging all officer logins, vehicle searches, evidence exports, and system configuration adjustments.',
+        bullets: [
+          'Strict cryptographic audit recording of every platform action',
+          'Officer badge ID, timestamp, IP address, and operation payload',
+          'Court-admissible forensic verification logs'
+        ],
+        image: '../hackathon_kit/screenshots/13_Audit_Log_Chain_Of_Custody.png',
+        video: '../videos/cam_vastrapur.mp4',
+        isVideo: false
+      },
+      {
+        id: '14_Vehicle_Intelligence_Dossier',
+        route: '/vehicles/details/UP32PQ6677',
+        title: 'Suspect Vehicle Intelligence & Offense Dossier',
+        category: 'DOSSIER',
+        desc: 'Deep single-vehicle profile detailing registered owner, chassis telemetry, associated warrants, recent sightings, and speed violation history.',
+        bullets: [
+          'Full vehicle registration profile (Make, Model, Color, Fuel)',
+          'Associated FIR warrants, active APB alert status, and offenses',
+          'Chronological map sightings across municipal cameras'
+        ],
+        image: '../hackathon_kit/screenshots/14_Vehicle_Intelligence_Dossier.png',
+        video: '../videos/cam_sg_highway_toll.mp4',
+        isVideo: false
+      },
+      {
+        id: '15_Camera_RTSP_Deep_Stream_Inspect',
+        route: '/camera-stream/cam-01',
+        title: 'Hardware RTSP Deep Stream Inspection & Latency',
+        category: 'HARDWARE STREAM',
+        desc: 'Direct RTSP video inspection workstation displaying raw camera stream feed, frame rates, optical encoding, and real-time bounding box metrics.',
+        bullets: [
+          'Low-latency raw RTSP hardware feed monitoring',
+          'Frame rate stability, packet loss, and optical resolution tags',
+          'Live ANPR overlay toggle with inference performance metrics'
+        ],
+        image: '../hackathon_kit/screenshots/15_Camera_RTSP_Deep_Stream_Inspect.png',
+        video: '../videos/cam_chiloda_circle.mp4',
+        isVideo: true
+      },
+      {
+        id: '16_Vehicle_Investigation_Search',
+        route: '/investigation',
+        title: 'Multi-Parameter Vehicle Investigation & Sighting Filter',
+        category: 'INVESTIGATION',
+        desc: 'Advanced law enforcement search engine filtering millions of sightings by license plate wildcard, time range, camera ID, vehicle class, and speed threshold.',
+        bullets: [
+          'Wildcard plate fuzzy search (e.g., UP32*, *6677)',
+          'Filter by vehicle class (Sedan, SUV, Truck, Bike) and color',
+          'Instant sighting export to PDF/Excel investigation dossier'
+        ],
+        image: '../hackathon_kit/screenshots/16_Vehicle_Investigation_Search.png',
+        video: '../videos/cam_gift_city.mp4',
         isVideo: false
       }
     ];
