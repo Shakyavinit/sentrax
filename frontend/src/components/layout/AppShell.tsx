@@ -5,6 +5,8 @@ import { TopBar } from './TopBar';
 import { useUiStore } from '../../store/uiStore';
 import { DEMO_MODE } from '../../utils/demo';
 import { Toaster } from 'sonner';
+import { IncidentNotepad } from '../common/IncidentNotepad';
+
 export const AppShell: React.FC = () => {
   const { sidebarCollapsed, mobileMenuOpen, setMobileMenuOpen } = useUiStore();
   const location = useLocation();
@@ -22,6 +24,8 @@ export const AppShell: React.FC = () => {
       {DEMO_MODE && <div className="workspace-notice"><strong>DEMO WORKSPACE</strong><span>Fictional records · Prerecorded footage · Changes saved on this device only · No police systems connected</span></div>}
       <main id="main-content" className="app-content" tabIndex={-1}><Outlet /></main>
     </div>
+    <IncidentNotepad />
     <Toaster theme="dark" position="bottom-right" />
   </div>;
 };
+
