@@ -409,11 +409,94 @@ export async function demoRequest(endpoint: string, options: RequestInit = {}): 
   }
 
   if (path === "/copilot/analyze") {
-    const plate = clean(body.plate_text || "GJ01AB1234"), rows = sightings.filter(s => s.plate_text === plate);
+    const plate = clean(body.plate_text || "UP32PQ6677"), rows = sightings.filter(s => s.plate_text === plate);
     const targetRows = rows.length ? rows : sightings.slice(0, 5);
     const avgConf = Math.round(targetRows.reduce((acc, r) => acc + (r.plate_conf || 0.95), 0) / targetRows.length * 100);
     const uniqueCams = new Set(targetRows.map(s => s.camera_id)).size;
+    const mode = (body.mode || "").toLowerCase();
+    const prompt = (body.prompt || "").toLowerCase();
 
+    // Mode 1: Interception & Predictive ETA
+    if (mode === "intercept" || prompt.includes("eta") || prompt.includes("intercept") || prompt.includes("junction")) {
+      return {
+        provider: "SENTRAX Tactical Route & Trajectory Neural Predictor",
+        model: "SENTRAX-Predictive-ETA-Engine-v2",
+        analysis: `## 🎯 PREDICTIVE ROUTE INTERCEPTION & ETA SCHEDULE
+**TARGET VEHICLE:** \`${plate}\` | **CURRENT CORRIDOR VELOCITY:** 54.2 km/h  
+**HEADING:** North-East (Heading 042° towards Gandhinagar GIFT Corridor)
+
+---
+
+### 1. PREDICTED JUNCTION ARRIVAL TIMELINE
+1. **Checkpoint Alpha (CAM04 - SG Highway Toll):**  
+   * **Distance:** 3.4 km | **ETA:** +04 min 12 sec (Probability: 96.8%)
+   * **Traffic Status:** Lane 2 Flow Normal (Speed limit: 70 km/h)
+2. **Checkpoint Bravo (CAM06 - GIFT City Access Gate 2):**  
+   * **Distance:** 8.9 km | **ETA:** +09 min 45 sec (Probability: 92.4%)
+   * **Tactical Choke-Point:** Recommended automated hydraulic spike-strip readiness
+3. **Checkpoint Charlie (CAM09 - Chiloda Circle Outer Ring):**  
+   * **Distance:** 14.2 km | **ETA:** +16 min 20 sec (Probability: 88.1%)
+
+### 2. TACTICAL INTERCEPTION DISPATCH PLAN
+* **Primary Intercept Unit:** Patrol Unit Bravo-7 (Stationed at Kudasan Junction, 2.1 km away).
+* **Backup Choke-point:** Gandhinagar Sector 15 Static Barricade.
+* **Operational Directive:** Execute rolling tactical roadblock. Do not engage in high-speed pursuit on arterial road; utilize remote ANPR camera tracking.`,
+      };
+    }
+
+    // Mode 2: Court-Admissible Section 65B Legal Affidavit
+    if (mode === "legal" || prompt.includes("65b") || prompt.includes("affidavit") || prompt.includes("court") || prompt.includes("certificate")) {
+      return {
+        provider: "SENTRAX Forensic Evidence Act Section 65B Drafter",
+        model: "SENTRAX-LegalAffidavit-v4-IEA",
+        analysis: `## 📜 CERTIFICATE UNDER SECTION 65B(4) OF THE INDIAN EVIDENCE ACT, 1872
+*(As amended by Bharatiya Sakshya Adhiniyam, 2023)*
+
+**IN THE COURT OF THE PRINCIPAL DISTRICT & SESSIONS JUDGE, AHMEDABAD**  
+**STATE OF GUJARAT (CRIME INVESTIGATION BRANCH) — POLICE RECORD NO: CR-2026/09/AHM-441**
+
+---
+
+### 1. DECLARATION OF TECHNICAL CUSTODY
+I, the undersigned Law Enforcement Technical Operations Officer, do hereby state and certify:
+1. That during the period of **14-September-2026 to 21-September-2026**, the SENTRAX Automated CCTV & ANPR System was operating continuously without malfunction.
+2. The computer output reproduced in this dossier relates to optical frames captured by RTSP surveillance nodes **CAM01 (MG Road)** through **CAM07 (Sabarmati Riverfront)**.
+3. Target registration plate **\`${plate}\`** was detected with an average neural confidence factor of **${avgConf}%**.
+
+### 2. IMMUTABLE CRYPTOGRAPHIC SIGNATURES
+* **Video Frame SHA-256 Digest:** \`e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\`
+* **Hardware MAC Identifier:** \`00:1A:2B:3C:4D:5E (Edge SOC Node 01)\`
+* **Capture Tamper Seal:** Hardware NTP Synchronized Timestamp signed via Ed25519 root key.
+
+### 3. LEGAL CONCLUSION
+The digital evidence extracted herewith complies with all evidentiary prerequisites stipulated under Section 65B(4) of the Indian Evidence Act, 1872, and constitutes primary electronic evidence in judicial proceedings.`,
+      };
+    }
+
+    // Mode 3: Vehicle Visual DNA & Physical Profiler
+    if (mode === "profiler" || prompt.includes("dna") || prompt.includes("damage") || prompt.includes("tint") || prompt.includes("visual")) {
+      return {
+        provider: "SENTRAX YOLOv8 Multi-Attribute Neural Profiler",
+        model: "SENTRAX-VehicleDNA-v3",
+        analysis: `## 🔍 VEHICLE VISUAL DNA & PHYSICAL ATTRIBUTE PROFILE
+**TARGET VEHICLE:** \`${plate}\` | **MODEL PIPELINE:** YOLOv8-Attribute-Classifier
+
+---
+
+### 1. EXTERIOR & STRUCTURAL SIGNATURES
+* **Vehicle Make & Classification:** Mahindra Scorpio Classic / 4x4 Commercial Spec.
+* **Color Spectrogram:** Midnight Obsidian Black (Hex: \`#18191B\`, 98.2% match).
+* **Roof Configuration:** Black OEM Luggage Roof Rails fitted with aftermarket cross-bars.
+* **Wheel Rim Type:** 5-Spoke Alloy Wheels, Front Left Rim showing visible curb scuff marks.
+
+### 2. FORENSIC ANOMALIES & TAMPERING RISK
+* **Window Tint Inspection:** **FLAGGED ILLEGAL** — 84% Visible Light Obstruction (Motor Vehicles Act Rule 100 violation).
+* **Physical Damage Signature:** 14cm linear dent with paint transfer on the rear right quarter panel above wheel arch.
+* **License Plate State:** High Security Registration Plate (HSRP) hologram intact; blue 'IND' tab clearly recognized with 0.984 confidence. No magnetic false-plate cover detected.`,
+      };
+    }
+
+    // Mode 4: Default Comprehensive Briefing
     return {
       provider: "SENTRAX Tactical Forensic Neural Copilot (YOLOv8 + PaddleOCR)",
       model: "SENTRAX-Copilot-v3-ForensicEngine",

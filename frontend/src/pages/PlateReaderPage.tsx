@@ -21,10 +21,13 @@ import {
   FileText,
   Copy,
   Sliders,
-  Maximize2
+  Maximize2,
+  Bot,
+  Wand2
 } from 'lucide-react';
 import { PageHeader } from '../components/layout/PageHeader';
 import { Button } from '../components/ui/Button';
+import { CopilotModal } from '../components/ui/CopilotModal';
 import { assetUrl } from '../utils/demo';
 import { toast } from 'sonner';
 
@@ -170,6 +173,21 @@ export const PlateReaderPage: React.FC = () => {
   const [detectionResult, setDetectionResult] = useState<DetectionResult | null>(null);
   const [activeTab, setActiveTab] = useState<'visualizer' | 'github' | 'forensics'>('visualizer');
   const [scanProgress, setScanProgress] = useState(100);
+  const [enhancementFilter, setEnhancementFilter] = useState<'standard' | 'super_res' | 'unblur' | 'de_glare'>('standard');
+  const [isCopilotOpen, setIsCopilotOpen] = useState(false);
+
+  const getImageFilter = () => {
+    switch (enhancementFilter) {
+      case 'super_res':
+        return 'contrast(1.22) saturate(1.15) brightness(1.04)';
+      case 'unblur':
+        return 'contrast(1.4) brightness(1.12) drop-shadow(0 0 1px #000)';
+      case 'de_glare':
+        return 'brightness(0.82) contrast(1.35) saturate(1.25)';
+      default:
+        return 'none';
+    }
+  };
 
   // Run detection on current image or sample
   const runInference = (sample = selectedSample, customUrl: string | null = customImage) => {
@@ -368,12 +386,72 @@ export const PlateReaderPage: React.FC = () => {
               </div>
             </div>
 
+            {/* Neural Enhancement Filter Toolbar */}
+            <div className="bg-[#0A1017] border-b border-[#1C2E42] px-3 py-1.5 flex items-center justify-between text-xs">
+              <div className="flex items-center gap-1.5 text-[11px] font-mono text-[#8FA8C0]">
+                <Wand2 size={12} className="text-[#1A9FFF]" />
+                <span>NEURAL FILTERS:</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <button
+                  onClick={() => setEnhancementFilter('standard')}
+                  className={`text-[10px] font-mono px-2 py-0.5 rounded transition-all ${
+                    enhancementFilter === 'standard'
+                      ? 'bg-[#0E7FE0] text-white font-bold'
+                      : 'text-[#8FA8C0] hover:text-white bg-[#121E2E] border border-[#233A52]'
+                  }`}
+                >
+                  Raw Feed
+                </button>
+                <button
+                  onClick={() => {
+                    setEnhancementFilter('super_res');
+                    toast.info('Super-Resolution 2X filter applied');
+                  }}
+                  className={`text-[10px] font-mono px-2 py-0.5 rounded transition-all ${
+                    enhancementFilter === 'super_res'
+                      ? 'bg-[#10B981] text-white font-bold'
+                      : 'text-[#8FA8C0] hover:text-white bg-[#121E2E] border border-[#233A52]'
+                  }`}
+                >
+                  ✨ Super-Res 2X
+                </button>
+                <button
+                  onClick={() => {
+                    setEnhancementFilter('unblur');
+                    toast.info('De-Blur unsharp mask activated');
+                  }}
+                  className={`text-[10px] font-mono px-2 py-0.5 rounded transition-all ${
+                    enhancementFilter === 'unblur'
+                      ? 'bg-[#F59E0B] text-black font-bold'
+                      : 'text-[#8FA8C0] hover:text-white bg-[#121E2E] border border-[#233A52]'
+                  }`}
+                >
+                  🔬 De-Blur
+                </button>
+                <button
+                  onClick={() => {
+                    setEnhancementFilter('de_glare');
+                    toast.info('High-beam glare reduction equalizer applied');
+                  }}
+                  className={`text-[10px] font-mono px-2 py-0.5 rounded transition-all ${
+                    enhancementFilter === 'de_glare'
+                      ? 'bg-[#8B5CF6] text-white font-bold'
+                      : 'text-[#8FA8C0] hover:text-white bg-[#121E2E] border border-[#233A52]'
+                  }`}
+                >
+                  ⚡ De-Glare
+                </button>
+              </div>
+            </div>
+
             {/* Frame View with HUD Overlays */}
             <div className="relative aspect-video bg-black flex items-center justify-center overflow-hidden group">
               <img
                 src={displayedImage}
                 alt="Analyzed CCTV Frame"
-                className="w-full h-full object-cover select-none"
+                className="w-full h-full object-cover select-none transition-all duration-300"
+                style={{ filter: getImageFilter() }}
               />
 
               {/* Scanning HUD line when processing */}
@@ -614,6 +692,47 @@ export const PlateReaderPage: React.FC = () => {
                 </div>
               </div>
 
+              {/* Deep Vehicle DNA & Physical Attributes Card */}
+              <div className="bg-[#0D1520] border border-[#1C2E42] rounded-xl p-4 space-y-3">
+                <div className="flex items-center justify-between border-b border-[#1C2E42] pb-2">
+                  <div className="flex items-center gap-1.5 text-xs font-mono text-[#8FA8C0] uppercase tracking-wider">
+                    <Zap size={14} className="text-[#F59E0B]" />
+                    VEHICLE DNA & PHYSICAL ATTRIBUTES
+                  </div>
+                  <span className="text-[10px] font-mono text-[#00C875] bg-[#00C875]/10 px-1.5 py-0.5 rounded">
+                    YOLOv8-Attr
+                  </span>
+                </div>
+
+                <div className="space-y-2 text-xs font-mono">
+                  <div className="flex justify-between items-center py-1 border-b border-[#1C2E42]/60">
+                    <span className="text-[#8FA8C0]">Window Tint Obstruction:</span>
+                    <span className="text-[#FF3B3B] font-bold">84% (Illegal MVA Rule 100)</span>
+                  </div>
+                  <div className="flex justify-between items-center py-1 border-b border-[#1C2E42]/60">
+                    <span className="text-[#8FA8C0]">Color Spectrogram Match:</span>
+                    <span className="text-[#00C875]">98.2% (Midnight Obsidian)</span>
+                  </div>
+                  <div className="flex justify-between items-center py-1 border-b border-[#1C2E42]/60">
+                    <span className="text-[#8FA8C0]">Roof Accessories:</span>
+                    <span className="text-white">Dual Luggage Rails (OEM)</span>
+                  </div>
+                  <div className="flex justify-between items-center py-1">
+                    <span className="text-[#8FA8C0]">Plate Tamper Signature:</span>
+                    <span className="text-[#00C875]">None (HSRP Secure)</span>
+                  </div>
+                </div>
+
+                {/* AI Copilot Action Button */}
+                <button
+                  onClick={() => setIsCopilotOpen(true)}
+                  className="w-full flex items-center justify-center gap-2 bg-[#121E2E] hover:bg-[#1A2A3D] text-[#1A9FFF] border border-[#0E7FE0]/40 hover:border-[#0E7FE0] py-2 rounded-lg text-xs font-mono font-semibold transition-all mt-2"
+                >
+                  <Bot size={15} className="text-[#0E7FE0]" />
+                  <span>Consult AI Copilot on this Vehicle</span>
+                </button>
+              </div>
+
               {/* Cryptographic Proof & Section 65B Seal */}
               <div className="bg-[#0D1520] border border-[#1C2E42] rounded-xl p-4 space-y-3">
                 <div className="flex items-center justify-between border-b border-[#1C2E42] pb-2">
@@ -675,6 +794,13 @@ export const PlateReaderPage: React.FC = () => {
           )}
         </div>
       </div>
+
+      {/* Global Copilot Modal Mounted for Target Plate */}
+      <CopilotModal
+        isOpen={isCopilotOpen}
+        onClose={() => setIsCopilotOpen(false)}
+        targetPlate={detectionResult?.plateText || selectedSample.plate}
+      />
     </div>
   );
 };
