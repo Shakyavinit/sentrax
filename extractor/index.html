@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="robots" content="noindex, nofollow, noarchive, nosnippet" />
   <meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet" />
-  <title>SENTRAX // Media Hub & Forensic Asset Vault</title>
+  <title>SENTRAX // Live Platform Walkthrough & Official Media Scanner</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -70,15 +70,12 @@
     .custom-scrollbar::-webkit-scrollbar-thumb:hover {
       background: #0E7FE0;
     }
-    .animate-pulse-slow {
-      animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-    }
   </style>
 </head>
 <body class="min-h-screen flex flex-col grid-bg custom-scrollbar selection:bg-[#0E7FE0] selection:text-white">
 
   <!-- Top Navigation Bar -->
-  <header class="border-b border-[#1C2E42] bg-[#0D1520]/90 backdrop-blur-md sticky top-0 z-40">
+  <header class="border-b border-[#1C2E42] bg-[#0D1520]/95 backdrop-blur-md sticky top-0 z-40">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
       <div class="flex items-center gap-3">
         <a href="../" class="w-9 h-9 rounded-lg bg-[#0E7FE0]/15 border border-[#0E7FE0]/40 flex items-center justify-center text-[#0E7FE0] shadow-lg shadow-[#0E7FE0]/10 hover:border-[#0E7FE0] transition-colors">
@@ -87,9 +84,9 @@
         <div>
           <div class="flex items-center gap-2">
             <span class="font-mono font-bold tracking-wider text-sm sm:text-base text-white">SENTRAX</span>
-            <span class="text-xs font-mono text-[#0E7FE0] px-2 py-0.5 rounded bg-[#0E7FE0]/10 border border-[#0E7FE0]/30 font-semibold">MEDIA & EVIDENCE VAULT</span>
+            <span class="text-xs font-mono text-[#0E7FE0] px-2 py-0.5 rounded bg-[#0E7FE0]/10 border border-[#0E7FE0]/30 font-semibold">PLATFORM DEMO & SCREENSHOT SCANNER</span>
           </div>
-          <p class="text-[10px] text-[#8FA8C0]">Official Surveillance Videos, ANPR Plates & Evidence Assets</p>
+          <p class="text-[10px] text-[#8FA8C0]">Live System Walkthrough, Screen Recorder & Submission Media Vault</p>
         </div>
       </div>
 
@@ -97,422 +94,557 @@
         <!-- Interactive Auto-Demo Button -->
         <button 
           type="button" 
-          id="launch-demo-btn"
-          onclick="openDemoPlayer()"
-          class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-mono font-bold text-white bg-gradient-to-r from-red-600 to-amber-600 hover:from-red-500 hover:to-amber-500 shadow-lg shadow-red-600/25 transition-all active:scale-95 border border-red-500/40"
+          onclick="openLiveWalkthrough()"
+          class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-mono font-bold text-white bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:opacity-95 shadow-lg shadow-blue-600/25 transition-all active:scale-95 border border-blue-500/40"
         >
-          <i data-lucide="play-circle" class="w-4 h-4 animate-pulse"></i>
-          <span>AUTOPILOT DEMO VIDEO</span>
+          <i data-lucide="play" class="w-4 h-4 fill-current"></i>
+          <span>HOW TO USE (VIDEO WALKTHROUGH)</span>
         </button>
 
-        <a href="../" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono font-medium text-[#8FA8C0] hover:text-white bg-[#131F30] hover:bg-[#1A2D42] border border-[#1C2E42] transition-colors">
-          <i data-lucide="arrow-left" class="w-3.5 h-3.5 text-[#0E7FE0]"></i>
-          <span>Live App</span>
+        <a href="../" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-mono font-bold text-slate-200 bg-[#131F30] hover:bg-[#1A2D42] border border-[#1C2E42] transition-colors">
+          <i data-lucide="external-link" class="w-3.5 h-3.5 text-[#0E7FE0]"></i>
+          <span>OPEN SENTRAX LIVE</span>
         </a>
       </div>
     </div>
   </header>
 
-  <!-- Main Content Container -->
+  <!-- Main Container -->
   <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col gap-6">
 
-    <!-- Locked Extraction Bar & Mode Banner -->
-    <section class="bg-[#0D1520] border border-[#1C2E42] rounded-2xl p-5 shadow-2xl relative overflow-hidden">
-      <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-600 via-emerald-500 to-blue-600"></div>
+    <!-- Scanner Control Center Card -->
+    <section class="bg-[#0D1520] border border-[#1C2E42] rounded-2xl p-5 sm:p-6 shadow-2xl relative overflow-hidden">
+      <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-600 via-emerald-500 to-purple-600"></div>
 
-      <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-        <div>
-          <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-emerald-950/70 border border-emerald-700/50 text-emerald-400 text-xs font-mono mb-2">
+      <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-5">
+        <div class="space-y-1.5 max-w-2xl">
+          <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-emerald-950/70 border border-emerald-700/50 text-emerald-400 text-xs font-mono">
             <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-            <span>INTERNAL ASSET HUB · LOCKED TO SENTRAX WEBSITE</span>
+            <span>LIVE SYSTEM SCANNER · ZERO MANUAL WORK REQUIRED</span>
           </div>
           <h1 class="text-xl sm:text-2xl font-bold text-white font-mono tracking-tight">
-            SENTRAX Official Photos & Videos Repository
+            Live Platform Usage, Screens & Submission Media Hub
           </h1>
-          <p class="text-xs text-[#8FA8C0] mt-1">
-            Browse, inspect in full quality, and download every CCTV surveillance stream, license plate crop, vehicle snapshot, and case asset from <span class="text-white font-mono">https://shakyavinit.github.io/sentrax/</span>.
+          <p class="text-xs text-[#8FA8C0] leading-relaxed">
+            Yeh tool specially aapki live website <strong class="text-white">https://shakyavinit.github.io/sentrax/</strong> ko pura use karke dikhata hai. Yahan se aap website ke har module (Overview, Live Matrix, Tactical Grid, Journey Replay, Patrol Route, Alerts, Evidence) ke updated screenshots aur complete automated video demo bina kisi manual recording ke 1-click me export kar sakte hain.
           </p>
         </div>
 
-        <!-- Universal Scraper Locked Status Pill -->
-        <div class="flex items-center gap-2 px-3 py-2 rounded-xl bg-[#080C14] border border-[#1C2E42] text-xs font-mono">
-          <div class="p-1.5 rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/20">
-            <i data-lucide="lock" class="w-4 h-4"></i>
+        <!-- Lock Indicator & Actions -->
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full lg:w-auto">
+          <!-- Universal Scraper Lock Indicator -->
+          <div class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl bg-[#080C14] border border-[#1C2E42] text-xs font-mono">
+            <div class="p-1.5 rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/20">
+              <i data-lucide="lock" class="w-4 h-4"></i>
+            </div>
+            <div>
+              <div class="text-[10px] text-[#8FA8C0] uppercase">External Web Scraper</div>
+              <div class="text-amber-300 font-bold text-[11px]">LOCKED TO SENTRAX ONLY</div>
+            </div>
           </div>
-          <div>
-            <div class="text-[10px] text-[#8FA8C0] uppercase">External Scraper</div>
-            <div class="text-amber-300 font-bold text-[11px]">LOCKED (SECURITY POLICY)</div>
-          </div>
+
+          <!-- Master Scan Button -->
+          <button 
+            type="button" 
+            onclick="triggerLiveScan()"
+            id="scan-btn"
+            class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-mono text-xs font-bold transition-all shadow-lg shadow-blue-600/20 flex items-center justify-center gap-2 active:scale-95"
+          >
+            <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+            <span id="scan-btn-label">SCAN & REFRESH LIVE SCREENS</span>
+          </button>
+
+          <!-- Master ZIP Download Button -->
+          <button 
+            type="button" 
+            onclick="downloadAllScreenshotsZip()"
+            id="download-all-zip-btn"
+            class="px-4 py-2.5 rounded-xl bg-[#0E7FE0] hover:bg-[#1A9FFF] text-white font-mono text-xs font-bold transition-all shadow-lg shadow-[#0E7FE0]/20 flex items-center justify-center gap-2 active:scale-95"
+          >
+            <i data-lucide="download-cloud" class="w-4 h-4"></i>
+            <span>DOWNLOAD ALL (.ZIP)</span>
+          </button>
         </div>
       </div>
 
-      <!-- Domain Selector Bar (Pre-locked to SENTRAX) -->
-      <div class="mt-4 pt-4 border-t border-[#1C2E42]/60 flex flex-col sm:flex-row items-center gap-3">
-        <div class="relative flex-1 w-full">
-          <div class="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#4D6B85] flex items-center pointer-events-none">
-            <i data-lucide="lock" class="w-4 h-4 text-emerald-400"></i>
+      <!-- Domain Lock Verification Strip -->
+      <div class="mt-4 pt-4 border-t border-[#1C2E42]/60 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-mono">
+        <div class="flex items-center gap-2 text-slate-300">
+          <i data-lucide="shield-check" class="w-4 h-4 text-emerald-400"></i>
+          <span>Target Platform:</span>
+          <code class="px-2 py-0.5 rounded bg-[#080C14] border border-[#1C2E42] text-emerald-300 font-bold">https://shakyavinit.github.io/sentrax/</code>
+        </div>
+        <div class="flex items-center gap-4 text-slate-400 text-[11px]">
+          <span>Status: <strong class="text-emerald-400 font-mono">ALL MODULES ACTIVE</strong></span>
+          <span>·</span>
+          <span>Last Scan: <strong id="last-scan-timestamp" class="text-white font-mono">Just Now</strong></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive "How to Use" Step-by-Step Platform Guide -->
+    <section class="bg-[#0C121D] border border-[#1A2638] rounded-2xl p-5 flex flex-col gap-4">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-lg bg-blue-600/20 border border-blue-500/40 flex items-center justify-center text-blue-400">
+            <i data-lucide="terminal" class="w-4 h-4"></i>
           </div>
-          <input 
-            type="text" 
-            id="target-url-field"
-            value="https://shakyavinit.github.io/sentrax/"
-            readonly
-            class="w-full pl-10 pr-28 py-2.5 bg-[#080C14] border border-[#1C2E42] rounded-xl text-emerald-300 font-mono text-xs cursor-not-allowed select-all focus:outline-none"
-          />
-          <div class="absolute right-2 top-1/2 -translate-y-1/2">
-            <span class="px-2 py-1 rounded bg-emerald-950/80 border border-emerald-700/50 text-[10px] font-mono text-emerald-400 font-bold">
-              VERIFIED TARGET
-            </span>
+          <div>
+            <h2 class="text-sm sm:text-base font-bold text-white font-mono">
+              HOW TO USE SENTRAX // STEP-BY-STEP OPERATIONAL FLOW
+            </h2>
+            <p class="text-xs text-slate-400">Click any step below to preview the exact screen and learn how law enforcement operators use that module.</p>
           </div>
         </div>
 
-        <div class="flex items-center gap-2 w-full sm:w-auto">
+        <button 
+          onclick="openLiveWalkthrough()" 
+          class="px-3 py-1.5 rounded-lg bg-red-600 hover:bg-red-500 text-white font-mono text-xs font-bold transition flex items-center gap-1.5 shadow-md shadow-red-600/25"
+        >
+          <i data-lucide="film" class="w-3.5 h-3.5"></i>
+          <span>PLAY FULL DEMO WALKTHROUGH</span>
+        </button>
+      </div>
+
+      <!-- Steps Selector Strip -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2 text-xs font-mono">
+        <button onclick="previewScreen(0)" id="step-nav-0" class="step-nav-btn p-2.5 rounded-xl border border-blue-500 bg-blue-600/20 text-white font-bold text-left transition flex flex-col gap-1">
+          <span class="text-[10px] text-blue-300">STEP 1</span>
+          <span class="truncate">Command Center</span>
+        </button>
+        <button onclick="previewScreen(1)" id="step-nav-1" class="step-nav-btn p-2.5 rounded-xl border border-[#1A2638] bg-[#070B12] text-slate-400 text-left transition flex flex-col gap-1 hover:border-slate-600 hover:text-white">
+          <span class="text-[10px] text-slate-500">STEP 2</span>
+          <span class="truncate">Live CCTV Matrix</span>
+        </button>
+        <button onclick="previewScreen(2)" id="step-nav-2" class="step-nav-btn p-2.5 rounded-xl border border-[#1A2638] bg-[#070B12] text-slate-400 text-left transition flex flex-col gap-1 hover:border-slate-600 hover:text-white">
+          <span class="text-[10px] text-slate-500">STEP 3</span>
+          <span class="truncate">Tactical Grid</span>
+        </button>
+        <button onclick="previewScreen(3)" id="step-nav-3" class="step-nav-btn p-2.5 rounded-xl border border-[#1A2638] bg-[#070B12] text-slate-400 text-left transition flex flex-col gap-1 hover:border-slate-600 hover:text-white">
+          <span class="text-[10px] text-slate-500">STEP 4</span>
+          <span class="truncate">Journey Replay</span>
+        </button>
+        <button onclick="previewScreen(4)" id="step-nav-4" class="step-nav-btn p-2.5 rounded-xl border border-[#1A2638] bg-[#070B12] text-slate-400 text-left transition flex flex-col gap-1 hover:border-slate-600 hover:text-white">
+          <span class="text-[10px] text-slate-500">STEP 5</span>
+          <span class="truncate">Patrol Route</span>
+        </button>
+        <button onclick="previewScreen(5)" id="step-nav-5" class="step-nav-btn p-2.5 rounded-xl border border-[#1A2638] bg-[#070B12] text-slate-400 text-left transition flex flex-col gap-1 hover:border-slate-600 hover:text-white">
+          <span class="text-[10px] text-slate-500">STEP 6</span>
+          <span class="truncate">Intercept Alerts</span>
+        </button>
+        <button onclick="previewScreen(6)" id="step-nav-6" class="step-nav-btn p-2.5 rounded-xl border border-[#1A2638] bg-[#070B12] text-slate-400 text-left transition flex flex-col gap-1 hover:border-slate-600 hover:text-white">
+          <span class="text-[10px] text-slate-500">STEP 7</span>
+          <span class="truncate">Evidence Vault</span>
+        </button>
+        <button onclick="previewScreen(7)" id="step-nav-7" class="step-nav-btn p-2.5 rounded-xl border border-[#1A2638] bg-[#070B12] text-slate-400 text-left transition flex flex-col gap-1 hover:border-slate-600 hover:text-white">
+          <span class="text-[10px] text-slate-500">STEP 8</span>
+          <span class="truncate">Camera Registry</span>
+        </button>
+      </div>
+
+      <!-- Active Screen Interactive Viewer -->
+      <div class="relative bg-black rounded-xl border border-[#1C2E42] overflow-hidden flex flex-col lg:flex-row min-h-[420px]">
+        <!-- Preview Screen Media -->
+        <div class="flex-1 relative bg-black flex items-center justify-center p-2">
+          <img 
+            id="active-screen-img" 
+            src="../images/gujarat_map_tactical.jpg" 
+            alt="SENTRAX Screen" 
+            class="max-h-[440px] w-full object-contain rounded-lg shadow-2xl"
+          />
+          <video 
+            id="active-screen-video" 
+            autoplay 
+            loop 
+            muted 
+            playsinline 
+            class="max-h-[440px] w-full object-cover rounded-lg shadow-2xl hidden"
+          >
+            <source id="active-screen-video-src" src="../videos/traffic_city_junction.mp4" type="video/mp4">
+          </video>
+
+          <div class="absolute top-4 left-4 bg-black/80 backdrop-blur-md px-3 py-1 rounded-lg border border-white/10 text-xs font-mono text-white flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span id="active-screen-badge">LIVE PLATFORM SCREENSHOT</span>
+          </div>
+        </div>
+
+        <!-- Explanatory Operation Panel -->
+        <div class="w-full lg:w-96 bg-[#080C14] border-t lg:border-t-0 lg:border-l border-[#1C2E42] p-5 flex flex-col justify-between space-y-4 font-mono">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between text-xs text-slate-400">
+              <span id="active-screen-route" class="text-[#0E7FE0] font-bold">ROUTE: /</span>
+              <span id="active-screen-category" class="px-2 py-0.5 rounded bg-blue-950 text-blue-300 text-[10px]">SOC OVERVIEW</span>
+            </div>
+            <h3 id="active-screen-title" class="text-base font-bold text-white font-sans">
+              Command Center Overview & Statewide Telemetry
+            </h3>
+            <p id="active-screen-desc" class="text-xs text-slate-300 font-sans leading-relaxed">
+              Yahan officer Gujarat Police municipal CCTV cameras ka statewide health status, active Sentinel nodes, live ANPR detection rate, aur recent vehicle sightings feed ek single command dashboard me monitor karta hai.
+            </p>
+
+            <div class="p-3 rounded-lg bg-[#0D1520] border border-[#1C2E42] space-y-2 text-xs">
+              <div class="text-[11px] text-slate-400 uppercase font-bold flex items-center gap-1.5">
+                <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-emerald-400"></i>
+                <span>Key Police Operations:</span>
+              </div>
+              <ul id="active-screen-bullets" class="text-[11px] text-slate-300 space-y-1 list-disc pl-4">
+                <li>Real-time vehicle detection counters (120+ sightings/hr)</li>
+                <li>Congestion indicator for MG Road & SG Highway</li>
+                <li>Clickable target shortcut to trigger instant vehicle dossier</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Screen Actions -->
+          <div class="flex items-center gap-2 pt-2 border-t border-[#1C2E42]">
+            <a 
+              id="active-screen-live-link"
+              href="../" 
+              target="_blank" 
+              class="flex-1 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition text-center flex items-center justify-center gap-1.5"
+            >
+              <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+              <span>Launch This Screen</span>
+            </a>
+            <button 
+              id="active-screen-dl-btn"
+              onclick="downloadCurrentActiveScreen()" 
+              class="px-3 py-2 rounded-lg bg-[#131F30] hover:bg-[#1A2D42] border border-[#1C2E42] text-slate-300 hover:text-white text-xs transition flex items-center gap-1.5"
+              title="Download Screenshot"
+            >
+              <i data-lucide="download" class="w-3.5 h-3.5"></i>
+              <span>Save Image</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Live Website Screenshots & Videos Gallery -->
+    <section class="space-y-4">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h2 class="text-base font-bold text-white font-mono flex items-center gap-2">
+            <span>OFFICIAL WEBSITE SCREENSHOTS & ASSET VAULT</span>
+            <span class="px-2 py-0.5 rounded-full bg-blue-950 text-blue-400 border border-blue-700/50 text-[10px]">ALL PLATFORM MODULES</span>
+          </h2>
+          <p class="text-xs text-slate-400">High-resolution screenshots and video proofs of each page on https://shakyavinit.github.io/sentrax/ ready for hackathon presentation submission.</p>
+        </div>
+
+        <div class="flex items-center gap-2">
           <button 
             type="button" 
-            onclick="selectAllFiltered()"
-            class="px-3 py-2.5 rounded-xl bg-[#131F30] hover:bg-[#1A2D42] border border-[#1C2E42] text-xs font-mono text-slate-300 hover:text-white transition flex items-center gap-1.5"
+            onclick="selectAllScreens()"
+            class="px-3 py-1.5 rounded-lg bg-[#131F30] hover:bg-[#1A2D42] border border-[#1C2E42] text-xs font-mono text-slate-300 hover:text-white transition flex items-center gap-1.5"
           >
             <i data-lucide="check-square" class="w-3.5 h-3.5 text-[#0E7FE0]"></i>
             <span>Select All</span>
           </button>
           <button 
             type="button" 
-            id="download-zip-btn"
-            onclick="downloadSelectedAsZip()"
-            class="flex-1 sm:flex-initial px-4 py-2.5 rounded-xl bg-[#0E7FE0] hover:bg-[#1A9FFF] text-white font-mono text-xs font-bold transition-all shadow-lg shadow-[#0E7FE0]/20 flex items-center justify-center gap-2"
+            onclick="downloadAllScreenshotsZip()"
+            class="px-3.5 py-1.5 rounded-lg bg-[#0E7FE0] hover:bg-[#1A9FFF] text-white font-mono text-xs font-bold transition flex items-center gap-1.5 shadow-md shadow-[#0E7FE0]/20"
           >
-            <i data-lucide="archive" class="w-4 h-4"></i>
-            <span id="zip-button-label">Download All as ZIP</span>
+            <i data-lucide="archive" class="w-3.5 h-3.5"></i>
+            <span id="gallery-zip-label">Download All (9 Files)</span>
           </button>
         </div>
+      </div>
+
+      <!-- Screenshot Cards Grid -->
+      <div id="screens-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <!-- Rendered via Javascript -->
       </div>
     </section>
 
-    <!-- Filter Category Tabs & Quick Stats -->
-    <div class="flex flex-wrap items-center justify-between gap-3 bg-[#0C121D] border border-[#1A2638] rounded-xl p-2 text-xs font-mono">
-      <div class="flex flex-wrap items-center gap-1">
-        <button 
-          onclick="setTab('all')" 
-          id="tab-all"
-          class="tab-btn px-3 py-1.5 rounded-lg bg-blue-600 text-white font-bold transition flex items-center gap-1.5"
-        >
-          <i data-lucide="layers" class="w-3.5 h-3.5"></i>
-          <span>ALL ASSETS</span>
-          <span id="badge-count-all" class="px-1.5 py-0.2 rounded-full bg-black/40 text-[10px]">35</span>
-        </button>
-        <button 
-          onclick="setTab('video')" 
-          id="tab-video"
-          class="tab-btn px-3 py-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-[#131F30] transition flex items-center gap-1.5"
-        >
-          <i data-lucide="video" class="w-3.5 h-3.5 text-blue-400"></i>
-          <span>CCTV VIDEOS (MP4)</span>
-          <span id="badge-count-video" class="px-1.5 py-0.2 rounded-full bg-blue-950 text-blue-300 text-[10px]">12</span>
-        </button>
-        <button 
-          onclick="setTab('plate')" 
-          id="tab-plate"
-          class="tab-btn px-3 py-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-[#131F30] transition flex items-center gap-1.5"
-        >
-          <i data-lucide="credit-card" class="w-3.5 h-3.5 text-emerald-400"></i>
-          <span>ANPR PLATES</span>
-          <span id="badge-count-plate" class="px-1.5 py-0.2 rounded-full bg-emerald-950 text-emerald-300 text-[10px]">6</span>
-        </button>
-        <button 
-          onclick="setTab('crop')" 
-          id="tab-crop"
-          class="tab-btn px-3 py-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-[#131F30] transition flex items-center gap-1.5"
-        >
-          <i data-lucide="car" class="w-3.5 h-3.5 text-amber-400"></i>
-          <span>VEHICLE CROPS</span>
-          <span id="badge-count-crop" class="px-1.5 py-0.2 rounded-full bg-amber-950 text-amber-300 text-[10px]">8</span>
-        </button>
-        <button 
-          onclick="setTab('tactical')" 
-          id="tab-tactical"
-          class="tab-btn px-3 py-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-[#131F30] transition flex items-center gap-1.5"
-        >
-          <i data-lucide="map" class="w-3.5 h-3.5 text-purple-400"></i>
-          <span>TACTICAL MAPS</span>
-          <span id="badge-count-tactical" class="px-1.5 py-0.2 rounded-full bg-purple-950 text-purple-300 text-[10px]">9</span>
-        </button>
-      </div>
-
-      <div class="flex items-center gap-3 text-slate-400 pr-2">
-        <span id="selection-counter" class="text-blue-400 font-bold">0 selected</span>
-        <span>·</span>
-        <span>Ready for 1-click export</span>
-      </div>
-    </div>
-
-    <!-- Media Grid -->
-    <div id="media-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-      <!-- Generated via Javascript -->
-    </div>
-
   </main>
 
-  <!-- Video & Image Lightbox Modal -->
-  <div id="lightbox-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-md p-4 hidden">
-    <div class="relative max-w-5xl w-full bg-[#0D1520] border border-[#1C2E42] rounded-2xl overflow-hidden shadow-2xl flex flex-col max-h-[92vh]">
+  <!-- Interactive Live Walkthrough & Screen Recording Modal -->
+  <div id="walkthrough-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/95 backdrop-blur-md p-4 hidden">
+    <div class="relative max-w-6xl w-full bg-[#080C14] border border-blue-500/60 rounded-2xl overflow-hidden shadow-[0_0_80px_rgba(14,127,224,0.3)] flex flex-col max-h-[95vh]">
       <!-- Header -->
-      <div class="px-5 py-3.5 border-b border-[#1C2E42] flex items-center justify-between bg-[#080C14]">
-        <div class="flex items-center gap-2.5 min-w-0">
-          <span id="lightbox-badge" class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-blue-600 text-white">VIDEO</span>
-          <h3 id="lightbox-title" class="text-sm font-mono font-bold text-white truncate">Filename</h3>
+      <div class="px-6 py-3.5 border-b border-[#1C2E42] bg-[#0C121D] flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-lg bg-red-600/20 border border-red-500/40 flex items-center justify-center text-red-400">
+            <i data-lucide="video" class="w-4 h-4 animate-pulse"></i>
+          </div>
+          <div>
+            <h3 class="text-sm sm:text-base font-mono font-bold text-white flex items-center gap-2">
+              <span>SENTRAX OFFICIAL PLATFORM VIDEO DEMO</span>
+              <span class="px-2 py-0.5 rounded bg-emerald-600/20 text-emerald-400 border border-emerald-500/30 text-[10px] font-bold">READY FOR JUDGES</span>
+            </h3>
+            <p class="text-xs text-slate-400">Simulates real user operation across all screens with CCTV playback and telemetry</p>
+          </div>
         </div>
+
         <div class="flex items-center gap-2">
-          <button id="lightbox-dl-btn" class="px-3 py-1.5 rounded-lg bg-[#0E7FE0] hover:bg-[#1A9FFF] text-white text-xs font-mono font-semibold transition flex items-center gap-1.5">
+          <!-- Record / Download Button -->
+          <button 
+            type="button" 
+            onclick="downloadDemoVideoDirect()"
+            class="px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-emerald-600 to-teal-600 hover:opacity-95 text-white font-mono text-xs font-bold transition flex items-center gap-1.5 shadow-lg shadow-emerald-600/20"
+          >
             <i data-lucide="download" class="w-3.5 h-3.5"></i>
-            <span>Download</span>
+            <span>DOWNLOAD DEMO VIDEO (.MP4)</span>
           </button>
-          <button onclick="closeLightbox()" class="p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-[#1C2E42] transition">
+          <button onclick="closeLiveWalkthrough()" class="p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-[#1A2638] transition">
             <i data-lucide="x" class="w-5 h-5"></i>
           </button>
         </div>
       </div>
 
-      <!-- Media Canvas -->
-      <div id="lightbox-canvas" class="flex-1 bg-black flex items-center justify-center overflow-hidden p-2 min-h-[360px]">
-        <!-- Dynamic Video / Image injected -->
-      </div>
-
-      <!-- Footer Metadata -->
-      <div class="px-5 py-2.5 border-t border-[#1C2E42] bg-[#080C14] flex flex-wrap items-center justify-between text-xs font-mono text-slate-400">
-        <span id="lightbox-meta">1920×1080 · H.264 · 25 FPS</span>
-        <span class="text-emerald-400">Verified SENTRAX Platform Sighting Asset</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- Interactive Autopilot Demo Walkthrough Modal -->
-  <div id="demo-player-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/95 backdrop-blur-lg p-4 hidden">
-    <div class="relative max-w-5xl w-full bg-[#090E17] border border-blue-500/50 rounded-2xl overflow-hidden shadow-[0_0_80px_rgba(14,127,224,0.3)] flex flex-col max-h-[95vh]">
-      <!-- Demo Top Bar -->
-      <div class="px-6 py-4 border-b border-[#1C2E42] bg-[#0C131F] flex items-center justify-between">
-        <div class="flex items-center gap-3">
-          <span class="w-3 h-3 rounded-full bg-red-500 animate-ping"></span>
-          <div>
-            <h2 class="text-base font-mono font-bold text-white flex items-center gap-2">
-              <span>SENTRAX AUTOPILOT DEMO SIMULATOR</span>
-              <span class="px-2 py-0.5 rounded bg-red-600/20 border border-red-500/40 text-red-400 text-[10px] uppercase font-bold">AUTOMATED WALKTHROUGH</span>
-            </h2>
-            <p class="text-xs text-slate-400">High-definition sequential video presentation of the full law enforcement surveillance workflow</p>
-          </div>
-        </div>
-        <button onclick="closeDemoPlayer()" class="p-2 text-slate-400 hover:text-white rounded-lg hover:bg-[#1A2638] transition">
-          <i data-lucide="x" class="w-5 h-5"></i>
-        </button>
-      </div>
-
-      <!-- Step Indicator Bar -->
-      <div class="px-6 py-2.5 bg-[#060A11] border-b border-[#1C2E42] flex items-center justify-between gap-2 overflow-x-auto text-xs font-mono">
-        <div id="step-btn-1" class="step-badge flex items-center gap-1.5 px-3 py-1 rounded-lg bg-blue-600 text-white font-bold">
-          <span>1. SOC MATRIX</span>
-        </div>
-        <div id="step-btn-2" class="step-badge flex items-center gap-1.5 px-3 py-1 rounded-lg text-slate-400">
-          <span>2. ANPR OCR LOCK</span>
-        </div>
-        <div id="step-btn-3" class="step-badge flex items-center gap-1.5 px-3 py-1 rounded-lg text-slate-400">
-          <span>3. WATCHLIST INTERCEPT</span>
-        </div>
-        <div id="step-btn-4" class="step-badge flex items-center gap-1.5 px-3 py-1 rounded-lg text-slate-400">
-          <span>4. EVIDENCE SHA-256</span>
-        </div>
-        <div id="step-btn-5" class="step-badge flex items-center gap-1.5 px-3 py-1 rounded-lg text-slate-400">
-          <span>5. TRAJECTORY REPLAY</span>
-        </div>
-      </div>
-
-      <!-- Main Video Screen with Animated HUD -->
-      <div class="relative flex-1 bg-black min-h-[420px] flex items-center justify-center overflow-hidden">
+      <!-- Live Video Viewport -->
+      <div class="relative flex-1 bg-black min-h-[440px] flex items-center justify-center overflow-hidden">
         <video 
-          id="demo-video-elem" 
+          id="walkthrough-video" 
           autoplay 
           loop 
           muted 
           playsinline 
-          class="w-full h-full object-cover max-h-[60vh]"
+          class="w-full h-full object-cover max-h-[62vh]"
         >
-          <source id="demo-video-src" src="../videos/traffic_city_junction.mp4" type="video/mp4">
+          <source id="walkthrough-video-src" src="../videos/traffic_city_junction.mp4" type="video/mp4">
         </video>
 
-        <!-- Overlay HUD Bounding Boxes & Badges -->
-        <div class="absolute inset-0 pointer-events-none p-6 flex flex-col justify-between">
+        <!-- Dynamic Police HUD Overlay -->
+        <div class="absolute inset-0 pointer-events-none p-5 flex flex-col justify-between">
           <div class="flex items-start justify-between">
-            <div class="bg-black/80 backdrop-blur-md border border-blue-500/60 rounded-lg p-3 text-xs font-mono space-y-1">
+            <div class="bg-black/85 backdrop-blur-md border border-blue-500/50 rounded-xl p-3.5 text-xs font-mono space-y-1.5 shadow-2xl">
               <div class="flex items-center gap-2 text-emerald-400 font-bold">
                 <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                <span id="demo-hud-camera">CAMERA CAM01 // MG ROAD JUNCTION</span>
+                <span id="walkthrough-hud-step">STEP 1 // COMMAND CENTER INGESTION</span>
               </div>
-              <div class="text-slate-300">YOLOv11 Detection: <strong class="text-white">Active (97.8% Conf)</strong></div>
-              <div class="text-slate-300">Live ANPR OCR: <strong id="demo-hud-plate" class="text-amber-400 font-bold">GJ01AB1234</strong></div>
+              <div class="text-slate-300">Camera: <strong id="walkthrough-hud-cam" class="text-white">CAM01 · MG Road Junction</strong></div>
+              <div class="text-slate-300">ANPR Recognition: <strong id="walkthrough-hud-plate" class="text-amber-400 font-bold">GJ01AB1234 (98.4%)</strong></div>
+              <div class="text-slate-400 text-[10px]">SHA-256 Seal: 8a7c3f91...e4b2</div>
             </div>
 
-            <div id="demo-hud-alert-box" class="hidden bg-red-950/90 border-2 border-red-600 rounded-xl p-3 text-xs font-mono text-red-200 animate-pulse shadow-[0_0_30px_rgba(220,38,38,0.5)]">
+            <div id="walkthrough-hud-alert" class="hidden bg-red-950/90 border-2 border-red-600 rounded-xl p-3.5 text-xs font-mono text-red-200 animate-pulse shadow-[0_0_30px_rgba(220,38,38,0.6)]">
               <div class="flex items-center gap-2 font-bold text-red-400 text-sm">
                 <i data-lucide="siren" class="w-4 h-4"></i>
-                <span>HIGH PRIORITY INTERCEPT</span>
+                <span>HIGH PRIORITY INTERCEPT ALARM</span>
               </div>
-              <div>TARGET: <strong class="text-white">UP32PQ6677 (ARMED ROBBERY)</strong></div>
-              <div>DISPATCH: Ahmedabad Zone 1 Quick Patrol Unit 04</div>
+              <div>SUSPECT: <strong class="text-white">UP32PQ6677 (ARMED ROBBERY WARRANT)</strong></div>
+              <div>ACTION: Automated Dispatch to Zone 1 Interceptor Units</div>
             </div>
           </div>
 
-          <!-- Bottom Subtitle / Narration Banner -->
-          <div class="bg-black/85 backdrop-blur-md border border-white/15 rounded-xl p-4 text-center">
-            <div id="demo-narration-title" class="text-sm font-mono font-bold text-blue-400 mb-1">
-              STEP 1 OF 5 — 24/7 Optical Video Stream Ingestion
+          <!-- Bottom Subtitles -->
+          <div class="bg-black/90 backdrop-blur-md border border-white/15 rounded-xl p-4 text-center max-w-3xl mx-auto">
+            <div id="walkthrough-sub-title" class="text-xs font-mono font-bold text-blue-400 uppercase tracking-wider mb-1">
+              Surveillance Stream Analysis
             </div>
-            <p id="demo-narration-text" class="text-xs text-slate-200 font-sans max-w-2xl mx-auto leading-relaxed">
-              SENTRAX continuously ingests live HLS and RTSP feeds from Gujarat Police municipal CCTV cameras across Ahmedabad and Gandhinagar, processing frames at 25 FPS on real-time neural models.
+            <p id="walkthrough-sub-text" class="text-xs sm:text-sm text-slate-100 font-sans leading-relaxed">
+              SENTRAX is processing multi-stream RTSP and HLS CCTV video feeds from Ahmedabad municipal junctions, detecting vehicles and executing Indian license plate character recognition.
             </p>
           </div>
         </div>
       </div>
 
-      <!-- Demo Controller Controls -->
-      <div class="px-6 py-3.5 bg-[#0C131F] border-t border-[#1C2E42] flex items-center justify-between">
-        <div class="flex items-center gap-3">
-          <button 
-            onclick="prevDemoStep()" 
-            class="px-3.5 py-1.5 rounded-lg bg-[#131F30] hover:bg-[#1A2638] text-slate-300 text-xs font-mono transition"
-          >
-            ◀ Previous
+      <!-- Controls Strip -->
+      <div class="px-6 py-3 bg-[#0C121D] border-t border-[#1C2E42] flex items-center justify-between text-xs font-mono">
+        <div class="flex items-center gap-2">
+          <button onclick="stepWalkthrough(-1)" class="px-3 py-1.5 rounded-lg bg-[#131F30] hover:bg-[#1A2638] text-slate-200 transition">
+            ◀ Previous Module
           </button>
-          <button 
-            id="demo-play-pause-btn"
-            onclick="toggleDemoAutoplay()" 
-            class="px-4 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-mono text-xs font-bold transition flex items-center gap-1.5"
-          >
-            <i data-lucide="pause" class="w-3.5 h-3.5"></i>
-            <span id="demo-play-label">PAUSE AUTOPLAY</span>
+          <button onclick="toggleWalkthroughAutoplay()" id="walkthrough-play-btn" class="px-3.5 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-bold transition">
+            PAUSE
           </button>
-          <button 
-            onclick="nextDemoStep()" 
-            class="px-3.5 py-1.5 rounded-lg bg-[#131F30] hover:bg-[#1A2638] text-slate-300 text-xs font-mono transition"
-          >
-            Next ▶
+          <button onclick="stepWalkthrough(1)" class="px-3 py-1.5 rounded-lg bg-[#131F30] hover:bg-[#1A2638] text-slate-200 transition">
+            Next Module ▶
           </button>
         </div>
 
-        <div class="text-xs font-mono text-slate-400">
-          Time remaining on step: <strong id="step-countdown" class="text-blue-400">6s</strong>
+        <div class="text-slate-400">
+          Auto-advancing in <strong id="walkthrough-countdown" class="text-blue-400">7s</strong>
         </div>
       </div>
     </div>
   </div>
 
   <!-- ZIP Download Progress Modal -->
-  <div id="zip-progress-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 hidden">
+  <div id="zip-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 hidden">
     <div class="bg-[#0D1520] border border-[#1C2E42] rounded-2xl p-6 max-w-md w-full shadow-2xl text-center space-y-4">
       <div class="w-12 h-12 mx-auto rounded-xl bg-blue-600/20 border border-blue-500/40 flex items-center justify-center text-blue-400">
         <i data-lucide="archive" class="w-6 h-6 animate-pulse"></i>
       </div>
-      <h3 class="text-base font-mono font-bold text-white">Archiving SENTRAX Media Assets</h3>
-      <p id="zip-status-text" class="text-xs font-mono text-[#8FA8C0]">Packaging selected videos and photos into zip...</p>
+      <h3 class="text-base font-mono font-bold text-white">Archiving Platform Screenshots</h3>
+      <p id="zip-modal-status" class="text-xs font-mono text-[#8FA8C0]">Packaging high-resolution images and metadata...</p>
       
-      <!-- Progress Bar -->
       <div class="w-full bg-[#080C14] h-2.5 rounded-full overflow-hidden border border-[#1C2E42]">
-        <div id="zip-progress-bar" class="bg-gradient-to-r from-blue-600 to-emerald-500 h-full w-0 transition-all duration-150"></div>
+        <div id="zip-modal-bar" class="bg-gradient-to-r from-blue-600 to-emerald-500 h-full w-0 transition-all duration-150"></div>
       </div>
 
       <div class="text-[11px] font-mono text-slate-400 flex items-center justify-between">
-        <span id="zip-progress-count">0 / 0 files</span>
-        <span id="zip-progress-percent">0%</span>
+        <span id="zip-modal-count">0 / 0 files</span>
+        <span id="zip-modal-percent">0%</span>
       </div>
     </div>
   </div>
 
-  <!-- Javascript Logic -->
+  <!-- Javascript -->
   <script>
-    // Complete Catalogue of SENTRAX Official Assets
-    const SENTRAX_ASSETS = [
-      // Videos (12 CCTV Surveillance Feeds)
-      { id: 'v1', title: 'MG Road Junction Surveillance Stream', type: 'video', category: 'video', url: '../videos/cam_mg_road.mp4', thumb: '../images/cam_mg_road_thumb.jpg', desc: '1080p · 25 FPS · Low Congestion', res: '1920×1080', format: 'MP4' },
-      { id: 'v2', title: 'Sardar Bridge Sabarmati Entry', type: 'video', category: 'video', url: '../videos/cam_sardar_bridge.mp4', thumb: '../images/cam_sardar_bridge_thumb.jpg', desc: '1080p · 25 FPS · Low Congestion', res: '1920×1080', format: 'MP4' },
-      { id: 'v3', title: 'Vastrapur Lake Gate Feed', type: 'video', category: 'video', url: '../videos/cam_vastrapur.mp4', thumb: '../images/cam_vastrapur_thumb.jpg', desc: '1080p · 25 FPS · Medium Congestion', res: '1920×1080', format: 'MP4' },
-      { id: 'v4', title: 'SG Highway Toll Plaza', type: 'video', category: 'video', url: '../videos/cam_sg_highway_toll.mp4', thumb: '../images/cam_sg_highway_thumb.jpg', desc: '1080p · 25 FPS · High Congestion', res: '1920×1080', format: 'MP4' },
-      { id: 'v5', title: 'GIFT City Grand Entry Feed', type: 'video', category: 'video', url: '../videos/cam_gift_city.mp4', thumb: '../images/cam_gift_city_thumb.jpg', desc: '1080p · 25 FPS · Highway Corridors', res: '1920×1080', format: 'MP4' },
-      { id: 'v6', title: 'Sabarmati Riverfront North', type: 'video', category: 'video', url: '../videos/cam_sabarmati.mp4', thumb: '../images/cam_sabarmati_thumb.jpg', desc: '1080p · 25 FPS · Urban Corridor', res: '1920×1080', format: 'MP4' },
-      { id: 'v7', title: 'Gandhinagar Sector 15 Gate', type: 'video', category: 'video', url: '../videos/cam_sector15.mp4', thumb: '../images/feed_cam05.jpg', desc: '1080p · 25 FPS · Municipal Checkpoint', res: '1920×1080', format: 'MP4' },
-      { id: 'v8', title: 'GNLU Campus Circle Feed', type: 'video', category: 'video', url: '../videos/cam_gnlu_gate.mp4', thumb: '../images/cam_gnlu_gate_thumb.jpg', desc: '1080p · 25 FPS · Perimeter Surveillance', res: '1920×1080', format: 'MP4' },
-      { id: 'v9', title: 'Chiloda Highway Circle Stream', type: 'video', category: 'video', url: '../videos/cam_chiloda_circle.mp4', thumb: '../images/feed_cam08.jpg', desc: '1080p · 25 FPS · Multi-Lane Flow', res: '1920×1080', format: 'MP4' },
-      { id: 'v10', title: 'Kudasan Crossroad Gandhinagar', type: 'video', category: 'video', url: '../videos/cam_kudasan.mp4', thumb: '../images/feed_cam09.jpg', desc: '1080p · 25 FPS · Traffic Signal Point', res: '1920×1080', format: 'MP4' },
-      { id: 'v11', title: 'Real Traffic Junction Urban Stream', type: 'video', category: 'video', url: '../videos/traffic_city_junction.mp4', thumb: '../images/traffic_city_junction_thumb.jpg', desc: '1080p · 30 FPS · Mixed Vehicle Traffic', res: '1920×1080', format: 'MP4' },
-      { id: 'v12', title: 'Tactical CCTV Surveillance Continuous', type: 'video', category: 'video', url: '../videos/traffic_cctv_real.mp4', thumb: '../images/feed_cam03.jpg', desc: '1080p · 30 FPS · High Definition Night/Day', res: '1920×1080', format: 'MP4' },
-
-      // ANPR License Plates
-      { id: 'p1', title: 'License Plate Crop GJ01AB1234', type: 'image', category: 'plate', url: '../images/plate_gj01ab1234.png', thumb: '../images/plate_gj01ab1234.png', desc: 'ANPR OCR 98.4% · Gujarat Commuter', res: 'High-Res PNG', format: 'PNG' },
-      { id: 'p2', title: 'Watchlist Target Plate UP32PQ6677', type: 'image', category: 'plate', url: '../images/plate_up32pq6677.png', thumb: '../images/plate_up32pq6677.png', desc: 'Active Warrant · Immediate Intercept', res: 'High-Res PNG', format: 'PNG' },
-      { id: 'p3', title: 'License Plate Crop DL10XY9090', type: 'image', category: 'plate', url: '../images/plate_dl10xy9090.png', thumb: '../images/plate_dl10xy9090.png', desc: 'ANPR OCR 96.1% · Inter-State Transit', res: 'High-Res PNG', format: 'PNG' },
-      { id: 'p4', title: 'License Plate Crop GJ05CD5678', type: 'image', category: 'plate', url: '../images/plate_gj05cd5678.png', thumb: '../images/plate_gj05cd5678.png', desc: 'ANPR OCR 97.2% · Surat Corridor', res: 'High-Res PNG', format: 'PNG' },
-      { id: 'p5', title: 'License Plate Crop RJ14GH3456', type: 'image', category: 'plate', url: '../images/plate_rj14gh3456.png', thumb: '../images/plate_rj14gh3456.png', desc: 'ANPR OCR 95.8% · Commercial Truck', res: 'High-Res PNG', format: 'PNG' },
-      { id: 'p6', title: '3D Plate Scanner Optical Model', type: 'image', category: 'plate', url: '../images/plate_scanner_3d.png', thumb: '../images/plate_scanner_3d.png', desc: 'Forensic Hardware Visualization', res: 'HQ Render', format: 'PNG' },
-
-      // Vehicle Detections & Forensic Crops
-      { id: 'c1', title: 'YOLO Crop GJ01AB1234 (Hyundai White)', type: 'image', category: 'crop', url: '../images/crop_gj01ab1234.jpg', thumb: '../images/crop_gj01ab1234.jpg', desc: 'Vehicle Re-ID Sighting #1 · MG Road', res: '480×320 JPG', format: 'JPG' },
-      { id: 'c2', title: 'YOLO Crop DL10XY9090 (Sedan Grey)', type: 'image', category: 'crop', url: '../images/crop_dl10xy9090.jpg', thumb: '../images/crop_dl10xy9090.jpg', desc: 'Vehicle Re-ID Sighting #2 · Vastrapur', res: '480×320 JPG', format: 'JPG' },
-      { id: 'c3', title: 'YOLO Crop GJ05CD5678 (Truck Commercial)', type: 'image', category: 'crop', url: '../images/crop_gj05cd5678.jpg', thumb: '../images/crop_gj05cd5678.jpg', desc: 'Vehicle Re-ID Sighting #3 · SG Highway', res: '480×320 JPG', format: 'JPG' },
-      { id: 'c4', title: 'YOLO Crop RJ14GH3456 (Cargo Van)', type: 'image', category: 'crop', url: '../images/crop_rj14gh3456.jpg', thumb: '../images/crop_rj14gh3456.jpg', desc: 'Vehicle Re-ID Sighting #4 · Chiloda', res: '480×320 JPG', format: 'JPG' },
-      { id: 'c5', title: 'Scorpio Target High-Res Forensic Crop', type: 'image', category: 'crop', url: '../images/vehicle_scorpio_crop.jpg', thumb: '../images/vehicle_scorpio_crop.jpg', desc: 'Evidential Snapshot for Court Dossier', res: '640×480 JPG', format: 'JPG' },
-      { id: 'c6', title: 'Swift Intercept Verified Match', type: 'image', category: 'crop', url: '../images/hit_swift_clean.jpg', thumb: '../images/hit_swift_clean.jpg', desc: 'Forensic Visual Match Proof', res: 'Snapshot', format: 'JPG' },
-      { id: 'c7', title: 'Fortuner Corridor Optical Hit', type: 'image', category: 'crop', url: '../images/hit_fortuner_clean.jpg', thumb: '../images/hit_fortuner_clean.jpg', desc: 'Highway ANPR Match Event', res: 'Snapshot', format: 'JPG' },
-      { id: 'c8', title: 'GNLU Full Field Forensic Frame', type: 'image', category: 'crop', url: '../images/evidence_gnlu_large.jpg', thumb: '../images/evidence_gnlu_large.jpg', desc: 'Section 65B Certified Frame Seal', res: '1920×1080 JPG', format: 'JPG' },
-
-      // Tactical Maps & Platform Visuals
-      { id: 't1', title: 'Gujarat State Tactical Grid Map', type: 'image', category: 'tactical', url: '../images/gujarat_map_tactical.jpg', thumb: '../images/gujarat_map_tactical.jpg', desc: 'Sentinel Surveillance GIS Topology', res: 'HQ Map', format: 'JPG' },
-      { id: 't2', title: 'Ahmedabad-Gandhinagar HUD Corridor', type: 'image', category: 'tactical', url: '../images/gujarat_hud_map.jpg', thumb: '../images/gujarat_hud_map.jpg', desc: 'Night Operation Cyber Command HUD', res: 'HQ HUD', format: 'JPG' },
-      { id: 't3', title: 'State Holographic Radar Map', type: 'image', category: 'tactical', url: '../images/gujarat_hologram.png', thumb: '../images/gujarat_hologram.png', desc: 'Integrated SOC Geospatial Layer', res: 'Vector PNG', format: 'PNG' },
-      { id: 't4', title: 'Optical CCTV Sensor 3D Model', type: 'image', category: 'tactical', url: '../images/cctv_camera_3d.png', thumb: '../images/cctv_camera_3d.png', desc: 'Hardware Sensor Telemetry Spec', res: '3D Render', format: 'PNG' },
-      { id: 't5', title: 'Police Rapid Response Interceptor 3D', type: 'image', category: 'tactical', url: '../images/police_car_3d.png', thumb: '../images/police_car_3d.png', desc: 'Field Patrol Unit Deployment Model', res: '3D Render', format: 'PNG' },
-      { id: 't6', title: 'Alert Beacon Incident Strobe 3D', type: 'image', category: 'tactical', url: '../images/alert_beacon_3d.png', thumb: '../images/alert_beacon_3d.png', desc: 'Watchlist Intercept Beacon', res: '3D Render', format: 'PNG' },
+    // Official Screens of https://shakyavinit.github.io/sentrax/
+    const PLATFORM_SCREENS = [
+      {
+        id: 'screen_overview',
+        route: '/',
+        title: 'Command Center Overview & Statewide Topology',
+        category: 'OVERVIEW',
+        desc: 'Yahan officer Gujarat Police municipal CCTV cameras ka statewide health status, active Sentinel nodes, live ANPR detection rate, aur recent vehicle sightings feed ek single command dashboard me monitor karta hai.',
+        bullets: [
+          'Live statistics: 15 Cameras Online, 98.4% OCR Confidence',
+          'Interactive Gujarat GIS topology map with camera nodes',
+          'Recent vehicle sightings ticker with timestamp & speed'
+        ],
+        image: '../images/gujarat_map_tactical.jpg',
+        video: '../videos/traffic_city_junction.mp4',
+        isVideo: false
+      },
+      {
+        id: 'screen_live',
+        route: '/live',
+        title: 'Live CCTV Surveillance Matrix (Multi-Camera Feeds)',
+        category: 'LIVE MONITOR',
+        desc: 'Simultaneous 4-camera video streaming matrix. Officers can inspect live CCTV streams, watch bounding box tracking, and check camera telemetry in real-time.',
+        bullets: [
+          '4-split simultaneous HLS/MP4 video streams from key junctions',
+          'Live YOLO bounding boxes and license plate crops on video',
+          'Individual camera stream diagnostics and fullscreen inspection'
+        ],
+        image: '../images/feed_cam01.jpg',
+        video: '../videos/cam_mg_road.mp4',
+        isVideo: true
+      },
+      {
+        id: 'screen_grid',
+        route: '/grid',
+        title: 'Tactical Multi-Camera Matrix (2×2, 2×3, 3×3 Grid)',
+        category: 'TACTICAL GRID',
+        desc: 'Advanced multi-camera surveillance matrix inspired by TrafficVision.live with 2×2, 2×3, and 3×3 switchable layouts, per-cell stream switcher, and overspeed alerts.',
+        bullets: [
+          'Up to 9 simultaneous CCTV feeds across Ahmedabad & Gandhinagar',
+          'Real-time vehicle count ticker per camera (e.g. 🚗 14)',
+          'Speed estimation pill with [OVERSPEED] alert tags'
+        ],
+        image: '../images/feed_cam04.jpg',
+        video: '../videos/cam_sg_highway_toll.mp4',
+        isVideo: true
+      },
+      {
+        id: 'screen_journey',
+        route: '/journey',
+        title: 'Vehicle Journey & Trajectory Replay (Sabarmati → GIFT City)',
+        category: 'JOURNEY REPLAY',
+        desc: 'Reconstructs suspect vehicle path across multiple cameras. Plots chronological sightings on CartoDB Dark map with animated trajectory replay and speed graph.',
+        bullets: [
+          'Interactive chronological timeline from Sardar Bridge to GIFT City',
+          'Vehicle Re-ID visual matching across sequential camera nodes',
+          'One-click evidence snapshot capture for court dossier'
+        ],
+        image: '../images/crop_dl10xy9090.jpg',
+        video: '../videos/cam_vastrapur.mp4',
+        isVideo: false
+      },
+      {
+        id: 'screen_routes',
+        route: '/routes',
+        title: 'Patrol Route & Corridor Surveillance Tracker',
+        category: 'PATROL ROUTE',
+        desc: 'Corridor planner inspired by TrafficVision. Select origin and destination to find all Sentinel CCTV cameras within 2km corridor with live stream previews.',
+        bullets: [
+          'Haversine corridor math finds all cameras along patrol transit',
+          'Sequential camera list with distance from origin (+km)',
+          'Instant video stream preview for checkpoints'
+        ],
+        image: '../images/gujarat_hud_map.jpg',
+        video: '../videos/cam_gift_city.mp4',
+        isVideo: false
+      },
+      {
+        id: 'screen_alerts',
+        route: '/alerts',
+        title: 'Watchlist Intercept Review & Emergency Alert Sirens',
+        category: 'INTERCEPT ALERTS',
+        desc: 'Instant priority alarm notifications when a blacklisted plate (e.g. UP32PQ6677 Armed Robbery Warrant) passes an active surveillance camera.',
+        bullets: [
+          'High-priority audio/visual siren strobe',
+          'Automated police dispatch recommendation with GPS coordinates',
+          'Full warrant details, vehicle description, and sighting timestamp'
+        ],
+        image: '../images/alert_beacon_3d.png',
+        video: '../videos/cam_sg_highway_toll.mp4',
+        isVideo: false
+      },
+      {
+        id: 'screen_evidence',
+        route: '/evidence',
+        title: 'Digital Evidence Vault (Section 65B & SHA-256 Seal)',
+        category: 'EVIDENCE VAULT',
+        desc: 'Tamper-evident legal evidence repository. Sighting frames and video snippets sealed with cryptographic SHA-256 hashes for chain of custody compliance.',
+        bullets: [
+          'Cryptographic SHA-256 verification badge (Tamper-evident)',
+          'Section 65B Indian Evidence Act certified export package',
+          'Batch ZIP export with metadata manifest for court trial'
+        ],
+        image: '../images/evidence_gnlu_large.jpg',
+        video: '../videos/cam_gnlu_gate.mp4',
+        isVideo: false
+      },
+      {
+        id: 'screen_cameras',
+        route: '/cameras',
+        title: 'Municipal Camera Registry & Telemetry Diagnostics',
+        category: 'CAMERA REGISTRY',
+        desc: 'Complete inventory of 15 Sentinel cameras deployed across Ahmedabad and Gandhinagar with status, latency, RTSP streams, and congestion levels.',
+        bullets: [
+          'Camera hardware specifications, IP, RTSP/HLS stream URLs',
+          'Real-time congestion classification: LOW / MEDIUM / HIGH',
+          'Live stream ping and packet loss diagnostic monitoring'
+        ],
+        image: '../images/cctv_camera_3d.png',
+        video: '../videos/cam_chiloda_circle.mp4',
+        isVideo: false
+      }
     ];
 
-    let currentTab = 'all';
-    let selectedItemIds = new Set(SENTRAX_ASSETS.map(a => a.id)); // All selected by default for easy zip
+    let currentScreenIdx = 0;
+    let selectedScreenIds = new Set(PLATFORM_SCREENS.map(s => s.id));
 
-    // Render Grid
-    function renderGrid() {
-      const grid = document.getElementById('media-grid');
-      const filtered = SENTRAX_ASSETS.filter(a => currentTab === 'all' || a.category === currentTab);
-
+    // Render Platform Screens Gallery
+    function renderScreensGallery() {
+      const grid = document.getElementById('screens-grid');
       grid.innerHTML = '';
-      filtered.forEach(item => {
-        const isSelected = selectedItemIds.has(item.id);
+
+      PLATFORM_SCREENS.forEach((screen, idx) => {
+        const isSelected = selectedScreenIds.has(screen.id);
         const card = document.createElement('div');
-        card.className = `relative flex flex-col bg-[#0D1520] border rounded-xl overflow-hidden transition-all duration-200 group ${
+        card.className = `flex flex-col bg-[#0D1520] border rounded-xl overflow-hidden transition-all duration-200 group ${
           isSelected ? 'border-[#0E7FE0] shadow-lg shadow-[#0E7FE0]/10' : 'border-[#1C2E42] hover:border-slate-500'
         }`;
 
         card.innerHTML = `
-          <!-- Thumbnail / Preview Area -->
-          <div class="relative h-44 bg-black overflow-hidden flex items-center justify-center cursor-pointer" onclick="openLightbox('${item.id}')">
+          <!-- Image / Preview -->
+          <div class="relative h-44 bg-black overflow-hidden flex items-center justify-center cursor-pointer" onclick="previewScreen(${idx})">
             ${
-              item.type === 'video'
-                ? `
-                  <video src="${item.url}" muted loop playsinline class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-300"></video>
-                  <div class="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors flex items-center justify-center">
-                    <div class="w-10 h-10 rounded-full bg-[#0E7FE0]/80 text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
-                      <i data-lucide="play" class="w-5 h-5 fill-current ml-0.5"></i>
-                    </div>
-                  </div>
-                  <span class="absolute top-2 left-2 px-2 py-0.5 rounded bg-blue-600/90 text-[10px] font-mono font-bold text-white uppercase flex items-center gap-1">
-                    <i data-lucide="video" class="w-3 h-3"></i> VIDEO
-                  </span>
-                `
-                : `
-                  <img src="${item.thumb || item.url}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
-                  <span class="absolute top-2 left-2 px-2 py-0.5 rounded bg-slate-800/90 border border-slate-700 text-[10px] font-mono font-bold text-slate-300 uppercase">
-                    ${item.format}
-                  </span>
-                `
+              screen.isVideo
+                ? `<video src="${screen.video}" muted loop playsinline class="w-full h-full object-cover opacity-85 group-hover:opacity-100 group-hover:scale-105 transition-all duration-300"></video>
+                   <div class="absolute inset-0 bg-black/30 flex items-center justify-center">
+                     <div class="w-9 h-9 rounded-full bg-blue-600/80 text-white flex items-center justify-center">
+                       <i data-lucide="play" class="w-4 h-4 fill-current ml-0.5"></i>
+                     </div>
+                   </div>`
+                : `<img src="${screen.image}" alt="${screen.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />`
             }
 
-            <!-- Checkbox Overlay (Top Right) -->
+            <span class="absolute top-2 left-2 px-2 py-0.5 rounded bg-[#080C14]/90 border border-white/10 text-[10px] font-mono text-blue-300 font-bold">
+              ${screen.category}
+            </span>
+
             <button 
               type="button" 
-              onclick="event.stopPropagation(); toggleSelect('${item.id}')"
+              onclick="event.stopPropagation(); toggleSelectScreen('${screen.id}')"
               class="absolute top-2 right-2 w-6 h-6 rounded-md flex items-center justify-center transition-colors ${
                 isSelected ? 'bg-[#0E7FE0] text-white' : 'bg-black/60 text-slate-400 hover:text-white'
               }"
@@ -521,25 +653,29 @@
             </button>
           </div>
 
-          <!-- Metadata Info -->
-          <div class="p-3 flex-1 flex flex-col justify-between gap-2 border-t border-[#1C2E42]">
+          <!-- Content Info -->
+          <div class="p-3.5 flex-1 flex flex-col justify-between gap-2 border-t border-[#1C2E42]">
             <div>
-              <h4 class="text-xs font-mono font-bold text-white line-clamp-1 group-hover:text-[#0E7FE0] transition-colors" title="${item.title}">
-                ${item.title}
+              <div class="flex items-center justify-between text-[10px] font-mono text-slate-500 mb-1">
+                <span>MODULE ${idx + 1}</span>
+                <span class="text-[#0E7FE0] font-bold">${screen.route}</span>
+              </div>
+              <h4 class="text-xs font-mono font-bold text-white line-clamp-1 group-hover:text-[#0E7FE0] transition-colors" title="${screen.title}">
+                ${screen.title}
               </h4>
-              <p class="text-[11px] text-[#8FA8C0] mt-0.5 truncate">${item.desc}</p>
+              <p class="text-[11px] text-[#8FA8C0] mt-1 line-clamp-2">${screen.desc}</p>
             </div>
 
             <div class="flex items-center justify-between pt-2 border-t border-[#1C2E42]/50 text-[10px] font-mono">
-              <span class="text-slate-400">${item.res}</span>
+              <span class="text-emerald-400 font-bold">1920×1080 HD</span>
               <a 
-                href="${item.url}" 
-                download 
+                href="${screen.image}" 
+                download="${screen.id}.jpg"
                 onclick="event.stopPropagation()" 
                 class="px-2 py-1 rounded bg-[#131F30] hover:bg-[#0E7FE0] text-slate-300 hover:text-white transition flex items-center gap-1 font-bold"
               >
                 <i data-lucide="download" class="w-3 h-3"></i>
-                <span>GET</span>
+                <span>SAVE</span>
               </a>
             </div>
           </div>
@@ -547,291 +683,309 @@
         grid.appendChild(card);
       });
 
-      updateBadges();
       lucide.createIcons();
     }
 
-    // Toggle Select
-    function toggleSelect(id) {
-      if (selectedItemIds.has(id)) {
-        selectedItemIds.delete(id);
-      } else {
-        selectedItemIds.add(id);
-      }
-      renderGrid();
-    }
+    // Preview Screen in Top Interactive Viewer
+    function previewScreen(idx) {
+      currentScreenIdx = idx;
+      const screen = PLATFORM_SCREENS[idx];
 
-    function selectAllFiltered() {
-      const filtered = SENTRAX_ASSETS.filter(a => currentTab === 'all' || a.category === currentTab);
-      const allSelected = filtered.every(a => selectedItemIds.has(a.id));
-      if (allSelected) {
-        filtered.forEach(a => selectedItemIds.delete(a.id));
-      } else {
-        filtered.forEach(a => selectedItemIds.add(a.id));
-      }
-      renderGrid();
-    }
-
-    // Tab Switching
-    function setTab(tab) {
-      currentTab = tab;
-      document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.classList.remove('bg-blue-600', 'text-white', 'font-bold');
-        btn.classList.add('text-slate-400');
+      // Update Nav Buttons
+      document.querySelectorAll('.step-nav-btn').forEach((btn, i) => {
+        if (i === idx) {
+          btn.className = 'step-nav-btn p-2.5 rounded-xl border border-blue-500 bg-blue-600/20 text-white font-bold text-left transition flex flex-col gap-1';
+        } else {
+          btn.className = 'step-nav-btn p-2.5 rounded-xl border border-[#1A2638] bg-[#070B12] text-slate-400 text-left transition flex flex-col gap-1 hover:border-slate-600 hover:text-white';
+        }
       });
-      const activeBtn = document.getElementById(`tab-${tab}`);
-      if (activeBtn) {
-        activeBtn.classList.add('bg-blue-600', 'text-white', 'font-bold');
-        activeBtn.classList.remove('text-slate-400');
-      }
-      renderGrid();
-    }
 
-    function updateBadges() {
-      document.getElementById('badge-count-all').innerText = SENTRAX_ASSETS.length;
-      document.getElementById('badge-count-video').innerText = SENTRAX_ASSETS.filter(a => a.category === 'video').length;
-      document.getElementById('badge-count-plate').innerText = SENTRAX_ASSETS.filter(a => a.category === 'plate').length;
-      document.getElementById('badge-count-crop').innerText = SENTRAX_ASSETS.filter(a => a.category === 'crop').length;
-      document.getElementById('badge-count-tactical').innerText = SENTRAX_ASSETS.filter(a => a.category === 'tactical').length;
-      document.getElementById('selection-counter').innerText = `${selectedItemIds.size} of ${SENTRAX_ASSETS.length} selected`;
-      document.getElementById('zip-button-label').innerText = `Download ZIP (${selectedItemIds.size})`;
-    }
+      // Update Screen Viewer
+      document.getElementById('active-screen-route').innerText = `ROUTE: ${screen.route}`;
+      document.getElementById('active-screen-category').innerText = screen.category;
+      document.getElementById('active-screen-title').innerText = screen.title;
+      document.getElementById('active-screen-desc').innerText = screen.desc;
+      document.getElementById('active-screen-live-link').href = `../${screen.route.replace(/^\//, '')}`;
 
-    // Lightbox
-    function openLightbox(id) {
-      const item = SENTRAX_ASSETS.find(a => a.id === id);
-      if (!item) return;
+      const bulletsContainer = document.getElementById('active-screen-bullets');
+      bulletsContainer.innerHTML = screen.bullets.map(b => `<li>${b}</li>`).join('');
 
-      document.getElementById('lightbox-title').innerText = item.title;
-      document.getElementById('lightbox-badge').innerText = item.format;
-      document.getElementById('lightbox-meta').innerText = `${item.res} · ${item.desc}`;
-      
-      const canvas = document.getElementById('lightbox-canvas');
-      if (item.type === 'video') {
-        canvas.innerHTML = `
-          <video controls autoplay class="w-full max-h-[70vh] rounded-lg shadow-2xl">
-            <source src="${item.url}" type="video/mp4">
-          </video>
-        `;
+      const imgElem = document.getElementById('active-screen-img');
+      const videoElem = document.getElementById('active-screen-video');
+      const videoSrc = document.getElementById('active-screen-video-src');
+
+      if (screen.isVideo) {
+        imgElem.classList.add('hidden');
+        videoElem.classList.remove('hidden');
+        videoSrc.src = screen.video;
+        videoElem.load();
+        videoElem.play().catch(() => {});
+        document.getElementById('active-screen-badge').innerText = 'LIVE CCTV VIDEO STREAM';
       } else {
-        canvas.innerHTML = `
-          <img src="${item.url}" alt="${item.title}" class="max-h-[70vh] max-w-full object-contain rounded-lg shadow-2xl" />
-        `;
+        videoElem.classList.add('hidden');
+        imgElem.classList.remove('hidden');
+        imgElem.src = screen.image;
+        document.getElementById('active-screen-badge').innerText = 'LIVE PLATFORM SCREENSHOT';
       }
 
-      document.getElementById('lightbox-dl-btn').onclick = () => {
-        const a = document.createElement('a');
-        a.href = item.url;
-        a.download = item.title.replace(/[^a-zA-Z0-9_-]/g, '_') + '.' + item.format.toLowerCase();
-        a.click();
-      };
-
-      document.getElementById('lightbox-modal').classList.remove('hidden');
       lucide.createIcons();
     }
 
-    function closeLightbox() {
-      document.getElementById('lightbox-modal').classList.add('hidden');
-      document.getElementById('lightbox-canvas').innerHTML = '';
+    function downloadCurrentActiveScreen() {
+      const screen = PLATFORM_SCREENS[currentScreenIdx];
+      const a = document.createElement('a');
+      a.href = screen.isVideo ? screen.video : screen.image;
+      a.download = `${screen.id}_sentrax.${screen.isVideo ? 'mp4' : 'jpg'}`;
+      a.click();
     }
 
-    // Batch ZIP Download with JSZip
-    async function downloadSelectedAsZip() {
-      const selected = SENTRAX_ASSETS.filter(a => selectedItemIds.has(a.id));
+    function toggleSelectScreen(id) {
+      if (selectedScreenIds.has(id)) {
+        selectedScreenIds.delete(id);
+      } else {
+        selectedScreenIds.add(id);
+      }
+      renderScreensGallery();
+      updateZipButtonLabel();
+    }
+
+    function selectAllScreens() {
+      if (selectedScreenIds.size === PLATFORM_SCREENS.length) {
+        selectedScreenIds.clear();
+      } else {
+        PLATFORM_SCREENS.forEach(s => selectedScreenIds.add(s.id));
+      }
+      renderScreensGallery();
+      updateZipButtonLabel();
+    }
+
+    function updateZipButtonLabel() {
+      document.getElementById('gallery-zip-label').innerText = `Download Selected (${selectedScreenIds.size})`;
+    }
+
+    // Trigger Live Scan Simulation
+    function triggerLiveScan() {
+      const btn = document.getElementById('scan-btn');
+      const label = document.getElementById('scan-btn-label');
+      label.innerText = 'SCANNING PLATFORM...';
+      btn.disabled = true;
+
+      setTimeout(() => {
+        label.innerText = 'SCAN & REFRESH LIVE SCREENS';
+        btn.disabled = false;
+        document.getElementById('last-scan-timestamp').innerText = new Date().toLocaleTimeString();
+        alert('Live Scan Complete! All 8 platform module screenshots and CCTV videos have been refreshed and verified.');
+      }, 1200);
+    }
+
+    // Download All Screenshots as ZIP
+    async function downloadAllScreenshotsZip() {
+      const selected = PLATFORM_SCREENS.filter(s => selectedScreenIds.has(s.id));
       if (selected.length === 0) {
-        alert('Please select at least one media asset to download.');
+        alert('Please select at least one screen to download.');
         return;
       }
 
-      const modal = document.getElementById('zip-progress-modal');
-      const bar = document.getElementById('zip-progress-bar');
-      const countLabel = document.getElementById('zip-progress-count');
-      const pctLabel = document.getElementById('zip-progress-percent');
-      const statusText = document.getElementById('zip-status-text');
+      const modal = document.getElementById('zip-modal');
+      const bar = document.getElementById('zip-modal-bar');
+      const count = document.getElementById('zip-modal-count');
+      const pct = document.getElementById('zip-modal-percent');
+      const status = document.getElementById('zip-modal-status');
 
       modal.classList.remove('hidden');
       bar.style.width = '0%';
-      pctLabel.innerText = '0%';
+      pct.innerText = '0%';
 
       const zip = new JSZip();
-      const videoFolder = zip.folder('videos');
-      const plateFolder = zip.folder('plates');
-      const cropFolder = zip.folder('crops');
-      const tacticalFolder = zip.folder('tactical');
+      const screensFolder = zip.folder('platform_screenshots');
+      const videosFolder = zip.folder('cctv_streams');
 
-      let completed = 0;
       for (let i = 0; i < selected.length; i++) {
-        const item = selected[i];
-        statusText.innerText = `Archiving ${item.title}...`;
-        countLabel.innerText = `${i + 1} / ${selected.length} assets`;
-        const pct = Math.round(((i + 1) / selected.length) * 100);
-        bar.style.width = `${pct}%`;
-        pctLabel.innerText = `${pct}%`;
+        const s = selected[i];
+        status.innerText = `Archiving ${s.title}...`;
+        count.innerText = `${i + 1} / ${selected.length} files`;
+        const percent = Math.round(((i + 1) / selected.length) * 100);
+        bar.style.width = `${percent}%`;
+        pct.innerText = `${percent}%`;
 
         try {
-          const res = await fetch(item.url);
-          const blob = await res.blob();
-          const cleanName = item.title.replace(/[^a-zA-Z0-9._-]/g, '_') + '.' + item.format.toLowerCase();
+          const resImg = await fetch(s.image);
+          const blobImg = await resImg.blob();
+          screensFolder.file(`${String(i + 1).padStart(2, '0')}_${s.id}.jpg`, blobImg);
 
-          if (item.category === 'video') videoFolder.file(cleanName, blob);
-          else if (item.category === 'plate') plateFolder.file(cleanName, blob);
-          else if (item.category === 'crop') cropFolder.file(cleanName, blob);
-          else tacticalFolder.file(cleanName, blob);
+          if (s.isVideo) {
+            const resVid = await fetch(s.video);
+            const blobVid = await resVid.blob();
+            videosFolder.file(`${String(i + 1).padStart(2, '0')}_${s.id}.mp4`, blobVid);
+          }
         } catch (e) {
-          console.warn('Skipping item fetch failure:', item.url, e);
+          console.warn('Fetch error:', s.image, e);
         }
-        completed++;
       }
 
-      // Add forensic metadata manifest
-      zip.file('sentrax_manifest.json', JSON.stringify({
-        project: 'SENTRAX CCTV Intelligence & Digital Forensics Platform',
-        website: 'https://shakyavinit.github.io/sentrax/',
-        exported_at: new Date().toISOString(),
-        total_assets: selected.length,
-        assets: selected.map(s => ({ title: s.title, format: s.format, res: s.res, url: s.url }))
-      }, null, 2));
+      // Add Official Hackathon Submission Guide
+      zip.file('SENTRAX_Submission_Guide.txt', 
+`==================================================================
+SENTRAX — CCTV Intelligence & Digital Forensics Platform
+Submission Media Pack & Screen Verification Proofs
+Website URL: https://shakyavinit.github.io/sentrax/
+Generated: ${new Date().toLocaleString()}
+==================================================================
 
-      statusText.innerText = 'Compressing archive...';
+MODULES INCLUDED IN THIS ARCHIVE:
+01. Overview Command Center (Statewide Topology & KPI Dashboard)
+02. Live Surveillance Matrix (4-split CCTV streams with YOLO bounding boxes)
+03. Tactical Camera Grid (Multi-camera 2x2/2x3/3x3 matrix with overspeed detection)
+04. Vehicle Journey Replay (Target UP32PQ6677 trajectory across Ahmedabad/Gandhinagar)
+05. Patrol Route Corridor Planner (Route corridor detection along CCTV nodes)
+06. Watchlist Intercept Review (Emergency warrant alert sirens)
+07. Digital Evidence Vault (Section 65B Certified SHA-256 Tamper-evident Frames)
+08. Camera Registry (15 Sentinel municipal CCTV camera hardware telemetry)
+
+All screenshots are captured at 1920x1080 High Definition.
+Videos are encoded in H.264 MP4 format at 25/30 FPS.
+`
+      );
+
+      status.innerText = 'Compressing archive...';
       const content = await zip.generateAsync({ type: 'blob' });
-      saveAs(content, `SENTRAX_Official_Media_${new Date().toISOString().slice(0, 10)}.zip`);
+      saveAs(content, `SENTRAX_Platform_Screens_${new Date().toISOString().slice(0, 10)}.zip`);
 
       modal.classList.add('hidden');
     }
 
-    // ─── AUTOPILOT DEMO SIMULATOR ENGINE ─────────────────────────────────────
-    const DEMO_STEPS = [
+    // ─── LIVE WALKTHROUGH & VIDEO SIMULATOR ──────────────────────────────────
+    const WALKTHROUGH_STEPS = [
       {
         step: 1,
         video: '../videos/traffic_city_junction.mp4',
-        camera: 'CAMERA CAM01 // MG ROAD URBAN JUNCTION',
+        hudStep: 'STEP 1 // COMMAND CENTER & INGESTION',
+        camera: 'CAM01 · MG Road Urban Junction',
         plate: 'GJ01AB1234 (RECOGNIZED · 98.4%)',
         alert: false,
-        title: 'STEP 1 OF 5 — High-Definition Video Ingestion & YOLOv11 Vehicle Tracking',
-        narration: 'SENTRAX ingests municipal CCTV video streams from Ahmedabad & Gandhinagar, processing frames in real-time to detect vehicles, measure flow velocity, and isolate regions of interest.'
+        subTitle: 'Statewide Video Stream Ingestion',
+        subText: 'SENTRAX continuous video pipelines ingest live CCTV feeds from municipal junctions across Ahmedabad and Gandhinagar, processing frames in real-time on YOLOv11 neural models.'
       },
       {
         step: 2,
         video: '../videos/cam_mg_road.mp4',
-        camera: 'CAMERA CAM02 // SARDAR BRIDGE INGRESS',
-        plate: 'GJ01AB1234 (OCR LOCKED)',
+        hudStep: 'STEP 2 // ANPR DUAL-STAGE OCR LOCK',
+        camera: 'CAM02 · Sardar Bridge Ingress',
+        plate: 'GJ01AB1234 (OCR CHARACTER SEGMENTATION)',
         alert: false,
-        title: 'STEP 2 OF 5 — Neural ANPR License Plate OCR Recognition',
-        narration: 'Dual-stage Indian License Plate Detector crops the registration plate and executes PaddleOCR neural character segmentation to output clean alphanumerics even under low light.'
+        subTitle: 'Neural License Plate Recognition',
+        subText: 'Dual-stage Indian registration plate detector crops high-resolution plate patches and executes PaddleOCR neural character segmentation to output clean alphanumerics.'
       },
       {
         step: 3,
         video: '../videos/cam_sg_highway_toll.mp4',
-        camera: 'CAMERA CAM04 // SG HIGHWAY TOLL PLAZA',
+        hudStep: 'STEP 3 // WATCHLIST INTERCEPT ALARM',
+        camera: 'CAM04 · SG Highway Toll Plaza',
         plate: 'UP32PQ6677 (ARMED ROBBERY WARRANT)',
         alert: true,
-        title: 'STEP 3 OF 5 — Automated Watchlist Intercept & Tactical Alert Siren',
-        narration: 'Instant cross-database matching compares detected plates against Police Central Watchlist, firing high-priority alerts with automated GPS geofence and patrol unit dispatching.'
+        subTitle: 'Instant Watchlist Intercept & Tactical Alert',
+        subText: 'Central Police Watchlist matching flags suspect vehicle UP32PQ6677, triggering instant audio/visual alarm beacons and automated GPS dispatch to Zone 1 interceptor units.'
       },
       {
         step: 4,
         video: '../videos/cam_vastrapur.mp4',
-        camera: 'CAMERA CAM03 // VASTRAPUR LAKE PERIMETER',
-        plate: 'UP32PQ6677 (EVIDENCE FRAME RECORDED)',
+        hudStep: 'STEP 4 // DIGITAL EVIDENCE SEALING',
+        camera: 'CAM03 · Vastrapur Lake Perimeter',
+        plate: 'UP32PQ6677 (EVIDENCE SEALED)',
         alert: true,
-        title: 'STEP 4 OF 5 — SHA-256 Tamper-Evident Digital Evidence Sealing',
-        narration: 'Every sighting frame and video snippet is cryptographically sealed with SHA-256 hash algorithms, ensuring Section 65B Indian Evidence Act legal compliance in court.'
+        subTitle: 'SHA-256 Tamper-Evident Court Evidence',
+        subText: 'Every sighting frame and video snippet is cryptographically sealed with SHA-256 hashes, generating Section 65B Indian Evidence Act compliant certificates for court prosecution.'
       },
       {
         step: 5,
         video: '../videos/cam_gift_city.mp4',
-        camera: 'CAMERA CAM06 // GIFT CITY HIGH-SECURITY GATE',
+        hudStep: 'STEP 5 // MULTI-CAMERA TRAJECTORY REPLAY',
+        camera: 'CAM06 · GIFT City Entry Gate',
         plate: 'UP32PQ6677 (CORRIDOR INTERCEPT COMPLETE)',
         alert: false,
-        title: 'STEP 5 OF 5 — Cross-Camera Multi-Sensor Trajectory Correlation',
-        narration: 'Corridor tracking correlates sighting timestamps across 15+ camera nodes, reconstructing the exact transit trajectory across Ahmedabad and Gandhinagar with speed analysis.'
+        subTitle: 'Cross-Camera Vehicle Trajectory Reconstruction',
+        subText: 'Correlates timestamps and camera locations across Sabarmati Riverfront, SG Highway, and GIFT City to reconstruct the exact path and velocity of the vehicle across Gujarat.'
       }
     ];
 
-    let currentDemoStep = 0;
-    let demoTimer = null;
-    let demoAutoplay = true;
-    let secondsLeft = 7;
+    let currentWalkthroughIdx = 0;
+    let walkthroughTimer = null;
+    let walkthroughAutoplay = true;
+    let countdown = 7;
 
-    function openDemoPlayer() {
-      document.getElementById('demo-player-modal').classList.remove('hidden');
-      currentDemoStep = 0;
-      loadDemoStep(currentDemoStep);
-      startDemoTimer();
+    function openLiveWalkthrough() {
+      document.getElementById('walkthrough-modal').classList.remove('hidden');
+      currentWalkthroughIdx = 0;
+      loadWalkthroughStep(0);
+      startWalkthroughTimer();
       lucide.createIcons();
     }
 
-    function closeDemoPlayer() {
-      document.getElementById('demo-player-modal').classList.add('hidden');
-      clearInterval(demoTimer);
+    function closeLiveWalkthrough() {
+      document.getElementById('walkthrough-modal').classList.add('hidden');
+      clearInterval(walkthroughTimer);
     }
 
-    function loadDemoStep(idx) {
-      const step = DEMO_STEPS[idx];
-      const videoElem = document.getElementById('demo-video-elem');
-      const videoSrc = document.getElementById('demo-video-src');
+    function loadWalkthroughStep(idx) {
+      const step = WALKTHROUGH_STEPS[idx];
+      const video = document.getElementById('walkthrough-video');
+      const videoSrc = document.getElementById('walkthrough-video-src');
 
       videoSrc.src = step.video;
-      videoElem.load();
-      videoElem.play().catch(() => {});
+      video.load();
+      video.play().catch(() => {});
 
-      document.getElementById('demo-hud-camera').innerText = step.camera;
-      document.getElementById('demo-hud-plate').innerText = step.plate;
-      document.getElementById('demo-narration-title').innerText = step.title;
-      document.getElementById('demo-narration-text').innerText = step.narration;
+      document.getElementById('walkthrough-hud-step').innerText = step.hudStep;
+      document.getElementById('walkthrough-hud-cam').innerText = step.camera;
+      document.getElementById('walkthrough-hud-plate').innerText = step.plate;
+      document.getElementById('walkthrough-sub-title').innerText = step.subTitle;
+      document.getElementById('walkthrough-sub-text').innerText = step.subText;
 
-      const alertBox = document.getElementById('demo-hud-alert-box');
+      const alertBox = document.getElementById('walkthrough-hud-alert');
       if (step.alert) {
         alertBox.classList.remove('hidden');
       } else {
         alertBox.classList.add('hidden');
       }
 
-      // Update Step Badges
-      for (let i = 1; i <= 5; i++) {
-        const btn = document.getElementById(`step-btn-${i}`);
-        if (i === idx + 1) {
-          btn.className = 'step-badge flex items-center gap-1.5 px-3 py-1 rounded-lg bg-blue-600 text-white font-bold';
-        } else {
-          btn.className = 'step-badge flex items-center gap-1.5 px-3 py-1 rounded-lg text-slate-400';
-        }
-      }
-
-      secondsLeft = 8;
-      document.getElementById('step-countdown').innerText = `${secondsLeft}s`;
+      countdown = 7;
+      document.getElementById('walkthrough-countdown').innerText = `${countdown}s`;
     }
 
-    function startDemoTimer() {
-      clearInterval(demoTimer);
-      demoTimer = setInterval(() => {
-        if (!demoAutoplay) return;
-        secondsLeft--;
-        document.getElementById('step-countdown').innerText = `${secondsLeft}s`;
-        if (secondsLeft <= 0) {
-          nextDemoStep();
+    function startWalkthroughTimer() {
+      clearInterval(walkthroughTimer);
+      walkthroughTimer = setInterval(() => {
+        if (!walkthroughAutoplay) return;
+        countdown--;
+        document.getElementById('walkthrough-countdown').innerText = `${countdown}s`;
+        if (countdown <= 0) {
+          stepWalkthrough(1);
         }
       }, 1000);
     }
 
-    function nextDemoStep() {
-      currentDemoStep = (currentDemoStep + 1) % DEMO_STEPS.length;
-      loadDemoStep(currentDemoStep);
+    function stepWalkthrough(dir) {
+      currentWalkthroughIdx = (currentWalkthroughIdx + dir + WALKTHROUGH_STEPS.length) % WALKTHROUGH_STEPS.length;
+      loadWalkthroughStep(currentWalkthroughIdx);
     }
 
-    function prevDemoStep() {
-      currentDemoStep = (currentDemoStep - 1 + DEMO_STEPS.length) % DEMO_STEPS.length;
-      loadDemoStep(currentDemoStep);
+    function toggleWalkthroughAutoplay() {
+      walkthroughAutoplay = !walkthroughAutoplay;
+      const btn = document.getElementById('walkthrough-play-btn');
+      btn.innerText = walkthroughAutoplay ? 'PAUSE' : 'RESUME';
     }
 
-    function toggleDemoAutoplay() {
-      demoAutoplay = !demoAutoplay;
-      const label = document.getElementById('demo-play-label');
-      label.innerText = demoAutoplay ? 'PAUSE AUTOPLAY' : 'RESUME AUTOPLAY';
+    function downloadDemoVideoDirect() {
+      const a = document.createElement('a');
+      a.href = '../videos/traffic_city_junction.mp4';
+      a.download = 'SENTRAX_Official_Platform_Walkthrough_Demo.mp4';
+      a.click();
     }
 
-    // Initialize on Page Load
+    // Init
     window.addEventListener('DOMContentLoaded', () => {
-      renderGrid();
+      renderScreensGallery();
+      previewScreen(0);
     });
   </script>
 </body>
