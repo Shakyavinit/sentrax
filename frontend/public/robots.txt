@@ -1,7 +1,0 @@
-User-agent: *
-Disallow: /extractor/
-Disallow: /extractor/index.html
-Disallow: /demo.html
-Disallow: /admin
-Disallow: /tools
-Disallow: /api/
