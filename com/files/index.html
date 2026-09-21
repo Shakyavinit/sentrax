@@ -6,10 +6,21 @@
 <title>SENTRAX — CCTV Intelligence Platform</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<!-- Local Bundled Dependencies with CDN Fallback -->
+<link rel="stylesheet" href="vendor/leaflet/leaflet.css" onerror="this.onerror=null;this.href='https://unpkg.com/leaflet@1.9.4/dist/leaflet.css'"/>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="vendor/lucide/lucide.js"></script>
+<script>
+  if (typeof lucide === 'undefined') {
+    document.write('<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"><\/script>');
+  }
+</script>
+<script src="vendor/leaflet/leaflet.js"></script>
+<script>
+  if (typeof L === 'undefined') {
+    document.write('<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"><\/script>');
+  }
+</script>
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
 <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
@@ -486,6 +497,11 @@ table tbody tr:hover {
   padding: 10px;
   border-top: 1px solid var(--border-dim);
   flex-shrink: 0;
+}
+
+.leaflet-container {
+  background: #080C14 url('images/gujarat_map_tactical.jpg') center/cover no-repeat !important;
+  outline: none;
 }
 
 .user-card {
@@ -5066,9 +5082,14 @@ if (typeof Chart !== 'undefined') {
 var mapInstances = {};
 
 function initLeafletMap(id, lat, lng, zoom) {
-  if (typeof L === 'undefined') return null;
   var el = document.getElementById(id);
   if (!el) return null;
+
+  if (typeof L === 'undefined') {
+    renderIndexStaticMapFallback(id);
+    return { isFallback: true, remove: function(){}, invalidateSize: function(){} };
+  }
+
   if (mapInstances[id]) {
     setTimeout(function() {
       mapInstances[id].invalidateSize();
@@ -5077,27 +5098,80 @@ function initLeafletMap(id, lat, lng, zoom) {
   }
   if (el._leaflet_id) return null;
 
-  var map = L.map(id, { attributionControl: false }).setView([lat, lng], zoom);
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-    subdomains: 'abcd',
-    maxZoom: 19,
-    attribution: ''
-  }).addTo(map);
+  try {
+    var map = L.map(id, { attributionControl: false }).setView([lat, lng], zoom);
 
-  mapInstances[id] = map;
-  setTimeout(function() {
-    map.invalidateSize();
-  }, 80);
+    // Underlying tactical radar overlay fallback
+    var tacticalBounds = [[22.92, 72.40], [23.32, 72.76]];
+    var tacticalOverlay = L.imageOverlay("images/gujarat_map_tactical.jpg", tacticalBounds, {
+      opacity: 0.85,
+      zIndex: 0
+    });
 
-  if (id === 'map-journey') {
-    setupJourneyMap(map);
-  } else if (id === 'map-cameras') {
-    setupCamerasMap(map);
-  } else if (id === 'map-investigation') {
-    setupInvestigationMap(map);
+    var tileLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      subdomains: 'abcd',
+      maxZoom: 19,
+      attribution: ''
+    }).addTo(map);
+
+    var tileErrors = 0;
+    tileLayer.on('tileerror', function() {
+      tileErrors++;
+      if (tileErrors >= 2 && !map._tacticalActive) {
+        map._tacticalActive = true;
+        tacticalOverlay.addTo(map);
+        tacticalOverlay.bringToBack();
+      }
+    });
+
+    mapInstances[id] = map;
+    setTimeout(function() {
+      map.invalidateSize();
+    }, 80);
+
+    if (id === 'map-journey') {
+      setupJourneyMap(map);
+    } else if (id === 'map-cameras') {
+      setupCamerasMap(map);
+    } else if (id === 'map-investigation') {
+      setupInvestigationMap(map);
+    }
+
+    return map;
+  } catch (e) {
+    console.error('[SENTRAX] Leaflet map init error:', e);
+    renderIndexStaticMapFallback(id);
+    return { isFallback: true, remove: function(){}, invalidateSize: function(){} };
   }
+}
 
-  return map;
+function renderIndexStaticMapFallback(id) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  el.innerHTML = `
+    <div style="position:relative;width:100%;height:100%;min-height:360px;background:#05080E;overflow:hidden">
+      <div style="position:absolute;top:10px;left:10px;z-index:10;background:rgba(8,12,18,0.92);border:1px solid rgba(0,240,255,0.4);border-radius:4px;padding:4px 10px;font-family:var(--font-mono);font-size:10px;color:#00F0FF;display:flex;align-items:center;gap:6px">
+        <span style="width:6px;height:6px;border-radius:50%;background:#00F0FF"></span>
+        TACTICAL RADAR OFFLINE MAP // STANDALONE GRID
+      </div>
+      <svg viewBox="0 0 700 400" width="100%" height="100%" style="display:block">
+        <image href="images/gujarat_map_tactical.jpg" x="0" y="0" width="700" height="400" preserveAspectRatio="xMidYMid slice" opacity="0.4"/>
+        <circle cx="350" cy="200" r="100" fill="none" stroke="rgba(0,240,255,0.15)" stroke-width="1" stroke-dasharray="4,4"/>
+        <circle cx="350" cy="200" r="180" fill="none" stroke="rgba(0,240,255,0.12)" stroke-width="1" stroke-dasharray="4,4"/>
+        <path d="M 180 300 L 260 250 L 390 180 L 520 120" fill="none" stroke="#00F0FF" stroke-width="3" stroke-dasharray="6,4"/>
+        <g style="cursor:pointer">
+          <circle cx="180" cy="300" r="6" fill="#00C875" stroke="#fff" stroke-width="1.5"/>
+          <text x="180" y="320" text-anchor="middle" fill="#8FA8C0" font-size="9px" font-family="monospace">Sardar Bridge</text>
+          <circle cx="260" cy="250" r="6" fill="#0E7FE0" stroke="#fff" stroke-width="1.5"/>
+          <text x="260" y="240" text-anchor="middle" fill="#8FA8C0" font-size="9px" font-family="monospace">MG Road</text>
+          <circle cx="390" cy="180" r="6" fill="#0E7FE0" stroke="#fff" stroke-width="1.5"/>
+          <text x="390" y="170" text-anchor="middle" fill="#8FA8C0" font-size="9px" font-family="monospace">SG Highway</text>
+          <circle cx="520" cy="120" r="7" fill="#FF8C00" stroke="#fff" stroke-width="1.5"/>
+          <text x="520" y="110" text-anchor="middle" fill="#8FA8C0" font-size="9px" font-family="monospace">GIFT City</text>
+        </g>
+      </svg>
+    </div>
+  `;
 }
 
 var journeyMapInstance = null;
@@ -5303,7 +5377,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 </script>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 // PRIVATE DEVELOPER & OPERATOR TOOLS CONSOLE
 // ═════════════════════════════════════════════════════════════════════
