@@ -38,6 +38,7 @@ import { PageHeader } from '../components/layout/PageHeader';
 import { Modal } from '../components/ui/Modal';
 import { LicensePlate } from '../components/ui/LicensePlate';
 import { CctvLiveTile } from '../components/cameras/CctvLiveTile';
+import { VideoTrackingOverlay } from '../components/cameras/VideoTrackingOverlay';
 import { CctvOfflinePattern } from '../components/cameras/CctvOfflinePattern';
 import { formatTimestamp } from '../utils/format';
 import { SAMPLE_PLATES } from '../api/demoClient';
@@ -652,24 +653,12 @@ export const DemoMonitor: React.FC = () => {
                           }}
                         />
 
-                        {/* High-tech ANPR Overlay */}
-                        {showModalAi && (
-                          <div
-                            className="absolute z-20 pointer-events-none border-2 border-[#00C875] rounded-[3px] shadow-[0_0_16px_rgba(0,200,117,0.6)] animate-pulse"
-                            style={{ top: '28%', left: '26%', width: '42%', height: '38%' }}
-                          >
-                            <div className="absolute -top-1 -left-1 w-3 h-3 border-t-2 border-l-2 border-white" />
-                            <div className="absolute -top-1 -right-1 w-3 h-3 border-t-2 border-r-2 border-white" />
-                            <div className="absolute -bottom-1 -left-1 w-3 h-3 border-b-2 border-l-2 border-white" />
-                            <div className="absolute -bottom-1 -right-1 w-3 h-3 border-b-2 border-r-2 border-white" />
-
-                            <div className="absolute -top-6 left-0 bg-[#080C12]/95 border border-[#00C875] text-[#00C875] px-2 py-0.5 rounded font-mono text-xs font-bold whitespace-nowrap flex items-center gap-1.5 shadow-xl">
-                              <span className="w-2 h-2 rounded-full bg-[#00C875] animate-ping" />
-                              <span>{currentPlate}</span>
-                              <span className="text-white/60 font-normal">({currentTarget.conf} CONF)</span>
-                            </div>
-                          </div>
-                        )}
+                        {/* Dynamic Multi-Object Video Tracking Overlay */}
+                        <VideoTrackingOverlay
+                          videoRef={modalVideoRef}
+                          cameraId={selected.camera_id}
+                          enabled={showModalAi}
+                        />
 
                         {/* Top HUD */}
                         <div className="absolute top-2.5 left-2.5 right-2.5 z-20 flex items-center justify-between pointer-events-none text-xs font-mono">

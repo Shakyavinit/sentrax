@@ -3,6 +3,7 @@ import { Camera } from '../../types';
 import { Maximize2, Volume2, VolumeX, ShieldCheck, Zap } from 'lucide-react';
 import { SAMPLE_PLATES } from '../../api/demoClient';
 import { assetUrl } from '../../utils/demo';
+import { VideoTrackingOverlay } from './VideoTrackingOverlay';
 
 interface CctvLiveTileProps {
   camera: Camera;
@@ -176,35 +177,12 @@ export const CctvLiveTile: React.FC<CctvLiveTileProps> = ({
       </div>
 
       {/* ─── SIMULATED AI ANPR BOUNDING BOX ─── */}
-      {showAiOverlay && (
-        <div
-          className="absolute z-20 pointer-events-none transition-all duration-700 border-2 border-[#00C875] rounded-[2px] shadow-[0_0_12px_rgba(0,200,117,0.45)]"
-          style={{
-            top: `${boxTop}%`,
-            left: `${boxLeft}%`,
-            width: '38%',
-            height: '34%',
-          }}
-        >
-          {/* Tactical Corner Brackets */}
-          <div className="absolute -top-1 -left-1 w-2 h-2 border-t-2 border-l-2 border-white" />
-          <div className="absolute -top-1 -right-1 w-2 h-2 border-t-2 border-r-2 border-white" />
-          <div className="absolute -bottom-1 -left-1 w-2 h-2 border-b-2 border-l-2 border-white" />
-          <div className="absolute -bottom-1 -right-1 w-2 h-2 border-b-2 border-r-2 border-white" />
-
-          {/* ANPR Plate Callout Tag */}
-          <div className="absolute -top-5 left-0 bg-[#080C12]/95 border border-[#00C875] text-[#00C875] px-1.5 py-0.5 rounded font-mono text-[9px] font-bold whitespace-nowrap flex items-center gap-1 shadow-lg">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#00C875] animate-ping" />
-            <span>{plate}</span>
-            <span className="text-white/60 text-[8px] font-normal">({conf}%)</span>
-          </div>
-
-          {/* Vehicle Class Badge (bottom) */}
-          <div className="absolute -bottom-4 right-0 bg-[#080C12]/90 border border-white/20 text-white/80 px-1 py-0.2 rounded font-mono text-[8px] whitespace-nowrap">
-            SEDAN · 42 km/h
-          </div>
-        </div>
-      )}
+      {/* ─── REAL-TIME MULTI-OBJECT VEHICLE TRACKING OVERLAY ─── */}
+      <VideoTrackingOverlay
+        videoRef={videoRef}
+        cameraId={camera.camera_id}
+        enabled={showAiOverlay}
+      />
 
       {/* ─── HUD BOTTOM BAR ─── */}
       <div className="absolute bottom-2 left-2 right-2 z-20 flex items-center justify-between pointer-events-none font-mono text-[9px]">
