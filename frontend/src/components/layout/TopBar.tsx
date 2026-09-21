@@ -51,6 +51,7 @@ export const TopBar: React.FC = () => {
       {/* Left: Mobile Menu + SOC Node Indicator + Full Page Title */}
       <div className="topbar-left flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
         <button
+          id="mobile-toggle"
           className="mobile-menu icon-button"
           aria-label="Open navigation"
           aria-expanded={mobileMenuOpen}

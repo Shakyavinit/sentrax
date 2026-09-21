@@ -596,16 +596,123 @@
     .toast-success { background: #059669; border: 1px solid #10B981; }
     @keyframes toast-in { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
+    /* Mobile Toggle Button */
+    #mobile-toggle {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      width: 34px;
+      height: 34px;
+      padding: 0;
+      border: 1px solid var(--border-dim);
+      border-radius: 6px;
+      background: var(--bg-card);
+      color: var(--text-main);
+      font-size: 16px;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: all 0.15s ease;
+    }
+    #mobile-toggle:hover {
+      background: var(--bg-hover);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    .mobile-close-btn {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      margin-left: auto;
+      border: 1px solid var(--border-dim);
+      border-radius: 4px;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .mobile-close-btn:hover {
+      color: #fff;
+      border-color: var(--text-muted);
+    }
+
+    .sidebar-backdrop {
+      display: none;
+    }
+
     /* Responsive */
     @media (max-width: 1100px) {
       .stat-grid { grid-template-columns: repeat(2, 1fr); }
       .cam-grid { grid-template-columns: repeat(2, 1fr); }
     }
     @media (max-width: 768px) {
-      .app-sidebar { transform: translateX(-100%); }
-      .app-sidebar.open { transform: translateX(0); }
-      .app-main { margin-left: 0; }
-      .cam-grid { grid-template-columns: 1fr; }
+      #mobile-toggle {
+        display: inline-flex !important;
+      }
+      .mobile-close-btn {
+        display: inline-flex;
+      }
+      .sidebar-backdrop {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(5, 8, 15, 0.75);
+        backdrop-filter: blur(4px);
+        z-index: 990;
+      }
+      .sidebar-backdrop.open {
+        display: block;
+      }
+      .app-sidebar {
+        transform: translateX(-100%);
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 1000;
+        box-shadow: 0 0 40px rgba(0, 0, 0, 0.8);
+        transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .app-sidebar.open {
+        transform: translateX(0);
+      }
+      .app-main {
+        margin-left: 0 !important;
+      }
+      .app-topbar {
+        padding: 0 12px;
+      }
+      .topbar-search {
+        display: none !important;
+      }
+      .topbar-right {
+        min-width: auto !important;
+      }
+      .app-content {
+        padding: 14px 12px;
+      }
+      .cam-grid {
+        grid-template-columns: 1fr;
+      }
+      .table-responsive {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+      .stat-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+    }
+    @media (max-width: 480px) {
+      .topbar-soc-pill, .topbar-slash {
+        display: none !important;
+      }
+      #topbar-current-page {
+        font-size: 11px;
+        max-width: 140px;
+      }
     }
   </style>
 </head>
@@ -617,45 +724,46 @@
       <div class="brand-logo-icon">S</div>
       <span class="brand-text">SENTRAX</span>
       <span class="brand-badge">SOC LIVE</span>
+      <button class="mobile-close-btn" onclick="closeSidebar()" aria-label="Close sidebar">✕</button>
     </div>
 
     <div class="nav-sections">
       <div class="nav-label">Workspace</div>
-      <a class="nav-item active" data-page="dashboard" onclick="navigate("dashboard")">
+      <a class="nav-item active" data-page="dashboard" onclick="navigate('dashboard')">
         <span class="nav-icon">📊</span>
         <span>Overview</span>
       </a>
-      <a class="nav-item" data-page="monitor" onclick="navigate("monitor")">
+      <a class="nav-item" data-page="monitor" onclick="navigate('monitor')">
         <span class="nav-icon">📹</span>
         <span>Camera Monitor</span>
       </a>
-      <a class="nav-item" data-page="investigation" onclick="navigate("investigation")">
+      <a class="nav-item" data-page="investigation" onclick="navigate('investigation')">
         <span class="nav-icon">🔍</span>
         <span>Vehicle Search</span>
       </a>
-      <a class="nav-item" data-page="journey" onclick="navigate("journey")">
+      <a class="nav-item" data-page="journey" onclick="navigate('journey')">
         <span class="nav-icon">🗺️</span>
         <span>Journey Replay</span>
       </a>
 
       <div class="nav-label">Operations</div>
-      <a class="nav-item" data-page="alerts" onclick="navigate("alerts")">
+      <a class="nav-item" data-page="alerts" onclick="navigate('alerts')">
         <span class="nav-icon">🚨</span>
         <span>Alert Review</span>
       </a>
-      <a class="nav-item" data-page="watchlist" onclick="navigate("watchlist")">
+      <a class="nav-item" data-page="watchlist" onclick="navigate('watchlist')">
         <span class="nav-icon">🎯</span>
         <span>Watchlist Target</span>
       </a>
-      <a class="nav-item" data-page="evidence" onclick="navigate("evidence")">
+      <a class="nav-item" data-page="evidence" onclick="navigate('evidence')">
         <span class="nav-icon">🔒</span>
         <span>Evidence Vault</span>
       </a>
-      <a class="nav-item" data-page="audit" onclick="navigate("audit")">
+      <a class="nav-item" data-page="audit" onclick="navigate('audit')">
         <span class="nav-icon">🛡️</span>
         <span>Audit Trail</span>
       </a>
-      <a class="nav-item" data-page="cameras" onclick="navigate("cameras")">
+      <a class="nav-item" data-page="cameras" onclick="navigate('cameras')">
         <span class="nav-icon">📡</span>
         <span>Camera Registry</span>
       </a>
@@ -666,18 +774,19 @@
       <span style="color:var(--green)">● Connected to 15 nodes</span>
     </div>
   </aside>
+  <div class="sidebar-backdrop" id="sidebar-backdrop" onclick="closeSidebar()"></div>
 
   <!-- MAIN WRAPPER -->
   <div class="app-main">
     <!-- TOPBAR -->
     <header class="app-topbar">
       <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0">
-        <button class="btn btn-ghost btn-sm" style="display:none" id="mobile-toggle" onclick="toggleSidebar()">☰</button>
-        <span style="font-family:var(--font-mono);font-size:10px;color:var(--green);background:rgba(0,200,117,0.1);border:1px solid rgba(0,200,117,0.25);padding:2px 7px;border-radius:4px;display:inline-flex;align-items:center;gap:6px;font-weight:600;letter-spacing:0.5px;flex-shrink:0">
+        <button class="btn btn-ghost btn-sm" id="mobile-toggle" onclick="toggleSidebar()" aria-label="Toggle navigation">☰</button>
+        <span class="topbar-soc-pill" style="font-family:var(--font-mono);font-size:10px;color:var(--green);background:rgba(0,200,117,0.1);border:1px solid rgba(0,200,117,0.25);padding:2px 7px;border-radius:4px;display:inline-flex;align-items:center;gap:6px;font-weight:600;letter-spacing:0.5px;flex-shrink:0">
           <span style="width:6px;height:6px;border-radius:50%;background:var(--green);display:inline-block"></span>
           AHMEDABAD SOC
         </span>
-        <span style="color:var(--text-muted);font-family:var(--font-mono);font-size:13px;flex-shrink:0">/</span>
+        <span class="topbar-slash" style="color:var(--text-muted);font-family:var(--font-mono);font-size:13px;flex-shrink:0">/</span>
         <strong id="topbar-current-page" style="color:#fff;font-weight:700;font-size:13px;letter-spacing:0.5px;font-family:var(--font-mono);text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">INVESTIGATION OVERVIEW</strong>
       </div>
 
@@ -1378,6 +1487,10 @@
         titleEl.textContent = pageTitles[page];
       }
 
+      if (window.innerWidth <= 768) {
+        closeSidebar();
+      }
+
       window.scrollTo({ top: 0, behavior: "smooth" });
 
       const mapInits = {
@@ -1386,6 +1499,23 @@
         cameras: () => setTimeout(initCamerasMap, 60)
       };
       if (mapInits[page]) mapInits[page]();
+    }
+
+    // Sidebar Mobile Controls
+    function toggleSidebar() {
+      const sidebar = document.getElementById("sidebar");
+      const backdrop = document.getElementById("sidebar-backdrop");
+      if (sidebar) {
+        const isOpen = sidebar.classList.toggle("open");
+        if (backdrop) backdrop.classList.toggle("open", isOpen);
+      }
+    }
+
+    function closeSidebar() {
+      const sidebar = document.getElementById("sidebar");
+      const backdrop = document.getElementById("sidebar-backdrop");
+      if (sidebar) sidebar.classList.remove("open");
+      if (backdrop) backdrop.classList.remove("open");
     }
 
     // Global Search (CMD+K)

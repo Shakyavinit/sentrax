@@ -565,7 +565,7 @@ table tbody tr:hover {
   transition: left 220ms var(--ease);
 }
 
-.hamburger {
+.hamburger, #mobile-toggle {
   width: 32px;
   height: 32px;
   border-radius: var(--r);
@@ -578,7 +578,7 @@ table tbody tr:hover {
   cursor: pointer;
   transition: all 140ms var(--ease);
 }
-.hamburger:hover {
+.hamburger:hover, #mobile-toggle:hover {
   background: var(--elevated);
   color: var(--text-1);
 }
@@ -1840,8 +1840,8 @@ tr:last-child td {
   .sidebar-overlay.visible, .sidebar-overlay.open {
     display: block;
   }
-  .hamburger {
-    display: flex;
+  #mobile-toggle, .hamburger {
+    display: flex !important;
   }
   #topbar {
     left: 0;
@@ -2812,7 +2812,7 @@ tr:last-child td {
   <div id="main">
     <!-- TOP BAR -->
     <div id="topbar">
-      <button class="hamburger" onclick="openSidebar()" aria-label="Toggle Menu">
+      <button class="hamburger" id="mobile-toggle" onclick="toggleSidebar()" aria-label="Toggle Menu">
         <i data-lucide="menu" style="width:16px;height:16px"></i>
       </button>
       <div class="breadcrumb" id="breadcrumb">
@@ -3594,6 +3594,14 @@ function openSidebar(){
 function closeSidebar(){
   document.getElementById('sidebar').classList.remove('mobile-open');
   document.getElementById('sidebar-overlay').classList.remove('visible');
+}
+function toggleSidebar(){
+  const sb = document.getElementById('sidebar');
+  if (sb && sb.classList.contains('mobile-open')) {
+    closeSidebar();
+  } else {
+    openSidebar();
+  }
 }
 
 // ═══════════════════════════════════════
