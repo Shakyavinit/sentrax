@@ -28,6 +28,9 @@ import {
   RefreshCw,
   FileText,
   ShieldAlert,
+  Flame,
+  Moon,
+  Sparkles,
 } from 'lucide-react';
 import { camerasApi } from '../api/cameras';
 import { vehiclesApi } from '../api/vehicles';
@@ -50,6 +53,7 @@ export const DemoMonitor: React.FC = () => {
   const [visibleCount, setVisibleCount] = useState<number>(15);
   const [showAiOverlays, setShowAiOverlays] = useState(true);
   const [retryingCamId, setRetryingCamId] = useState<string | null>(null);
+  const [monitorVisionMode, setMonitorVisionMode] = useState<'standard' | 'night_vision' | 'flir_thermal' | 'edge_cv'>('standard');
 
   // Modal player states
   const [isPlaying, setIsPlaying] = useState(true);
@@ -130,20 +134,65 @@ export const DemoMonitor: React.FC = () => {
         title="Live Surveillance Monitor"
         description="Synchronized real-time CCTV monitoring wall across Gujarat intelligence grid."
         actions={
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
+            {/* Sensor Vision Mode Switcher */}
+            <div className="flex items-center bg-[#070B12] border border-[#1C2E42] rounded-lg p-0.5 gap-1 font-mono text-xs">
+              <button
+                onClick={() => { setMonitorVisionMode('standard'); toast.info('Monitor Sensor: RAW RGB Optical'); }}
+                className={`flex items-center gap-1 px-2.5 py-1 rounded transition-all cursor-pointer font-bold ${
+                  monitorVisionMode === 'standard' ? 'bg-blue-600 text-white shadow' : 'text-slate-400 hover:text-white'
+                }`}
+                title="Standard True Color Optical"
+              >
+                <Eye size={13} />
+                <span className="hidden sm:inline">RGB</span>
+              </button>
+              <button
+                onClick={() => { setMonitorVisionMode('night_vision'); toast.info('Monitor Sensor: NIGHT VISION IR (850nm)'); }}
+                className={`flex items-center gap-1 px-2.5 py-1 rounded transition-all cursor-pointer font-bold ${
+                  monitorVisionMode === 'night_vision' ? 'bg-emerald-500 text-slate-950 shadow-[0_0_10px_#10b981]' : 'text-emerald-400 hover:text-emerald-300'
+                }`}
+                title="Night Vision Infrared 850nm"
+              >
+                <Moon size={13} />
+                <span className="hidden sm:inline">NIGHT IR</span>
+              </button>
+              <button
+                onClick={() => { setMonitorVisionMode('flir_thermal'); toast.info('Monitor Sensor: FLIR THERMAL HEATMAP'); }}
+                className={`flex items-center gap-1 px-2.5 py-1 rounded transition-all cursor-pointer font-bold ${
+                  monitorVisionMode === 'flir_thermal' ? 'bg-amber-500 text-slate-950 shadow-[0_0_10px_#f59e0b]' : 'text-amber-400 hover:text-amber-300'
+                }`}
+                title="FLIR Thermal Heatmap LWIR"
+              >
+                <Flame size={13} />
+                <span className="hidden sm:inline">FLIR</span>
+              </button>
+              <button
+                onClick={() => { setMonitorVisionMode('edge_cv'); toast.info('Monitor Sensor: EDGE CV MATRIX'); }}
+                className={`flex items-center gap-1 px-2.5 py-1 rounded transition-all cursor-pointer font-bold ${
+                  monitorVisionMode === 'edge_cv' ? 'bg-cyan-500 text-slate-950 shadow-[0_0_10px_#06b6d4]' : 'text-cyan-400 hover:text-cyan-300'
+                }`}
+                title="Edge CV Matrix Contour Detection"
+              >
+                <Sparkles size={13} />
+                <span className="hidden sm:inline">EDGE CV</span>
+              </button>
+            </div>
+
             <button
               onClick={() => setShowAiOverlays(!showAiOverlays)}
-              className={`px-3 py-1.5 rounded text-xs font-mono font-bold flex items-center gap-1.5 border transition-all ${
+              className={`px-3 py-1.5 rounded text-xs font-mono font-bold flex items-center gap-1.5 border transition-all cursor-pointer ${
                 showAiOverlays
                   ? 'bg-[#00C875]/20 text-[#00C875] border-[#00C875]/40'
                   : 'bg-[#121E2E] text-white/60 border-[#1C2E42]'
               }`}
             >
               <Layers size={14} />
-              <span>AI ANPR {showAiOverlays ? 'ON' : 'OFF'}</span>
+              <span>AI {showAiOverlays ? 'ON' : 'OFF'}</span>
             </button>
-            <Link to="/cameras" className="primary-action">
-              <CameraIcon size={16} /> Manage registry
+            <Link to="/grid" className="px-3 py-1.5 rounded text-xs font-mono font-bold flex items-center gap-1.5 bg-[#0C1420] text-cyan-300 border border-cyan-500/50 hover:border-cyan-400 transition-all shadow-[0_0_8px_rgba(6,182,212,0.25)]">
+              <LayoutGrid size={14} className="text-cyan-400" />
+              <span>Tactical Grid</span>
             </Link>
           </div>
         }
@@ -351,6 +400,7 @@ export const DemoMonitor: React.FC = () => {
                     index={originalIndex}
                     onOpen={() => setParams({ camera: c.id })}
                     showAiOverlay={showAiOverlays}
+                    visionMode={monitorVisionMode}
                   />
                 )}
               </div>

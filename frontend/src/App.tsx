@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, HashRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, HashRouter, Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { DEMO_MODE } from './utils/demo';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AppShell } from './components/layout/AppShell';
@@ -51,6 +51,22 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode; requiredRole?: strin
 
 const basename = typeof window !== 'undefined' && window.location.pathname.startsWith('/sentrax') ? '/sentrax' : '';
 
+const HashRouteHandler: React.FC = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  React.useEffect(() => {
+    if (window.location.hash) {
+      const cleanHash = window.location.hash.replace(/^#\/?/, '/');
+      if (cleanHash && cleanHash !== '/' && cleanHash !== location.pathname) {
+        navigate(cleanHash, { replace: true });
+      }
+    }
+  }, [location, navigate]);
+
+  return null;
+};
+
 export const App: React.FC = () => {
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -67,6 +83,7 @@ export const App: React.FC = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter basename={basename}>
+        <HashRouteHandler />
         <Routes>
           <Route path="/login" element={<Login />} />
 

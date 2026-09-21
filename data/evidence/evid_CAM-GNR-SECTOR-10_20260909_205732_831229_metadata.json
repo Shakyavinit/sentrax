@@ -1,0 +1,41 @@
+{
+  "frame_number": 33,
+  "source_id": 3,
+  "vehicle_class": "car",
+  "vehicle_confidence": 0.487,
+  "raw_ocr": "F44",
+  "normalized_plate": "F44",
+  "plate_confidence": 0.528,
+  "is_valid_format": false,
+  "format_type": "UNPARSED",
+  "state_code": null,
+  "rto_code": null,
+  "notes": [
+    "Plate text too short or unreadable"
+  ],
+  "camera_id": "CAM-GNR-SECTOR-10",
+  "captured_at": "2026-09-09T20:57:32.831351+00:00",
+  "sighting_id": 4328,
+  "alert_id": null,
+  "case_reference": null,
+  "artifacts": {
+    "frame": {
+      "uuid": "8d26cf78-5f4d-4e2d-a190-961805f693e6",
+      "filename": "evid_CAM-GNR-SECTOR-10_20260909_205732_831229_frame.jpg",
+      "sha256": "68fa5438f4138fad2c622630d8bc553ffd642296ab29040198adca411ebecf7f",
+      "bytes": 147959
+    },
+    "vehicle": {
+      "uuid": "aa8a33f4-76ed-4c4c-8e91-e326d9af72c7",
+      "filename": "evid_CAM-GNR-SECTOR-10_20260909_205732_831229_vehicle.jpg",
+      "sha256": "e452ed67d893157bb09fabdd07ba0e0b2a164b81c0aa8d415baea4090069b145",
+      "bytes": 2919
+    },
+    "plate": {
+      "uuid": "e9b954f1-ad05-476a-8d82-b942093cfce4",
+      "filename": "evid_CAM-GNR-SECTOR-10_20260909_205732_831229_plate.jpg",
+      "sha256": "388ddd7860c49dd67d2d39665d8aa0ba919cf015c040f23b2abd97ee68453e7e",
+      "bytes": 1047
+    }
+  }
+}

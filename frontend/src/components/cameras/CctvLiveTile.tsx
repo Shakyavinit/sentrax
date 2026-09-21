@@ -10,6 +10,7 @@ interface CctvLiveTileProps {
   onOpen: () => void;
   className?: string;
   showAiOverlay?: boolean;
+  visionMode?: 'standard' | 'night_vision' | 'flir_thermal' | 'edge_cv';
 }
 
 export const CctvLiveTile: React.FC<CctvLiveTileProps> = ({
@@ -18,6 +19,7 @@ export const CctvLiveTile: React.FC<CctvLiveTileProps> = ({
   onOpen,
   className = '',
   showAiOverlay = true,
+  visionMode = 'standard',
 }) => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [isMuted, setIsMuted] = useState(true);
@@ -56,6 +58,19 @@ export const CctvLiveTile: React.FC<CctvLiveTileProps> = ({
   const boxTop = 22 + ((index * 9) % 28);
   const boxLeft = 18 + ((index * 13) % 40);
 
+  const getVisionFilter = () => {
+    switch (visionMode) {
+      case 'night_vision':
+        return 'contrast(1.45) brightness(1.22) saturate(2.6) hue-rotate(65deg) drop-shadow(0 0 2px #22c55e)';
+      case 'flir_thermal':
+        return 'contrast(1.9) saturate(2.8) hue-rotate(185deg) invert(0.88) brightness(1.15)';
+      case 'edge_cv':
+        return 'contrast(2.4) grayscale(1) invert(0.12) brightness(1.3) drop-shadow(0 0 1px #38bdf8)';
+      default:
+        return 'none';
+    }
+  };
+
   return (
     <div
       className={`relative w-full h-full overflow-hidden select-none bg-[#080C12] group ${className}`}
@@ -76,14 +91,42 @@ export const CctvLiveTile: React.FC<CctvLiveTileProps> = ({
           playsInline
           preload="metadata"
           onError={() => setHasError(true)}
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+          style={{ filter: getVisionFilter() }}
+          className="w-full h-full object-cover transition-all duration-300 group-hover:scale-[1.02]"
         />
       ) : (
         <img
           src={assetUrl(`images/feed_cam${String((index % 3) + 1).padStart(2, '0')}.jpg`)}
           alt={camera.name}
+          style={{ filter: getVisionFilter() }}
           className="w-full h-full object-cover"
         />
+      )}
+
+      {/* ─── SENSOR OVERLAYS ─── */}
+      {visionMode === 'night_vision' && (
+        <>
+          <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,255,100,0.18)_50%)] bg-[length:100%_4px] opacity-70 mix-blend-screen z-10" />
+          <div className="absolute top-8 right-2 pointer-events-none bg-black/85 border border-emerald-500/50 px-1.5 py-0.5 rounded text-[8px] font-mono text-emerald-300 font-bold z-20 flex items-center gap-1 shadow">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+            <span>IR 850nm</span>
+          </div>
+        </>
+      )}
+
+      {visionMode === 'flir_thermal' && (
+        <>
+          <div className="absolute right-1 top-8 bottom-8 w-1.5 rounded bg-gradient-to-t from-indigo-900 via-blue-600 via-purple-600 via-rose-500 via-amber-400 to-white pointer-events-none opacity-85 z-20" />
+          <div className="absolute top-8 right-2 pointer-events-none bg-black/85 border border-amber-500/50 px-1.5 py-0.5 rounded text-[8px] font-mono text-amber-300 font-bold z-20 shadow">
+            <span>FLIR LWIR</span>
+          </div>
+        </>
+      )}
+
+      {visionMode === 'edge_cv' && (
+        <div className="absolute top-8 right-2 pointer-events-none bg-black/85 border border-cyan-500/50 px-1.5 py-0.5 rounded text-[8px] font-mono text-cyan-300 font-bold z-20 shadow">
+          <span>SOBEL CV</span>
+        </div>
       )}
 
       {/* ─── CRT SCANLINE EFFECT (SUBTLE) ─── */}

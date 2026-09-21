@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Bell, Search, Menu, Bot } from 'lucide-react';
+import { Bell, Search, Menu, Bot, Grid3X3 } from 'lucide-react';
 import { CopilotModal } from '../ui/CopilotModal';
 import { useUiStore } from '../../store/uiStore';
 const titles: Record<string, string> = {
@@ -16,6 +16,7 @@ const titles: Record<string, string> = {
   '/analytics': 'Forensic Analytics & Intelligence',
   '/research-agent': 'Forensic Research Assistant',
   '/plate-reader': 'Plate & Vehicle AI Reader',
+  '/grid': 'Tactical Camera Matrix (FLIR & Night-Vision)',
 };
 
 export const TopBar: React.FC = () => {
@@ -101,6 +102,15 @@ export const TopBar: React.FC = () => {
             title="Alert Review"
           >
             <Bell size={18} />
+          </button>
+          <button
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#0C1420] hover:bg-[#121E30] text-cyan-300 shadow-[0_0_12px_rgba(6,182,212,0.25)] border border-cyan-500/50 hover:border-cyan-400 transition-all font-mono text-xs font-bold cursor-pointer"
+            aria-label="Open Tactical Camera Matrix"
+            onClick={() => navigate('/grid')}
+            title="Tactical Multi-Camera Matrix with FLIR Thermal & Night-Vision"
+          >
+            <Grid3X3 size={15} className="text-cyan-400" />
+            <span className="hidden md:inline">TACTICAL GRID</span>
           </button>
           <button
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gradient-to-r from-sky-600 to-blue-600 hover:from-sky-500 hover:to-blue-500 text-white shadow-[0_0_15px_rgba(14,165,233,0.4)] border border-sky-400/60 transition-all font-mono text-xs font-bold cursor-pointer"
