@@ -1,0 +1,128 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="100%" height="100%">
+  <defs>
+    <style>
+      .txt { font-family: 'JetBrains Mono', 'Courier New', monospace; font-size: 11px; fill: #FFFFFF; }
+      .txt-dim { font-family: 'JetBrains Mono', 'Courier New', monospace; font-size: 9px; fill: rgba(255,255,255,0.7); }
+      .txt-badge { font-family: 'JetBrains Mono', 'Courier New', monospace; font-size: 10px; font-weight: bold; }
+      @keyframes crtSweep {
+        0% { transform: translateY(-360px); }
+        100% { transform: translateY(360px); }
+      }
+      @keyframes blink {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.2; }
+      }
+      .sweep-beam {
+        animation: crtSweep 3.5s linear infinite;
+      }
+      .rec-dot {
+        animation: blink 1.2s step-start infinite;
+      }
+    </style>
+    <pattern id="smpte-scanlines" width="100" height="4" patternUnits="userSpaceOnUse">
+      <line x1="0" y1="2" x2="100" y2="2" stroke="rgba(0,0,0,0.4)" stroke-width="1.5"/>
+    </pattern>
+    <linearGradient id="beam-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="rgba(0,240,255,0)"/>
+      <stop offset="70%" stop-color="rgba(0,240,255,0.08)"/>
+      <stop offset="95%" stop-color="rgba(0,240,255,0.22)"/>
+      <stop offset="100%" stop-color="rgba(255,255,255,0.45)"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background Base -->
+  <rect width="640" height="360" fill="#0A0E17"/>
+
+  <!-- Top 67% SMPTE 75% Bars (height: 241px) -->
+  <g>
+    <!-- 640 / 7 = 91.43px per bar -->
+    <rect x="0" y="0" width="91.5" height="241" fill="#C0C0C0"/>
+    <rect x="91.5" y="0" width="91.5" height="241" fill="#C0C000"/>
+    <rect x="183" y="0" width="91.5" height="241" fill="#00C0C0"/>
+    <rect x="274.5" y="0" width="91.5" height="241" fill="#00C000"/>
+    <rect x="366" y="0" width="91.5" height="241" fill="#C000C0"/>
+    <rect x="457.5" y="0" width="91.5" height="241" fill="#C00000"/>
+    <rect x="549" y="0" width="91" height="241" fill="#0000C0"/>
+  </g>
+
+  <!-- Mid 8% Castellation Bars (height: 29px, y: 241) -->
+  <g transform="translate(0, 241)">
+    <rect x="0" y="0" width="91.5" height="29" fill="#0000C0"/>
+    <rect x="91.5" y="0" width="91.5" height="29" fill="#131313"/>
+    <rect x="183" y="0" width="91.5" height="29" fill="#C000C0"/>
+    <rect x="274.5" y="0" width="91.5" height="29" fill="#131313"/>
+    <rect x="366" y="0" width="91.5" height="29" fill="#00C0C0"/>
+    <rect x="457.5" y="0" width="91.5" height="29" fill="#131313"/>
+    <rect x="549" y="0" width="91" height="29" fill="#C0C0C0"/>
+  </g>
+
+  <!-- Bot 25% Bottom Bars (height: 90px, y: 270) -->
+  <g transform="translate(0, 270)">
+    <!-- -I: 18% = 115.2px -->
+    <rect x="0" y="0" width="115.2" height="90" fill="#082238"/>
+    <!-- 100% White: 18% = 115.2px -->
+    <rect x="115.2" y="0" width="115.2" height="90" fill="#FFFFFF"/>
+    <!-- +Q: 18% = 115.2px -->
+    <rect x="230.4" y="0" width="115.2" height="90" fill="#2E083B"/>
+    <!-- Black: 18% = 115.2px -->
+    <rect x="345.6" y="0" width="115.2" height="90" fill="#131313"/>
+    <!-- Pluge 3.5 IRE: 6% = 38.4px -->
+    <rect x="460.8" y="0" width="38.4" height="90" fill="#090909"/>
+    <!-- Pluge 7.5 IRE: 6% = 38.4px -->
+    <rect x="499.2" y="0" width="38.4" height="90" fill="#131313"/>
+    <!-- Pluge 11.5 IRE: 6% = 38.4px -->
+    <rect x="537.6" y="0" width="38.4" height="90" fill="#1D1D1D"/>
+    <!-- Remainder Black: ~64px -->
+    <rect x="576" y="0" width="64" height="90" fill="#131313"/>
+  </g>
+
+  <!-- CRT Scanlines Texture -->
+  <rect width="640" height="360" fill="url(#smpte-scanlines)" pointer-events="none"/>
+
+  <!-- Animated CRT Phosphor Sweep Beam -->
+  <rect class="sweep-beam" x="0" y="0" width="640" height="60" fill="url(#beam-grad)" pointer-events="none"/>
+
+  <!-- Surveillance Crosshair Grid Overlay -->
+  <g stroke="rgba(255,255,255,0.18)" stroke-width="1" stroke-dasharray="3,3">
+    <!-- Center Target Reticle -->
+    <circle cx="320" cy="180" r="48" fill="none" stroke="rgba(0,240,255,0.4)" stroke-width="1"/>
+    <circle cx="320" cy="180" r="16" fill="none" stroke="rgba(0,240,255,0.5)" stroke-width="1"/>
+    <line x1="260" y1="180" x2="380" y2="180" stroke="rgba(0,240,255,0.5)"/>
+    <line x1="320" y1="120" x2="320" y2="240" stroke="rgba(0,240,255,0.5)"/>
+    <!-- Framing Corners -->
+    <path d="M 20 40 L 20 20 L 40 20" fill="none" stroke="#00F0FF" stroke-width="2"/>
+    <path d="M 620 40 L 620 20 L 600 20" fill="none" stroke="#00F0FF" stroke-width="2"/>
+    <path d="M 20 320 L 20 340 L 40 340" fill="none" stroke="#00F0FF" stroke-width="2"/>
+    <path d="M 620 320 L 620 340 L 600 340" fill="none" stroke="#00F0FF" stroke-width="2"/>
+  </g>
+
+  <!-- Professional Broadcast Diagnostics Banner Overlay -->
+  <g transform="translate(16, 16)">
+    <!-- Top Left Pill -->
+    <rect x="0" y="0" width="220" height="24" rx="4" fill="rgba(8,12,18,0.88)" stroke="rgba(255,255,255,0.25)" stroke-width="1"/>
+    <circle class="rec-dot" cx="12" cy="12" r="4.5" fill="#EF4444"/>
+    <text x="24" y="16" class="txt-badge" fill="#00F0FF">SENTRAX CCTV // SMPTE-219</text>
+  </g>
+
+  <!-- Top Right Timecode Pill -->
+  <g transform="translate(450, 16)">
+    <rect x="0" y="0" width="174" height="24" rx="4" fill="rgba(8,12,18,0.88)" stroke="rgba(255,255,255,0.25)" stroke-width="1"/>
+    <text x="12" y="16" class="txt" fill="#F59E0B">TEST PATTERN · 1080p50</text>
+  </g>
+
+  <!-- Center Diagnostic Box -->
+  <g transform="translate(170, 140)">
+    <rect x="0" y="0" width="300" height="68" rx="6" fill="rgba(6,9,15,0.92)" stroke="rgba(0,240,255,0.6)" stroke-width="1.5"/>
+    <rect x="2" y="2" width="296" height="4" fill="#00F0FF"/>
+    <text x="150" y="26" text-anchor="middle" class="txt-badge" fill="#FFFFFF" font-size="12px" letter-spacing="1">SURVEILLANCE NODE OFFLINE</text>
+    <text x="150" y="44" text-anchor="middle" class="txt-dim" fill="#94A3B8">STANDBY SIGNAL / RTSP FAILOVER ACTIVE</text>
+    <text x="150" y="58" text-anchor="middle" class="txt-dim" fill="#F59E0B">ENCODING: SMPTE COLOR TEST BAR RECOVERY</text>
+  </g>
+
+  <!-- Bottom Telemetry HUD Bar -->
+  <g transform="translate(16, 324)">
+    <rect x="0" y="0" width="608" height="22" rx="3" fill="rgba(8,12,18,0.88)" stroke="rgba(255,255,255,0.18)" stroke-width="1"/>
+    <text x="12" y="15" class="txt-dim">FREQ: 50.00Hz · CAL: ITU-R BT.709 · COLORSPACE: YCbCr 4:2:2 · BIT DEPTH: 10-BIT</text>
+    <text x="596" y="15" text-anchor="end" class="txt-dim" fill="#10B981">SYSTEM READY</text>
+  </g>
+</svg>

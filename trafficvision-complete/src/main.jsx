@@ -6,18 +6,18 @@ import "leaflet/dist/leaflet.css";
 import "./styles.css";
 
 const cameras = [
-  {id:1,name:"Downtown Junction",city:"New York",country:"USA",type:"Traffic",lat:40.7128,lng:-74.0060,status:"LIVE",vehicles:42,source:"Demo DOT",image:"https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?auto=format&fit=crop&w=1000&q=80"},
-  {id:2,name:"Golden Gate Approach",city:"San Francisco",country:"USA",type:"Traffic",lat:37.8199,lng:-122.4783,status:"LIVE",vehicles:27,source:"Demo DOT",image:"https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=80"},
-  {id:3,name:"Central London",city:"London",country:"UK",type:"Street",lat:51.5074,lng:-0.1278,status:"LIVE",vehicles:35,source:"Demo Transport",image:"https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=1000&q=80"},
-  {id:4,name:"Shibuya Crossing",city:"Tokyo",country:"Japan",type:"Street",lat:35.6595,lng:139.7005,status:"LIVE",vehicles:71,source:"Demo Network",image:"https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=1000&q=80"},
-  {id:5,name:"Marina Bay",city:"Singapore",country:"Singapore",type:"Scenic",lat:1.2868,lng:103.8545,status:"LIVE",vehicles:19,source:"Demo Network",image:"https://images.unsplash.com/photo-1525625293386-3f8f99389edd?auto=format&fit=crop&w=1000&q=80"},
-  {id:6,name:"Ahmedabad Ring Road",city:"Ahmedabad",country:"India",type:"Traffic",lat:23.0225,lng:72.5714,status:"LIVE",vehicles:54,source:"Demo India",image:"https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&w=1000&q=80"},
-  {id:7,name:"Gandhinagar Highway",city:"Gandhinagar",country:"India",type:"Traffic",lat:23.2156,lng:72.6369,status:"LIVE",vehicles:31,source:"Demo India",image:"https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=1000&q=80"},
-  {id:8,name:"Sydney Harbour",city:"Sydney",country:"Australia",type:"Scenic",lat:-33.8523,lng:151.2108,status:"LIVE",vehicles:12,source:"Demo Network",image:"https://images.unsplash.com/photo-1506973035872-a4f5c9f6a4a7?auto=format&fit=crop&w=1000&q=80"},
-  {id:9,name:"Toronto Downtown",city:"Toronto",country:"Canada",type:"Street",lat:43.6532,lng:-79.3832,status:"LIVE",vehicles:29,source:"Demo Canada",image:"https://images.unsplash.com/photo-1517090504586-fde19ea6066f?auto=format&fit=crop&w=1000&q=80"},
-  {id:10,name:"Dubai Downtown",city:"Dubai",country:"UAE",type:"Traffic",lat:25.2048,lng:55.2708,status:"LIVE",vehicles:38,source:"Demo Network",image:"https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1000&q=80"},
-  {id:11,name:"Berlin Ring",city:"Berlin",country:"Germany",type:"Traffic",lat:52.52,lng:13.405,status:"LIVE",vehicles:23,source:"Demo Europe",image:"https://images.unsplash.com/photo-1560969184-10fe8719e047?auto=format&fit=crop&w=1000&q=80"},
-  {id:12,name:"Rio Coast",city:"Rio de Janeiro",country:"Brazil",type:"Beach",lat:-22.9068,lng:-43.1729,status:"LIVE",vehicles:8,source:"Demo Brazil",image:"https://images.unsplash.com/photo-1483729558449-99ef09a8c325?auto=format&fit=crop&w=1000&q=80"}
+  {id:1,name:"Downtown Junction",city:"New York",country:"USA",type:"Traffic",lat:40.7128,lng:-74.0060,status:"LIVE",vehicles:42,source:"Demo DOT",image:"images/feed_cam01.jpg"},
+  {id:2,name:"Golden Gate Approach",city:"San Francisco",country:"USA",type:"Traffic",lat:37.8199,lng:-122.4783,status:"LIVE",vehicles:27,source:"Demo DOT",image:"images/feed_cam02.jpg"},
+  {id:3,name:"Central London",city:"London",country:"UK",type:"Street",lat:51.5074,lng:-0.1278,status:"LIVE",vehicles:35,source:"Demo Transport",image:"images/feed_cam03.jpg"},
+  {id:4,name:"Shibuya Crossing",city:"Tokyo",country:"Japan",type:"Street",lat:35.6595,lng:139.7005,status:"LIVE",vehicles:71,source:"Demo Network",image:"images/feed_cam04.jpg"},
+  {id:5,name:"Marina Bay",city:"Singapore",country:"Singapore",type:"Scenic",lat:1.2868,lng:103.8545,status:"LIVE",vehicles:19,source:"Demo Network",image:"images/feed_cam05.jpg"},
+  {id:6,name:"Ahmedabad Ring Road",city:"Ahmedabad",country:"India",type:"Traffic",lat:23.0225,lng:72.5714,status:"LIVE",vehicles:54,source:"Demo India",image:"images/cam_mg_road_thumb.jpg"},
+  {id:7,name:"Gandhinagar Highway",city:"Gandhinagar",country:"India",type:"Traffic",lat:23.2156,lng:72.6369,status:"LIVE",vehicles:31,source:"Demo India",image:"images/cam_sg_highway_thumb.jpg"},
+  {id:8,name:"Sydney Harbour",city:"Sydney",country:"Australia",type:"Scenic",lat:-33.8523,lng:151.2108,status:"LIVE",vehicles:12,source:"Demo Network",image:"images/feed_cam06.jpg"},
+  {id:9,name:"Toronto Downtown",city:"Toronto",country:"Canada",type:"Street",lat:43.6532,lng:-79.3832,status:"LIVE",vehicles:29,source:"Demo Canada",image:"images/feed_cam07.jpg"},
+  {id:10,name:"Dubai Downtown",city:"Dubai",country:"UAE",type:"Traffic",lat:25.2048,lng:55.2708,status:"LIVE",vehicles:38,source:"Demo Network",image:"images/feed_cam08.jpg"},
+  {id:11,name:"Berlin Ring",city:"Berlin",country:"Germany",type:"Traffic",lat:52.52,lng:13.405,status:"LIVE",vehicles:23,source:"Demo Europe",image:"images/feed_cam09.jpg"},
+  {id:12,name:"Rio Coast",city:"Rio de Janeiro",country:"Brazil",type:"Beach",lat:-22.9068,lng:-43.1729,status:"LIVE",vehicles:8,source:"Demo Brazil",image:"images/cctv_smpte_placeholder.svg"}
 ];
 
 const markerIcon = new L.Icon({

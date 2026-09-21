@@ -477,6 +477,20 @@
       background: linear-gradient(rgba(18,16,16,0) 50%, rgba(0,0,0,0.45) 50%);
       background-size: 100% 3px;
       pointer-events: none;
+      overflow: hidden;
+    }
+    .scanlines::after {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 100%;
+      background: linear-gradient(to bottom, rgba(0,240,255,0) 0%, rgba(0,240,255,0.06) 70%, rgba(0,240,255,0.2) 95%, rgba(255,255,255,0.3) 100%);
+      opacity: 0.65;
+      animation: crtSweep 3.5s linear infinite;
+      pointer-events: none;
+    }
+    @keyframes crtSweep {
+      0% { transform: translateY(-100%); }
+      100% { transform: translateY(100%); }
     }
     .cam-card {
       background: var(--bg-elevated);
@@ -907,12 +921,13 @@
         <div class="panel">
           <div class="panel-header">
             <div class="panel-title"><span>📹</span> Live Camera Previews</div>
-            <button class="btn btn-secondary btn-sm" onclick="navigate("monitor")">Open Full Monitor</button>
+            <button class="btn btn-secondary btn-sm" onclick="navigate('monitor')">Open Full Monitor</button>
           </div>
           <div class="cam-grid">
-            <div class="cam-card" onclick="navigate("monitor")">
+            <div class="cam-card" onclick="navigate('monitor')">
               <div class="cam-viewport">
-                <img class="cam-feed-img" src="https://images.unsplash.com/photo-1545178803-4056771d60a3?w=500" alt="Feed"/>
+                <img class="cam-feed-img" src="images/cam_mg_road_thumb.jpg" alt="CAM01 Feed" onerror="this.onerror=null;this.src='images/cctv_smpte_placeholder.svg'"/>
+                <div class="scanlines"></div>
                 <div class="cam-hud-tag">CAM01 · MG Road</div>
                 <div class="cam-hud-status"><span class="badge badge-green">ONLINE</span></div>
               </div>
@@ -921,9 +936,10 @@
                 <span class="badge badge-green">LOW TRAFFIC</span>
               </div>
             </div>
-            <div class="cam-card" onclick="navigate("monitor")">
+            <div class="cam-card" onclick="navigate('monitor')">
               <div class="cam-viewport">
-                <img class="cam-feed-img" src="https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=500" alt="Feed"/>
+                <img class="cam-feed-img" src="images/cam_sardar_bridge_thumb.jpg" alt="CAM02 Feed" onerror="this.onerror=null;this.src='images/cctv_smpte_placeholder.svg'"/>
+                <div class="scanlines"></div>
                 <div class="cam-hud-tag">CAM02 · Sardar Bridge</div>
                 <div class="cam-hud-status"><span class="badge badge-green">ONLINE</span></div>
               </div>
@@ -932,9 +948,10 @@
                 <span class="badge badge-green">LOW TRAFFIC</span>
               </div>
             </div>
-            <div class="cam-card" onclick="navigate("monitor")">
+            <div class="cam-card" onclick="navigate('monitor')">
               <div class="cam-viewport">
-                <img class="cam-feed-img" src="https://images.unsplash.com/photo-1502877338535-766e1452684a?w=500" alt="Feed"/>
+                <img class="cam-feed-img" src="images/cam_sg_highway_thumb.jpg" alt="CAM04 Feed" onerror="this.onerror=null;this.src='images/cctv_smpte_placeholder.svg'"/>
+                <div class="scanlines"></div>
                 <div class="cam-hud-tag">CAM04 · SG Highway</div>
                 <div class="cam-hud-status"><span class="badge badge-green">ONLINE</span></div>
               </div>
@@ -1208,6 +1225,35 @@
       { id: "CAM14", name: "Chandkheda Circle", lat: 23.1100, lng: 72.5990, status: "offline", congestion: "HIGH" },
       { id: "CAM15", name: "Sector 7 Gate", lat: 23.2220, lng: 72.6450, status: "offline", congestion: "LOW" },
     ];
+
+    const CAM_IMAGE_MAP = {
+      "CAM01": "images/cam_mg_road_thumb.jpg",
+      "CAM02": "images/cam_sardar_bridge_thumb.jpg",
+      "CAM03": "images/cam_vastrapur_thumb.jpg",
+      "CAM04": "images/cam_sg_highway_thumb.jpg",
+      "CAM05": "images/feed_cam05.jpg",
+      "CAM06": "images/cam_gift_city_thumb.jpg",
+      "CAM07": "images/cam_sabarmati_thumb.jpg",
+      "CAM08": "images/cam_gnlu_gate_thumb.jpg",
+      "CAM09": "images/feed_cam09.jpg",
+      "CAM10": "images/cctv_smpte_placeholder.svg",
+      "CAM11": "images/traffic_city_junction_thumb.jpg",
+      "CAM12": "images/cctv_smpte_placeholder.svg",
+      "CAM13": "images/feed_cam04.jpg",
+      "CAM14": "images/cctv_smpte_placeholder.svg",
+      "CAM15": "images/cctv_smpte_placeholder.svg",
+    };
+
+    function getCamImage(camId, idx) {
+      if (CAM_IMAGE_MAP[camId]) return CAM_IMAGE_MAP[camId];
+      const feedNum = ((idx % 9) + 1).toString().padStart(2, '0');
+      return `images/feed_cam${feedNum}.jpg`;
+    }
+
+    function handleCamImgError(img, camId) {
+      img.onerror = null;
+      img.src = 'images/cctv_smpte_placeholder.svg';
+    }
 
     const SIGHTINGS_DATA = [
       { cam: "CAM02", time: "08:45:12", conf: 0.97, plate: "GJ01AB1234" },
@@ -1665,14 +1711,20 @@
       // 7. Evidence Cards
       const evContainer = document.getElementById("evidence-cards-container");
       if (evContainer) {
-        evContainer.innerHTML = [1, 2, 3].map(id => `
+        const evImages = [
+          "images/evidence_gnlu_large.jpg",
+          "images/crop_gj01ab1234.jpg",
+          "images/cam_sg_highway_thumb.jpg"
+        ];
+        evContainer.innerHTML = [1, 2, 3].map((id, idx) => `
           <div class="panel" style="margin-bottom:0">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
               <span class="badge badge-green" id="ev-badge-${id}">SHA-256 SEALED</span>
               <span style="font-family:var(--font-mono);font-size:10px;color:var(--text-muted)">CASE-2026-00${id}</span>
             </div>
             <div style="aspect-ratio:16/9;background:#04080D;border-radius:4px;overflow:hidden;margin-bottom:10px;position:relative">
-              <img src="https://images.unsplash.com/photo-1545178803-4056771d60a3?w=500" style="width:100%;height:100%;object-fit:cover" alt="Evidence"/>
+              <img src="${evImages[idx]}" onerror="this.onerror=null;this.src='images/cctv_smpte_placeholder.svg'" style="width:100%;height:100%;object-fit:cover" alt="Evidence ${id}"/>
+              <div class="scanlines"></div>
               <span class="plate-badge" style="position:absolute;top:8px;left:8px">GJ01AB1234</span>
             </div>
             <div style="font-size:11px;color:var(--text-muted);font-family:var(--font-mono);margin-bottom:12px">
@@ -1682,7 +1734,7 @@
             </div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
               <button class="btn btn-secondary btn-sm" onclick="verifyEvidence(this, ${id})">Verify SHA</button>
-              <button class="btn btn-ghost btn-sm" onclick="showToast("Exporting Evidence ZIP...", "info")">Export ZIP</button>
+              <button class="btn btn-ghost btn-sm" onclick="showToast('Exporting Evidence ZIP...', 'info')">Export ZIP</button>
             </div>
           </div>
         `).join("");
@@ -1838,10 +1890,12 @@
           `;
         }
 
+        const camThumb = getCamImage(c.id, originalIdx);
         return `
           <div class="cam-card" onclick="openCamModal(${originalIdx})">
             <div class="cam-viewport">
-              <img class="cam-feed-img" src="https://images.unsplash.com/photo-${originalIdx % 2 === 0 ? "1545178803-4056771d60a3" : "1568605117036-5fe5e7bab0b7"}?w=500" alt="${c.name}"/>
+              <img class="cam-feed-img" src="${camThumb}" alt="${c.name}" onerror="handleCamImgError(this, '${c.id}')"/>
+              <div class="scanlines"></div>
               <div class="cam-hud-tag">${c.id} · ${c.name}</div>
               <div class="cam-hud-status"><span class="badge badge-green">● LIVE REC</span></div>
               <div class="cam-bbox" style="top:${20 + (originalIdx * 7) % 25}%;left:${15 + (originalIdx * 11) % 35}%;width:38%;height:34%">
@@ -1921,9 +1975,10 @@
       } else {
         badge.className = "badge badge-green";
         badge.textContent = "● LIVE FEED";
+        const modalCamSrc = getCamImage(c.id, idx);
         body.innerHTML = `
           <div style="aspect-ratio:16/9;background:#000;position:relative;border-radius:6px;overflow:hidden;margin-bottom:14px">
-            <img src="https://images.unsplash.com/photo-${idx % 2 === 0 ? "1545178803-4056771d60a3" : "1568605117036-5fe5e7bab0b7"}?w=900" style="width:100%;height:100%;object-fit:cover" alt="${c.name}"/>
+            <img src="${modalCamSrc}" onerror="handleCamImgError(this, '${c.id}')" style="width:100%;height:100%;object-fit:cover" alt="${c.name}"/>
             <div class="scanlines"></div>
             <div style="position:absolute;top:10px;left:10px;background:rgba(0,0,0,0.8);border:1px solid rgba(255,255,255,0.2);padding:2px 8px;border-radius:4px;font-family:var(--font-mono);font-size:11px;color:#fff">${c.id} · 1920x1080 @ 25 FPS</div>
             <div style="position:absolute;top:10px;right:10px;background:rgba(255,59,59,0.2);border:1px solid var(--red);color:var(--red);padding:2px 8px;border-radius:4px;font-family:var(--font-mono);font-size:10px;font-weight:700">● LIVE REC</div>
