@@ -90,9 +90,26 @@ You can immediately test and evaluate the platform directly in your browser with
 - Instant alert triggering upon detecting vehicles flagged for theft, warrants, or organized crime.
 - Audio-visual alert banner, severity categorization (Critical / High / Medium), and automated corridor lock recommendations.
 
-### 🤖 5. Autonomous AI Forensic Copilot
-- Natural language query interface allowing officers to investigate complex patterns (e.g. *"Show white Scorpio moving northbound on SG Highway between 14:00 and 15:00"*).
-- Anomaly detection, multi-camera correlation, and vehicle journey inference.
+### 🤖 5. Autonomous AI Forensic Copilot & Research Agent Fleet
+SENTRAX integrates an autonomous multi-agent research fleet powered by Claude Sonnet 4.6 intelligence to assist law enforcement leadership and intelligence analysts:
+
+![Autonomous AI Research Agent Fleet](docs/screenshots/research_overview.png)
+
+- **8 Specialized Sub-Agents Operating in Parallel:**
+  1. **GitHub Scout (⬡):** Scours open-source computer vision, ONNX, and TensorRT repositories (YOLOv8, PaddleOCR, DeepSORT, Frigate, mmtracking, pgvector).
+  2. **API Hunter (⬢):** Maps national government portals (NIC VAHAN & SARATHI, Parivahan gateway, CartoDB Dark Matter, RTSP testbeds).
+  3. **Data Collector (◈):** Catalogs Indian High-Security Registration Plate (HSRP) datasets and municipal geographic coordinates.
+  4. **Tool Finder (◇):** Evaluates hardware-accelerated video pipelines, FFmpeg low-latency RTSP ingestion, and PostGIS trajectory solvers.
+  5. **Frontend Scout (◉):** Audits modern UI/UX Pro Max tactical HUD elements, dark OLED themes, and spatial GIS overlays.
+  6. **Security Agent (⬟):** Implements SHA-256 continuous evidence hashing, tamper seals, and Bharatiya Sakshya Adhiniyam (BSA) 2023 Section 63 compliance.
+  7. **Backend Scout (⬡):** Designs PostgreSQL BRIN indexing (90% RAM reduction on 50k+ daily sightings) and Redis pub/sub dispatch queues.
+  8. **Trend Watcher (◈):** Tracks cutting-edge Vision-Language Models (VLM) for multimodal CCTV event querying.
+
+![Boss Decision Board & Action Panel](docs/screenshots/research_boss_board.png)
+
+- **Team Manager Escalation & Boss Decision Board:** Synthesizes the highest-impact technical proposals into executive decision cards with instant **Add to Project**, **Save in Docket**, or **Skip** actions.
+- **Client-Side API Configuration:** Pre-configured with secure token authentication and offline fallback caching.
+- **Markdown & Docket Export:** One-click export of research findings into a formatted `.md` executive dossier.
 
 ### 🔒 6. Security & Diagnostic Tools
 - Secret owner/developer console protected with PIN authentication (`7391`) and rapid click authentication.
