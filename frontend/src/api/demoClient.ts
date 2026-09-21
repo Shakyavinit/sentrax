@@ -512,7 +512,7 @@ Target vehicle \`${plate}\` has logged **${targetRows.length} confirmed optical 
 ### 2. SIGHTINGS CHRONOLOGY & CAM CHECKPOINTS
 ${targetRows.map((s, idx) => `* **Checkpoint ${idx + 1} (${s.camera_identifier})** — \`${s.camera_name}\`
   * **Timestamp:** ${s.frame_ts}
-  * **OCR Quality:** ${Math.round((s.plate_conf || 0.95) * 100)}% | **Class:** ${s.vehicle_class.toUpperCase()} | **Track ID:** #${s.track_id}
+  * **OCR Quality:** ${Math.round((s.plate_conf || 0.95) * 100)}% | **Class:** ${(s.vehicle_class || 'SUV / Passenger').toUpperCase()} | **Track ID:** #${s.track_id}
   * **Review Status:** ${s.plate_conf && s.plate_conf < 0.75 ? "⚠️ Flagged for Secondary Officer Verification" : "✅ Unambiguous Optical Recognition"}`).join("\n\n")}
 
 ### 3. VELOCITY & ROUTE DETOUR ANOMALY AUDIT
